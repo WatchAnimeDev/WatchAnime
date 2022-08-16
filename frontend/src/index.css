@@ -1,0 +1,52 @@
+html {
+    scroll-behavior: smooth;
+}
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.slider-slide:before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #202125;
+    background: -moz-linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
+    background: -webkit-linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
+    background: linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
+}
+.slider-slide:after {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #202125;
+    background: -moz-linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
+    background: -webkit-linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
+    background: linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
+    z-index: 2;
+}
+.slider--text {
+    position: absolute;
+    bottom: 4em;
+    left: 2em;
+    width: 50%;
+    height: fit-content;
+    padding: 1em;
+    border-radius: 4px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+}

@@ -85,6 +85,9 @@ const useStyles = createStyles((theme) => ({
             display: "none",
         },
     },
+    searchBarScheduleIcon: {
+        ...{ ...(window.location.pathname !== "/" ? { display: "none" } : {}) },
+    },
 }));
 
 function HeaderComponent({ sideBarState, setSideBarState }) {
@@ -140,7 +143,7 @@ function HeaderComponent({ sideBarState, setSideBarState }) {
                         <a href={"/"} className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
                             <IconSearch size={20} stroke={1.5} />
                         </a>
-                        <a href={"/"} className={classes.navIcons} onClick={(event) => event.preventDefault()}>
+                        <a href={"/"} className={[classes.navIcons, classes.searchBarScheduleIcon]} onClick={(event) => event.preventDefault()}>
                             <IconCalendarEvent size={20} stroke={1.5} />
                         </a>
                         <a href={"/"} className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()} sx={{}}>

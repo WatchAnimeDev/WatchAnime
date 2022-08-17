@@ -50,3 +50,15 @@ code {
     display: flex;
     flex-direction: column;
 }
+::-webkit-scrollbar {
+    width: 10px;
+    visibility: hidden;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.1);
+}
+::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.2);
+}

@@ -1,6 +1,7 @@
 import { Button, createStyles, Group, Paper, Text } from "@mantine/core";
 import { IconCalendarTime, IconPlayerPlay, IconStar } from "@tabler/icons";
 import React from "react";
+import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { SLIDER_HEIGHT } from "../constants/cssConstants";
 import { getImageByRelevance } from "../custom/AnimeData";
@@ -53,7 +54,7 @@ function HeaderSliderLayout({ anime, index }) {
                     {anime.titles[0].title}
                 </Text>
                 <Text lineClamp={1}>{`Plot Summary: ${anime.synopsis}`}</Text>
-                <Button fullWidth={false} size={"md"} sx={{ width: "fit-content", marginTop: "15px", padding: "10px 20px" }} radius={100} className={classes.sliderButton}>
+                <Button fullWidth={false} size={"md"} sx={{ width: "fit-content", marginTop: "15px", padding: "10px 20px" }} radius={100} className={classes.sliderButton} component={Link} to={`/anime/${anime.slug}`}>
                     <IconPlayerPlay size={16} stroke={1.5} />
                     <Text sx={{ marginLeft: "5px" }}>Play</Text>
                 </Button>

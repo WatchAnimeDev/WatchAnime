@@ -9,6 +9,7 @@ import { useMediaQuery } from "@mantine/hooks";
 
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH, SLIDER_HEIGHT } from "../constants/cssConstants";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
+import ScheduleComponent from "../components/ScheduleComponent";
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
         margin: "20px 30px",
@@ -91,6 +92,7 @@ function HomeScreen({ sideBarState, setSideBarState }) {
             <Container fluid className={classes.bodyContainer}>
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent"} sliderConfig={animeSliderConfig} />
                 <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular"} sliderConfig={animeSliderConfig} />
+                <ScheduleComponent></ScheduleComponent>
             </Container>
         </>
     ) : (

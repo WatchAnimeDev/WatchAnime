@@ -146,7 +146,7 @@ function HeaderComponent({ sideBarState, setSideBarState }) {
                         <a href={"/"} className={[classes.navIcons, classes.searchBarScheduleIcon]} onClick={(event) => event.preventDefault()}>
                             <IconCalendarEvent size={20} stroke={1.5} />
                         </a>
-                        <a href={"/"} className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()} sx={{}}>
+                        <a href={"/"} className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()}>
                             <IconUserCircle size={20} stroke={1.5} />
                         </a>
                     </Group>

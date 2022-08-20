@@ -1,4 +1,4 @@
-import { createStyles, Header, Group, Burger, Image, UnstyledButton, Text, useMantineTheme } from "@mantine/core";
+import { createStyles, Header, Group, Burger, Image, UnstyledButton, Text, useMantineTheme, Paper } from "@mantine/core";
 import { IconSearch, IconCalendarEvent, IconUserCircle } from "@tabler/icons";
 import { Link, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
@@ -49,7 +49,7 @@ const useStyles = createStyles((theme) => ({
         color: "white",
         fontSize: theme.fontSizes.sm,
         fontWeight: 500,
-
+        backgroundColor: "transparent",
         "&:hover": {
             color: WATCHANIME_RED,
         },
@@ -90,7 +90,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function HeaderComponent({ sideBarState, setSideBarState }) {
+function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
     const location = useLocation();
     const { classes } = useStyles(location);
     const spotlight = useSpotlight();
@@ -140,15 +140,21 @@ function HeaderComponent({ sideBarState, setSideBarState }) {
                         </Group>
                     </UnstyledButton>
                     <Group spacing={5}>
-                        <a href={"/"} className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
+                        <Paper className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
                             <IconSearch size={20} stroke={1.5} />
-                        </a>
-                        <a href={"/"} className={[classes.navIcons, classes.searchBarScheduleIcon]} onClick={(event) => event.preventDefault()}>
+                        </Paper>
+                        <Paper
+                            className={[classes.navIcons, classes.searchBarScheduleIcon]}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                otherData.executeTargetRefSchedule();
+                            }}
+                        >
                             <IconCalendarEvent size={20} stroke={1.5} />
-                        </a>
-                        <a href={"/"} className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()}>
+                        </Paper>
+                        <Paper className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()}>
                             <IconUserCircle size={20} stroke={1.5} />
-                        </a>
+                        </Paper>
                     </Group>
                 </Group>
             </div>

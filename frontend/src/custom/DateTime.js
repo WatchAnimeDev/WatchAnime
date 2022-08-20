@@ -41,4 +41,4 @@ function getDateAndDayForMonthFromCurrentDate() {
     }
     return dateArray;
 }
-export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate };
+export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate, roundOffTime, getHoursIn12HoursFormat };

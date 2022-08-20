@@ -4,21 +4,21 @@ import HeaderSliderLayout from "../layouts/HeaderSliderLayout";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
 import ScheduleDateSliderPartial from "../partials/ScheduleDateSliderPartial";
 
-const getSliderType = (sliderData, sliderRenderComponent, ind) => {
+const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
     switch (sliderRenderComponent) {
         case "HeaderSliderLayout":
             return <HeaderSliderLayout anime={sliderData} index={ind} />;
         case "AnimeSectionLayout":
             return <AnimeSectionLayout anime={sliderData} />;
         case "ScheduleSectionLayout":
-            return <ScheduleDateSliderPartial dayAndDate={sliderData} />;
+            return <ScheduleDateSliderPartial dayAndDate={sliderData} setSelectedDate={otherData.setSelectedDate} />;
         default:
             return <></>;
     }
 };
 
-function SliderComponent({ sliderDatas, sliderRenderComponent, sliderConfig = {} }) {
-    const slides = sliderDatas.map((sliderData, ind) => <Carousel.Slide key={ind}>{getSliderType(sliderData, sliderRenderComponent, ind)}</Carousel.Slide>);
+function SliderComponent({ sliderDatas, sliderRenderComponent, sliderConfig, otherData = {} }) {
+    const slides = sliderDatas.map((sliderData, ind) => <Carousel.Slide key={ind}>{getSliderType(sliderData, sliderRenderComponent, ind, otherData)}</Carousel.Slide>);
     return <Carousel {...sliderConfig}>{slides}</Carousel>;
 }
 

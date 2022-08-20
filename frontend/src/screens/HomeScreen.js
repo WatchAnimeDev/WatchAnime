@@ -10,6 +10,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH, SLIDER_HEIGHT } from "../constants/cssConstants";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
+import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
+
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
         margin: "20px 30px",
@@ -18,7 +20,28 @@ const useStyles = createStyles((theme) => ({
         },
     },
 }));
-function HomeScreen({ sideBarState, setSideBarState }) {
+
+const prepareScheduleData = (scheduleData = []) => {
+    scheduleData.forEach((schedule, index, scheduleData) => {
+        const tempDate = dateSchedule(Number(schedule.time) + 7200);
+        scheduleData[index].timeday = tempDate.time;
+        scheduleData[index].daynum = tempDate.daynum;
+    });
+    scheduleData.sort((first, second) => {
+        return first.timeday < second.timeday ? -1 : first.timeday > second.timeday ? 1 : 0;
+    });
+    return scheduleData;
+};
+
+const dateSchedule = (timeStamp) => {
+    const currentDate = new Date(timeStamp * 1000);
+    return {
+        daynum: currentDate.getDay(),
+        time: `${roundOffTime(getHoursIn12HoursFormat(currentDate.getHours()))}:${roundOffTime(currentDate.getMinutes())} ${currentDate.getHours() >= 12 ? "PM" : "AM"}`,
+    };
+};
+
+function HomeScreen({ sideBarState, setSideBarState, otherData }) {
     const targetRefRecent = useRef(null);
     const targetRefPopular = useRef(null);
 
@@ -37,11 +60,11 @@ function HomeScreen({ sideBarState, setSideBarState }) {
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`, axios.get(`https://apitest.watchanime.dev/schedule`))]);
+            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`), axios.get(`${API_BASE_URL}/schedule`)]);
             setRecentlyReleasedAnimes(recentlyReleasedData.data);
             setSliderAnimes(popularData.data.slice(0, 10));
             setPopularSeries(popularData.data);
-            setScheduleData(scheduleData);
+            setScheduleData(prepareScheduleData(scheduleData.data));
             setAjaxComplete(true);
             return;
         }
@@ -91,8 +114,8 @@ function HomeScreen({ sideBarState, setSideBarState }) {
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent"} sliderConfig={animeSliderConfig} />
+                <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
                 <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular"} sliderConfig={animeSliderConfig} />
-                <ScheduleComponent></ScheduleComponent>
             </Container>
         </>
     ) : (

@@ -20,25 +20,23 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function ScheduleComponent() {
+function ScheduleComponent({ scheduleData, targetRefSchedule }) {
     const { classes } = useStyles();
 
     return (
-        <>
-            <Group sx={{ width: "100%", marginBottom: "30px" }}>
-                <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
-                    <Text sx={{ fontSize: "20px", fontWeight: "700" }}>Estimated Schedule</Text>
-                    <div className={classes.scheduleCurrentTimeParent}>
-                        <div>GMT{getTimeZoneOffesetFromGMT()}</div>
-                        <div className={classes.scheduleCurrentTimeDate}>{getCurrentDate()}</div>
-                        <ScheduleTimerPartial />
-                    </div>
-                </Group>
-                <Group sx={{ width: "100%" }}>
-                    <ScheduleSectionLayout />
-                </Group>
+        <Group sx={{ width: "100%", marginBottom: "30px" }} ref={targetRefSchedule}>
+            <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
+                <Text sx={{ fontSize: "20px", fontWeight: "700" }}>Estimated Schedule</Text>
+                <div className={classes.scheduleCurrentTimeParent}>
+                    <div>GMT{getTimeZoneOffesetFromGMT()}</div>
+                    <div className={classes.scheduleCurrentTimeDate}>{getCurrentDate()}</div>
+                    <ScheduleTimerPartial />
+                </div>
             </Group>
-        </>
+            <Group sx={{ width: "100%" }}>
+                <ScheduleSectionLayout scheduleData={scheduleData} />
+            </Group>
+        </Group>
     );
 }
 

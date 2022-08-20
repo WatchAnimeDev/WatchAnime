@@ -10,6 +10,7 @@ import HeaderComponent from "./components/HeaderComponent";
 import SearchLayout from "./layouts/SearchLayout";
 import AnimeDetailsScreen from "./screens/AnimeDetailsScreen";
 import VideoPlayerScreen from "./screens/VideoPlayerScreen";
+import FooterComponent from "./components/FooterComponent";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -43,6 +44,7 @@ function App() {
                         </Routes>
                     </Container>
                 </main>
+                <FooterComponent />
             </Router>
         </SpotlightProvider>
     );

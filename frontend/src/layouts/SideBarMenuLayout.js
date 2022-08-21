@@ -17,17 +17,20 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function SideBarMenuLayout({ menuData }) {
+function SideBarMenuLayout({ menuData, setSideBarState }) {
     const { classes } = useStyles();
     return (
         <>
             <Anchor
                 component={Link}
-                to="/"
+                to={`${menuData.href ?? "/"}`}
                 className={classes.sideBarMenuLayoutAnchor}
                 onClick={(e) => {
-                    e.preventDefault();
-                    menuData.refs();
+                    setSideBarState(false);
+                    if (menuData.refs) {
+                        e.preventDefault();
+                        menuData.refs();
+                    }
                 }}
             >
                 <Text>{menuData.label}</Text>

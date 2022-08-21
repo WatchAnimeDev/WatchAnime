@@ -16,7 +16,7 @@ function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfi
     const { classes } = useStyles();
 
     const sideBarItems = sideBarComponentConfig.data.map((data, ind) => {
-        return sideBarComponentConfig.type === "SideBarMenuLayout" ? <SideBarMenuLayout menuData={data} key={ind} /> : <></>;
+        return sideBarComponentConfig.type === "SideBarMenuLayout" ? <SideBarMenuLayout menuData={data} key={ind} setSideBarState={setSideBarState} /> : <></>;
     });
 
     return (

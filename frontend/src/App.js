@@ -36,10 +36,10 @@ function App() {
             <Router>
                 <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />
                 <main className="py-3">
-                    <Container className="bodyContainer" fluid p={0}>
+                    <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "80vh" }}>
                         <Routes>
                             <Route path="/" element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ targetRefSchedule: targetRefSchedule }} />} exact></Route>
-                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen />} exact></Route>
+                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{}} />} exact></Route>
                             <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen />} exact></Route>
                         </Routes>
                     </Container>

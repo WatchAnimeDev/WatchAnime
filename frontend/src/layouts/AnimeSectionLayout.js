@@ -2,7 +2,7 @@ import React from "react";
 import { createStyles, Paper, Text, Group, Anchor, Tooltip } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
+import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -58,15 +58,15 @@ function Card({ animeData }) {
                                 {getAnimeTitleByRelevance(animeData.titles)}
                             </Text>
                         </Tooltip>
-                        <Text sx={{ fontSize: "10px" }}>{`${animeData?.duration?.split(" ")[0]} min` ?? ""}</Text>
+                        <Text sx={{ fontSize: "10px" }}>{animeData.duration ? `${animeData?.duration?.split(" ")[0]} min` : ""}</Text>
                     </Group>
                 </Group>
                 <Group sx={{ width: "100%" }}>
                     <Group className={classes.sliderInfoDisplayDiv}>
                         <Text lineClamp={1} sx={{ fontSize: "10px", flexBasis: "70%" }}>
-                            {animeData.genres.map((genre) => genre.name).join(",")}
+                            {toTitleCase(animeData.genres.map((genre) => genre.name).join(","))}
                         </Text>
-                        <div className={classes.animeSourceDiv}>{animeData.type}</div>
+                        <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
                     </Group>
                 </Group>
             </Paper>

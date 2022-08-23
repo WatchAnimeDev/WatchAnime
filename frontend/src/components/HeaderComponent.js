@@ -10,7 +10,7 @@ import { useSpotlight } from "@mantine/spotlight";
 const useStyles = createStyles((theme) => ({
     header: {
         ...{ paddingLeft: theme.spacing.md, paddingRight: theme.spacing.md },
-        ...(window.location.pathname === "/" ? { backgroundColor: "transparent", borderBottom: 0 } : {}),
+        ...(window.location.pathname === "/" || window.location.href.includes("/anime") ? { backgroundColor: "transparent", borderBottom: 0 } : {}),
     },
 
     inner: {

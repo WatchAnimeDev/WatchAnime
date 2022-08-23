@@ -26,10 +26,12 @@ function SideBarMenuLayout({ menuData, setSideBarState }) {
                 to={`${menuData.href ?? "/"}`}
                 className={classes.sideBarMenuLayoutAnchor}
                 onClick={(e) => {
-                    setSideBarState(false);
                     if (menuData.refs) {
                         e.preventDefault();
                         menuData.refs();
+                    }
+                    if (menuData.href) {
+                        setSideBarState(false);
                     }
                 }}
             >

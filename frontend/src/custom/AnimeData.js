@@ -15,4 +15,12 @@ function getAnimeTitleByRelevance(titles, isDub) {
     return `${defaultTitle.length ? defaultTitle[0].title : titles[0].title}${isDub ? " (DUB)" : ""}`;
 }
 
-export { getImageByRelevance, getAnimeTitleByRelevance };
+const toTitleCase = (phrase) => {
+    return phrase
+        .toLowerCase()
+        .split(",")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(",");
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase };

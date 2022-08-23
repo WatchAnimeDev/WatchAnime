@@ -14,7 +14,10 @@ const useStyles = createStyles((theme) => ({
         backgroundPosition: "center",
         justifyContent: "flex-end",
         padding: "10px",
-        maxWidth: "200px",
+        width: "200px",
+        [theme.fn.smallerThan("md")]: {
+            width: "150px",
+        },
     },
     backGroundFilter: {
         width: "100%",
@@ -23,6 +26,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "7px",
         background: "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.42) 51.04%, rgba(0, 0, 0, 0.94) 79.17%, #000000 100%)",
         opacity: "0.9",
+        position: "absolute",
     },
     animeSourceDiv: {
         backgroundColor: WATCHANIME_RED,
@@ -78,7 +82,7 @@ function Card({ animeData }) {
 function AnimeSectionLayout({ anime }) {
     const { classes } = useStyles();
     return (
-        <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode}` : ""}`} className={classes.noTextDecoration}>
+        <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
             <Card animeData={anime} />
         </Anchor>
     );

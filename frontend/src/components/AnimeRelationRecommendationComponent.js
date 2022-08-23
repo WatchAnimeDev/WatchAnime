@@ -46,8 +46,8 @@ function AnimeRelationRecommendationComponent({ animeRecommendation, animeData }
 
     return (
         <>
-            <AnimeSectionComponent sectionTitle={"RELATED ANIME"} sectionAnimeData={relatedData} hasViewMore={false} sliderConfig={animeSliderConfig} />
-            <AnimeSectionComponent sectionTitle={"RECOMMENDED FOR YOU"} sectionAnimeData={animeRecommendation} hasViewMore={false} sliderConfig={animeSliderConfig} />
+            {relatedData.length ? <AnimeSectionComponent sectionTitle={"RELATED ANIME"} sectionAnimeData={relatedData} hasViewMore={false} sliderConfig={animeSliderConfig} /> : ""}
+            {animeRecommendation.length ? <AnimeSectionComponent sectionTitle={"RECOMMENDED FOR YOU"} sectionAnimeData={animeRecommendation} hasViewMore={false} sliderConfig={animeSliderConfig} /> : ""}
         </>
     );
 }

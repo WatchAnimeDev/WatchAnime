@@ -11,6 +11,7 @@ import SearchLayout from "./layouts/SearchLayout";
 import AnimeDetailsScreen from "./screens/AnimeDetailsScreen";
 import VideoPlayerScreen from "./screens/VideoPlayerScreen";
 import FooterComponent from "./components/FooterComponent";
+import GenericScreen from "./screens/GenericScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -41,6 +42,8 @@ function App() {
                             <Route path="/" element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ targetRefSchedule: targetRefSchedule }} />} exact></Route>
                             <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{}} />} exact></Route>
                             <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen />} exact></Route>
+                            <Route path="/recent/:pageNumber" element={<GenericScreen pageType={"recent"} />}></Route>
+                            <Route path="/popular/:pageNumber" element={<GenericScreen pageType={"popular"} />}></Route>
                         </Routes>
                     </Container>
                 </main>

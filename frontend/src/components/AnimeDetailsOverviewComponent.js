@@ -68,7 +68,7 @@ const useStyles = createStyles((theme) => ({
         maxWidth: "45%",
         margin: "15px",
         [theme.fn.smallerThan("lg")]: {
-            width: "100%",
+            maxWidth: "100%",
         },
     },
 }));

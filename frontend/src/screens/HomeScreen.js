@@ -113,9 +113,9 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
-                <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent"} sliderConfig={animeSliderConfig} />
+                <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
-                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular"} sliderConfig={animeSliderConfig} />
+                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} />
             </Container>
         </>
     ) : (

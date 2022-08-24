@@ -1,7 +1,7 @@
-import { Container, createStyles, Group, Loader, Text } from "@mantine/core";
+import { Container, createStyles, Group, Loader, Pagination, Text } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { API_BASE_URL } from "../constants/genricConstants";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
 
@@ -24,11 +24,20 @@ const getApiUrlFromRoute = (location, searchParams) => {
     }
 };
 
-function GenericScreen({ pageType }) {
+function GenericScreen({ pageType, hasPagination }) {
     const location = useLocation();
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const [genericPageData, setGenericPageData] = useState();
     const [ajaxComplete, setAjaxComplete] = useState(false);
+    const [activePage, setPage] = useState(location.pathname.split("/").slice(-1)[0]);
+
+    const onPaginationClick = (e) => {
+        let tempPath = location.pathname.split("/");
+        tempPath.pop();
+        navigate(`${tempPath.join("/")}/${e}`);
+        setPage(e);
+    };
 
     useEffect(() => {
         async function getGenericDetails() {
@@ -54,6 +63,11 @@ function GenericScreen({ pageType }) {
                     ))}
                 </Group>
             </Group>
+            {hasPagination && (
+                <Group sx={{ marginTop: "50px", justifyContent: "center" }}>
+                    <Pagination page={activePage} onChange={onPaginationClick} total={50} />
+                </Group>
+            )}
         </Container>
     ) : (
         <Loader sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />

@@ -12,15 +12,13 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, otherData, params }
     const [ajaxComplete, setAjaxComplete] = useState(false);
 
     const [animeData, setAnimeData] = useState({});
-    const [animeRecommendation, setAnimeRecommendation] = useState([]);
 
     useEffect(() => {
         async function getAnimeDetails() {
             setAjaxComplete(false);
             const animeSlug = location.pathname.split("/anime/")[1];
-            const [animeAjaxData, animeRecommendationAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/anime/details/${animeSlug}`), axios.get(`${API_BASE_URL}/anime/recommendation/${animeSlug}`)]);
+            const [animeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/anime/details/${animeSlug}`)]);
             setAnimeData(animeAjaxData.data);
-            setAnimeRecommendation(animeRecommendationAjaxData.data);
             setAjaxComplete(true);
             return;
         }
@@ -38,7 +36,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, otherData, params }
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <AnimeDetailsOverviewComponent animeData={animeData} />
-                <AnimeRelationRecommendationComponent animeRecommendation={animeRecommendation} animeData={animeData} />
+                <AnimeRelationRecommendationComponent animeData={animeData} />
             </Container>
         </>
     ) : (

@@ -32,6 +32,11 @@ function GenericScreen({ pageType, hasPagination }) {
     const [ajaxComplete, setAjaxComplete] = useState(false);
     const [activePage, setPage] = useState(location.pathname.split("/").slice(-1)[0]);
 
+    const pageTitleType = {
+        popular: "POPULAR",
+        recent: "RECENTLY RELEASED",
+    };
+
     const onPaginationClick = (e) => {
         let tempPath = location.pathname.split("/");
         tempPath.pop();
@@ -55,7 +60,7 @@ function GenericScreen({ pageType, hasPagination }) {
         <Container fluid className={classes.bodyContainer}>
             <Group sx={{ width: "100%", marginBottom: "30px" }}>
                 <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
-                    <Text sx={{ fontWeight: "700" }}>{"RECENTLY RELEASED"}</Text>
+                    <Text sx={{ fontWeight: "700" }}>{pageTitleType[pageType]}</Text>
                 </Group>
                 <Group>
                     {genericPageData.map((genericData, ind) => (

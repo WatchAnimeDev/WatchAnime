@@ -19,7 +19,7 @@ function App() {
 
     const targetRefSchedule = useRef(null);
 
-    const executeTargetRefSchedule = () => targetRefSchedule.current.scrollIntoView();
+    const executeTargetRefSchedule = () => targetRefSchedule.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
     return (
         <SpotlightProvider

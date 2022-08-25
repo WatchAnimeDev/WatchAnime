@@ -45,8 +45,8 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
     const targetRefRecent = useRef(null);
     const targetRefPopular = useRef(null);
 
-    const executeTargetRefRecent = () => targetRefRecent.current.scrollIntoView();
-    const executeTargetRefPopular = () => targetRefPopular.current.scrollIntoView();
+    const executeTargetRefRecent = () => targetRefRecent.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    const executeTargetRefPopular = () => targetRefPopular.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);

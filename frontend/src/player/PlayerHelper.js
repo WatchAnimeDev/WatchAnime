@@ -43,4 +43,31 @@ const setWatchHistoryBySlug = (animeData, playbackDetails, episodeNumber) => {
     localStorage.setItem("watchHistory", JSON.stringify(lastWatched));
 };
 
-export { initHlsSelector, getWatchHistoryBySlug, getPlaybackTimeFromWatchHistoryBySlug, setWatchHistoryBySlug };
+const setLastWatchedQueue = (slug, episodeNumber) => {
+    let lastWatched = localStorage.getItem("lastWatchedQueue") || "[]";
+    lastWatched = JSON.parse(lastWatched);
+    lastWatched = lastWatched.filter((anime) => anime.slug !== slug);
+    lastWatched.unshift({
+        slug: slug,
+        episodeNumber: parseInt(episodeNumber),
+    });
+    if (lastWatched.length > 20) {
+        lastWatched.pop();
+    }
+    localStorage.setItem("lastWatchedQueue", JSON.stringify(lastWatched));
+};
+
+const getLastWatchedData = () => {
+    let animeData = [];
+    let lastWatchedQueue = localStorage.getItem("lastWatchedQueue") || "[]";
+    lastWatchedQueue = JSON.parse(lastWatchedQueue);
+    let watchHistory = localStorage.getItem("watchHistory") || "{}";
+    watchHistory = JSON.parse(watchHistory);
+    for (const lastWatched of lastWatchedQueue) {
+        const playbackPercent = (watchHistory[lastWatched.slug].watchedEpisodes[lastWatched.episodeNumber].playBackTime / watchHistory[lastWatched.slug].watchedEpisodes[lastWatched.episodeNumber].duration) * 100;
+        animeData.push({ ...watchHistory[lastWatched.slug].animeData, ...{ playbackPercent: playbackPercent, playBackData: watchHistory[lastWatched.slug].watchedEpisodes[lastWatched.episodeNumber], currentReleasedEpisode: lastWatched.episodeNumber } });
+    }
+    return animeData;
+};
+
+export { initHlsSelector, getWatchHistoryBySlug, getPlaybackTimeFromWatchHistoryBySlug, setWatchHistoryBySlug, setLastWatchedQueue, getLastWatchedData };

@@ -6,6 +6,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useSpotlight } from "@mantine/spotlight";
+import { showNotification } from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -152,7 +153,16 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                         >
                             <IconCalendarEvent size={20} stroke={1.5} />
                         </Paper>
-                        <Paper className={[classes.navIcons, classes.searchBarAccountIcon]} onClick={(event) => event.preventDefault()}>
+                        <Paper
+                            className={[classes.navIcons, classes.searchBarAccountIcon]}
+                            onClick={() => {
+                                showNotification({
+                                    title: "Comming Soon!",
+                                    message: "Hey there, account features are on the way! 🤥",
+                                    autoClose: 5000,
+                                });
+                            }}
+                        >
                             <IconUserCircle size={20} stroke={1.5} />
                         </Paper>
                     </Group>

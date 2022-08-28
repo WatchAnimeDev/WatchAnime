@@ -13,7 +13,7 @@ function ScheduleSectionLayout({ scheduleData }) {
         align: "start",
         includeGapInSize: false,
         loop: true,
-        initialSlide: new Date().getDate() - 3,
+        initialSlide: new Date().getDate() - 2,
     };
     return (
         <Paper sx={{ width: "100%" }}>

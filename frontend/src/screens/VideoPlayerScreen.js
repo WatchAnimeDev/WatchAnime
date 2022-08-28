@@ -1,6 +1,6 @@
-import { Button, Container, Loader } from "@mantine/core";
+import { Container, Loader } from "@mantine/core";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SideBarComponent from "../components/SideBarComponent";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
@@ -8,6 +8,7 @@ import { API_BASE_URL } from "../constants/genricConstants";
 
 function VideoPlayerScreen({ sideBarState, setSideBarState }) {
     const location = useLocation();
+    const firstRender = useRef(true);
     const [ajaxComplete, setAjaxComplete] = useState(false);
     const [episodeData, setEpisodeData] = useState({});
     const [episodeDecoderData, setEpisodeDecoderData] = useState({});
@@ -48,7 +49,11 @@ function VideoPlayerScreen({ sideBarState, setSideBarState }) {
 
             return;
         }
-        getAnimeDetails();
+        if (!firstRender.current) {
+            getAnimeDetails();
+        } else {
+            firstRender.current = false;
+        }
     }, [selectedServer]);
 
     return ajaxComplete ? (

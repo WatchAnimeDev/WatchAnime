@@ -47,6 +47,24 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "space-between",
         gap: "15px",
     },
+    playBackTimeDiv: {
+        position: "absolute",
+        height: "5px",
+        background: WATCHANIME_RED,
+        bottom: 0,
+        zIndex: 1,
+    },
+    animeCardEpisodeDiv: {
+        fontSize: "10px",
+        background: WATCHANIME_RED,
+        display: "inline-block",
+        padding: "2px 12px",
+        borderRadius: "4px",
+        position: "absolute",
+        left: "10px",
+        top: "10px",
+        color: "white",
+    },
 }));
 
 function Card({ animeData }) {
@@ -74,7 +92,8 @@ function Card({ animeData }) {
                     </Group>
                 </Group>
 
-                <Paper sx={{ position: "absolute", height: "5px", background: WATCHANIME_RED, bottom: 0, width: "0%", zIndex: 1 }}></Paper>
+                <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent ?? 0}%` }}></Paper>
+                {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
             </Paper>
             <div className={classes.backGroundFilter}></div>
         </>

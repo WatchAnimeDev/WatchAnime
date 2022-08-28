@@ -7,7 +7,7 @@ import { prepareVideoData } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
-import { initHlsSelector, setWatchHistoryBySlug } from "../player/PlayerHelper";
+import { getLastWatchedData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
 
 const updatePlaybackInWathHistoryBySlug = (player, slug, episodeNumber) => {
     setWatchHistoryBySlug({ slug: slug }, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
@@ -48,9 +48,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, selectedServer 
         });
         player.on("dispose", () => {
             console.log("player will dispose");
-            if (typeof videoPlaybackRef.current === "function") {
-                clearInterval(videoPlaybackRef.current);
-            }
+            clearInterval(videoPlaybackRef.current);
         });
         player.on("ended", () => {
             console.log("player video ended");
@@ -102,6 +100,9 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, selectedServer 
             console.log("loadeddata");
             const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
             const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
+            let lastWatchedData = getLastWatchedData();
+            player.currentTime(lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime);
+            setLastWatchedQueue(animeSlug, episodeNumber);
             setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
             videoPlaybackRef.current = setInterval(updatePlaybackInWathHistoryBySlug.bind(null, player, animeSlug, episodeNumber), 3000);
         });

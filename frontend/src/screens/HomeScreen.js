@@ -11,6 +11,7 @@ import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH, SLIDER
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
+import { getLastWatchedData } from "../player/PlayerHelper";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -53,9 +54,13 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
 
     const [ajaxComplete, setAjaxComplete] = useState(false);
     const [recentlyReleasedAnimes, setRecentlyReleasedAnimes] = useState([]);
+
     const [scheduleData, setScheduleData] = useState([]);
     const [sliderAnimes, setSliderAnimes] = useState([]);
     const [popularSeries, setPopularSeries] = useState([]);
+
+    const lastWatchedData = getLastWatchedData();
+
     const { classes } = useStyles();
 
     useEffect(() => {
@@ -107,12 +112,14 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
         },
         nextControlIcon: <IconChevronRight size={20} stroke={1.5} />,
         previousControlIcon: <IconChevronLeft size={20} stroke={1.5} />,
+        sx: { width: "100%" },
     };
     return ajaxComplete ? (
         <>
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
+                {lastWatchedData.length ? <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Last Watched"} sectionAnimeData={lastWatchedData} sliderConfig={animeSliderConfig} /> : <></>}
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
                 <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} />

@@ -1,4 +1,5 @@
 import { Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { IconPlayerPlay, IconPlus } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -88,7 +89,19 @@ function AnimeDetailsOverviewComponent({ animeData }) {
                             <IconPlayerPlay size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>
-                        <Button fullWidth={false} size={"md"} radius={5} component={Link} to={`/anime/${animeData.slug}`} className={classes.watchListButton}>
+                        <Button
+                            fullWidth={false}
+                            size={"md"}
+                            radius={5}
+                            onClick={() => {
+                                showNotification({
+                                    title: "Comming Soon!",
+                                    message: "Hey there, watchlist features are on the way! Will be added on next release 🤥",
+                                    autoClose: 8000,
+                                });
+                            }}
+                            className={classes.watchListButton}
+                        >
                             <IconPlus size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Add to Watchlist</Text>
                         </Button>

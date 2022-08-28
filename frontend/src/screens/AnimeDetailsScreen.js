@@ -7,7 +7,7 @@ import AnimeRelationRecommendationComponent from "../components/AnimeRelationRec
 import SideBarComponent from "../components/SideBarComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 
-function AnimeDetailsScreen({ sideBarState, setSideBarState, otherData, params }) {
+function AnimeDetailsScreen({ sideBarState, setSideBarState }) {
     const location = useLocation();
     const [ajaxComplete, setAjaxComplete] = useState(false);
 

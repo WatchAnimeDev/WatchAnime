@@ -1,3 +1,5 @@
+import { API_REDIRECT_HOST } from "../constants/genricConstants";
+
 function getImageByRelevance(images, size, type = "") {
     if (images.webp && (!type || type === "webp")) {
         return images.webp[size] ?? images.webp[Object.keys(images.webp)[0]];
@@ -23,4 +25,29 @@ const toTitleCase = (phrase) => {
         .join(",");
 };
 
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase };
+const prepareVideoData = (videoData) => {
+    var videos_with_video_format = [];
+    for (const result of videoData) {
+        // results.forEach(async (result) => {
+        if (result.url.includes("mp4") || result.url.includes("m3u8")) {
+            videos_with_video_format.push({
+                link: getProxyUrl(result.url),
+                type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
+                resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
+                priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,
+            });
+        }
+    }
+    videos_with_video_format.sort((b, a) => a.priority - b.priority);
+    return videos_with_video_format;
+};
+
+const getProxyUrl = (videoUrl) => {
+    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", document.location.hostname];
+    if (whitelist.some((link) => videoUrl.includes(link))) {
+        return videoUrl;
+    }
+    return API_REDIRECT_HOST + videoUrl;
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData };

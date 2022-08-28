@@ -40,8 +40,8 @@ function App() {
                     <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "80vh" }}>
                         <Routes>
                             <Route path="/" element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ targetRefSchedule: targetRefSchedule }} />} exact></Route>
-                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{}} />} exact></Route>
-                            <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen />} exact></Route>
+                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
+                            <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
                             <Route path="/recent/:pageNumber" element={<GenericScreen pageType={"recent"} hasPagination={true} />}></Route>
                             <Route path="/popular/:pageNumber" element={<GenericScreen pageType={"popular"} hasPagination={true} />}></Route>
                         </Routes>

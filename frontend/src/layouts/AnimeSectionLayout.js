@@ -73,6 +73,8 @@ function Card({ animeData }) {
                         <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
                     </Group>
                 </Group>
+
+                <Paper sx={{ position: "absolute", height: "5px", background: WATCHANIME_RED, bottom: 0, width: "0%", zIndex: 1 }}></Paper>
             </Paper>
             <div className={classes.backGroundFilter}></div>
         </>

@@ -95,7 +95,7 @@ function AnimeDetailsOverviewComponent({ animeData }) {
                             radius={5}
                             onClick={() => {
                                 showNotification({
-                                    title: "Comming Soon!",
+                                    title: "Coming Soon!",
                                     message: "Hey there, watchlist features are on the way! Will be added on next release 🤥",
                                     autoClose: 8000,
                                 });

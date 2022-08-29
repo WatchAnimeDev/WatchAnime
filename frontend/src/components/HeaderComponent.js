@@ -157,7 +157,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                             className={[classes.navIcons, classes.searchBarAccountIcon]}
                             onClick={() => {
                                 showNotification({
-                                    title: "Comming Soon!",
+                                    title: "Coming Soon!",
                                     message: "Hey there, account features are on the way! 🤥",
                                     autoClose: 5000,
                                 });

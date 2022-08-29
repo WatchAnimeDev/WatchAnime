@@ -1,23 +1,58 @@
-import { Group, Text } from "@mantine/core";
+import { Button, createStyles, Divider, Group, Text, Title, UnstyledButton } from "@mantine/core";
 import axios from "axios";
 import React, { useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { API_BASE_URL } from "../constants/genricConstants";
-import { prepareVideoData } from "../custom/AnimeData";
+import { getAnimeTitleByRelevance, prepareVideoData } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import { getLastWatchedData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
+import { IconBug, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
+import { WATCHANIME_RED } from "../constants/cssConstants";
+
+const useStyles = createStyles((theme) => ({
+    parentPlayerDiv: {
+        height: "fit-content",
+        width: "100%",
+        maxWidth: "900px",
+        alignItems: "baseline",
+        gap: 0,
+    },
+    changeServerButton: {
+        backgroundColor: WATCHANIME_RED,
+        fontSize: "14px",
+        padding: "3px 5px",
+        height: "fit-content",
+        alignItems: "center",
+        "&:hover": {
+            textDecoration: "none",
+            backgroundColor: WATCHANIME_RED,
+        },
+    },
+    videoDetailsDiv: {
+        width: "100%",
+        height: "fit-content",
+        padding: "15px 20px",
+        backgroundColor: "#2A2B2C",
+        gap: 0,
+        marginBottom: "25px",
+    },
+}));
 
 const updatePlaybackInWathHistoryBySlug = (player, slug, episodeNumber) => {
     setWatchHistoryBySlug({ slug: slug }, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
 };
 
 function VideoPlayerComponent({ episodeData, episodeDecoderData, selectedServer }) {
+    const { classes } = useStyles();
     const playerRef = useRef(null);
     const videoCounter = useRef(0);
     const videoPlaybackRef = useRef();
     const location = useLocation();
+
+    const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
+    const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
 
     let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList);
 
@@ -98,10 +133,9 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, selectedServer 
         });
         player.on("loadeddata", () => {
             console.log("loadeddata");
-            const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
-            const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
             let lastWatchedData = getLastWatchedData();
-            player.currentTime(lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime);
+            let lastWatchedTime = lastWatchedData.length && lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug).length ? lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime : 0;
+            player.currentTime(lastWatchedTime);
             setLastWatchedQueue(animeSlug, episodeNumber);
             setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
             videoPlaybackRef.current = setInterval(updatePlaybackInWathHistoryBySlug.bind(null, player, animeSlug, episodeNumber), 3000);
@@ -115,10 +149,45 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, selectedServer 
     return (
         <>
             <Group pt={"80px"} sx={{ width: "100%", justifyContent: "center" }}>
-                <Group sx={{ height: "500px", width: "100%", maxWidth: "900px" }}>
-                    <Text>Hello</Text>
+                <Group className={classes.parentPlayerDiv}>
+                    <Group sx={{ backgroundColor: "#353738", width: "100%", fontSize: "14px", padding: "0px 10px", justifyContent: "space-between" }}>
+                        <Group sx={{ gap: "5px" }}>
+                            <Text>EP {episodeNumber}</Text>
+                            <Divider orientation="vertical" />
+                            <Text>Internal Player</Text>
+                        </Group>
+                        <Group>
+                            <IconPlayerTrackPrev size={14} />
+                            <IconPlayerTrackNext size={14} />
+                            <IconDownload size={14} />
+                            <IconBug size={14} />
+                        </Group>
+                    </Group>
                     <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} />
-                    <Text>World</Text>
+                    <Group className={classes.videoDetailsDiv}>
+                        <Group sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                            <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{getAnimeTitleByRelevance(episodeData.animeDetails.titles)}</Title>
+                            <Button className={classes.changeServerButton}>
+                                <IconSettings size={14} />
+                                <Text sx={{ paddingLeft: "5px" }}>Change Server</Text>
+                            </Button>
+                        </Group>
+                        <Divider sx={{ width: "100%", margin: "10px 0px" }} />
+                        <Group sx={{ fontSize: "12px", flexDirection: "column", alignItems: "baseline", gap: "0px" }}>
+                            <Group sx={{ gap: "5px" }}>
+                                <Text>Genres:</Text>
+                                <Text>{episodeData.animeDetails?.genres?.map((genre) => genre.name).join(", ")}</Text>
+                            </Group>
+                            <Group sx={{ gap: "5px" }}>
+                                <Text>Status:</Text>
+                                <Text>{episodeData.animeDetails.airing ? "Ongoing" : "Finished Airing"}</Text>
+                                <Divider orientation="vertical" />
+                                <UnstyledButton sx={{ fontSize: "10px", padding: "1px 7px", backgroundColor: "#636363" }} component={Link} to={`/anime/${animeSlug}`}>
+                                    More Info
+                                </UnstyledButton>
+                            </Group>
+                        </Group>
+                    </Group>
                 </Group>
             </Group>
         </>

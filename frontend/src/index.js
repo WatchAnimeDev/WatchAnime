@@ -5,13 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
         <NotificationsProvider>
-            <App />
+            <ModalsProvider>
+                <App />
+            </ModalsProvider>
         </NotificationsProvider>
     </MantineProvider>
 );

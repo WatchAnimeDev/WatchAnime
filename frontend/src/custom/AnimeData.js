@@ -50,4 +50,11 @@ const getProxyUrl = (videoUrl) => {
     return API_REDIRECT_HOST + videoUrl;
 };
 
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData };
+const prevEpisodeUrl = (animeSlug, episodeNumber) => {
+    return episodeNumber > 1 ? `/anime/${animeSlug}/episode/${episodeNumber - 1}` : false;
+};
+const nextEpisodeUrl = (animeSlug, episodeNumber, totalEpisodes) => {
+    return episodeNumber < totalEpisodes ? `/anime/${animeSlug}/episode/${episodeNumber + 1}` : false;
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl };

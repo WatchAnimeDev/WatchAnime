@@ -33,7 +33,7 @@ const useStyles = createStyles((theme) => ({
 function HeaderSliderLayout({ anime, index }) {
     const { classes } = useStyles();
     return (
-        <Paper sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }} className="slider-slide">
+        <Paper sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${anime.bannerImage ?? getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }} className="slider-slide">
             <div className={classes.sliderText}>
                 <Text sx={{ color: WATCHANIME_RED }}>{`#${index + 1} Trending`}</Text>
                 <Group>

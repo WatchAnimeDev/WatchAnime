@@ -7,7 +7,7 @@ import AnimeRelationRecommendationComponent from "../components/AnimeRelationRec
 import SideBarComponent from "../components/SideBarComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 
-function AnimeDetailsScreen({ sideBarState, setSideBarState }) {
+function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
     const [ajaxComplete, setAjaxComplete] = useState(false);
 
@@ -28,12 +28,12 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState }) {
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }, { label: "Report a Problem" }, { label: "Install App" }],
+        data: [{ label: "Home", href: "/" }, { label: "Random" }],
     };
 
     return ajaxComplete ? (
         <>
-            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
+            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <AnimeDetailsOverviewComponent animeData={animeData} />
                 <AnimeRelationRecommendationComponent animeData={animeData} />

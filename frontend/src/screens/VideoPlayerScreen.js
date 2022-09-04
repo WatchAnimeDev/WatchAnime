@@ -6,7 +6,7 @@ import SideBarComponent from "../components/SideBarComponent";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 
-function VideoPlayerScreen({ sideBarState, setSideBarState }) {
+function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
     const [ajaxComplete, setAjaxComplete] = useState(false);
     const [episodeData, setEpisodeData] = useState({});
@@ -15,7 +15,7 @@ function VideoPlayerScreen({ sideBarState, setSideBarState }) {
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }, { label: "Report a Problem" }, { label: "Install App" }],
+        data: [{ label: "Home", href: "/" }, { label: "Random" }],
     };
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function VideoPlayerScreen({ sideBarState, setSideBarState }) {
 
     return ajaxComplete ? (
         <>
-            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
+            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <VideoPlayerComponent episodeData={episodeData} episodeDecoderData={episodeDecoderData} />
             </Container>

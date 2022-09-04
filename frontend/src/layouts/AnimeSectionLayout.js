@@ -33,6 +33,7 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "10px",
         fontSize: "10px",
         padding: "2px 10px",
+        color: "white",
     },
     noTextDecoration: {
         textDecoration: "none",

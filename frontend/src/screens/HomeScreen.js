@@ -42,7 +42,7 @@ const dateSchedule = (timeStamp) => {
     };
 };
 
-function HomeScreen({ sideBarState, setSideBarState, otherData }) {
+function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState, otherData }) {
     const targetRefRecent = useRef(null);
     const targetRefPopular = useRef(null);
 
@@ -78,7 +78,7 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Recently Added", refs: executeTargetRefRecent }, { label: "Popular", refs: executeTargetRefPopular }, { label: "Random" }, { label: "Report a Problem" }, { label: "Install App" }],
+        data: [{ label: "Recently Added", refs: executeTargetRefRecent }, { label: "Popular", refs: executeTargetRefPopular }, { label: "Random" }],
     };
     const headerSliderConfig = {
         withIndicators: true,
@@ -116,7 +116,7 @@ function HomeScreen({ sideBarState, setSideBarState, otherData }) {
     };
     return ajaxComplete ? (
         <>
-            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} />
+            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
                 {lastWatchedData.length ? <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Last Watched"} sectionAnimeData={lastWatchedData} sliderConfig={animeSliderConfig} /> : <></>}

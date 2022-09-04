@@ -12,9 +12,9 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfig = {} }) {
+function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfig = {}, otherData = {} }) {
     const { classes } = useStyles();
-
+    sideBarComponentConfig = specificActionsOnSideBarComponentType(sideBarComponentConfig.type, sideBarComponentConfig, otherData);
     const sideBarItems = sideBarComponentConfig.data.map((data, ind) => {
         return sideBarComponentConfig.type === "SideBarMenuLayout" ? <SideBarMenuLayout menuData={data} key={ind} setSideBarState={setSideBarState} /> : <></>;
     });
@@ -24,6 +24,27 @@ function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfi
             <Group className={classes.sideBarGroup}>{sideBarItems}</Group>
         </Drawer>
     );
+}
+
+function specificActionsOnSideBarComponentType(componentType, sideBarComponentConfig, otherData) {
+    switch (componentType) {
+        case "SideBarMenuLayout":
+            sideBarComponentConfig.data = [
+                ...sideBarComponentConfig.data,
+                ...[
+                    {
+                        label: "Report a Problem",
+                        callBack: () => {
+                            otherData.setBugReportState(!otherData.bugReportState);
+                        },
+                    },
+                    { label: "Install App" },
+                ],
+            ];
+            return sideBarComponentConfig;
+        default:
+            return sideBarComponentConfig;
+    }
 }
 
 export default SideBarComponent;

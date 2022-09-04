@@ -33,6 +33,11 @@ function SideBarMenuLayout({ menuData, setSideBarState }) {
                     if (menuData.href) {
                         setSideBarState(false);
                     }
+                    if (menuData.callBack) {
+                        e.preventDefault();
+                        setSideBarState(false);
+                        menuData.callBack();
+                    }
                 }}
             >
                 <Text>{menuData.label}</Text>

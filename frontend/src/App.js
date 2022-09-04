@@ -14,9 +14,11 @@ import FooterComponent from "./components/FooterComponent";
 import GenericScreen from "./screens/GenericScreen";
 import DmcaScreen from "./screens/DmcaScreen";
 import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
+import BugReportLayout from "./layouts/BugReportLayout";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
+    const [bugReportState, setBugReportState] = useState(false);
     const [searchData, setSearchData] = useState([]);
 
     const targetRefSchedule = useRef(null);
@@ -41,16 +43,31 @@ function App() {
                 <main className="py-3">
                     <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "81vh" }}>
                         <Routes>
-                            <Route path="/" element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ targetRefSchedule: targetRefSchedule }} />} exact></Route>
-                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
-                            <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
-                            <Route path="/recent/:pageNumber" element={<GenericScreen pageType={"recent"} hasPagination={true} />}></Route>
-                            <Route path="/popular/:pageNumber" element={<GenericScreen pageType={"popular"} hasPagination={true} />}></Route>
-                            <Route path="/dmca" element={<DmcaScreen />}></Route>
-                            <Route path="/privacy" element={<PrivacyPolicyScreen />}></Route>
+                            <Route
+                                path="/"
+                                element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} otherData={{ targetRefSchedule: targetRefSchedule }} />}
+                                exact
+                            ></Route>
+                            <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />} exact></Route>
+                            <Route
+                                path="/anime/:animeSlug/episode/:episodenumber"
+                                element={<VideoPlayerScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}
+                                exact
+                            ></Route>
+                            <Route
+                                path="/recent/:pageNumber"
+                                element={<GenericScreen sideBarState={sideBarState} setSideBarState={setSideBarState} pageType={"recent"} hasPagination={true} bugReportState={bugReportState} setBugReportState={setBugReportState} />}
+                            ></Route>
+                            <Route
+                                path="/popular/:pageNumber"
+                                element={<GenericScreen sideBarState={sideBarState} setSideBarState={setSideBarState} pageType={"popular"} hasPagination={true} bugReportState={bugReportState} setBugReportState={setBugReportState} />}
+                            ></Route>
+                            <Route path="/dmca" element={<DmcaScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
+                            <Route path="/privacy" element={<PrivacyPolicyScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         </Routes>
                     </Container>
                 </main>
+                <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
                 <FooterComponent />
             </Router>
         </SpotlightProvider>

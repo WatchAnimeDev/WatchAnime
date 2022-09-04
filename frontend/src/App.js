@@ -12,6 +12,8 @@ import AnimeDetailsScreen from "./screens/AnimeDetailsScreen";
 import VideoPlayerScreen from "./screens/VideoPlayerScreen";
 import FooterComponent from "./components/FooterComponent";
 import GenericScreen from "./screens/GenericScreen";
+import DmcaScreen from "./screens/DmcaScreen";
+import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -37,13 +39,15 @@ function App() {
             <Router>
                 <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />
                 <main className="py-3">
-                    <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "80vh" }}>
+                    <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "81vh" }}>
                         <Routes>
                             <Route path="/" element={<HomeScreen sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ targetRefSchedule: targetRefSchedule }} />} exact></Route>
                             <Route path="/anime/:animeSlug" element={<AnimeDetailsScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
                             <Route path="/anime/:animeSlug/episode/:episodenumber" element={<VideoPlayerScreen sideBarState={sideBarState} setSideBarState={setSideBarState} />} exact></Route>
                             <Route path="/recent/:pageNumber" element={<GenericScreen pageType={"recent"} hasPagination={true} />}></Route>
                             <Route path="/popular/:pageNumber" element={<GenericScreen pageType={"popular"} hasPagination={true} />}></Route>
+                            <Route path="/dmca" element={<DmcaScreen />}></Route>
+                            <Route path="/privacy" element={<PrivacyPolicyScreen />}></Route>
                         </Routes>
                     </Container>
                 </main>

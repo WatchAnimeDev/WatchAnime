@@ -1,14 +1,14 @@
-import { Button, createStyles, Divider, Group, Radio, Text, Title, UnstyledButton } from "@mantine/core";
+import { Button, createStyles, Divider, Group, Radio, Text, Title, Tooltip, UnstyledButton } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { API_BASE_URL } from "../constants/genricConstants";
+import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
 import { getAnimeTitleByRelevance, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import { getLastWatchedData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
-import { IconBug, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
+import { IconDeviceTv, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
 import VideoScreenEpisodeDisplayPartial from "../partials/VideoScreenEpisodeDisplayPartial";
@@ -218,21 +218,41 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                         <Group sx={{ gap: "5px" }}>
                             <Text>EP {episodeNumber}</Text>
                             <Divider orientation="vertical" />
-                            <Text>Internal Player</Text>
+                            <Text>{!selectedServer.includes("_ad") ? `Internal Player` : `External Player`}</Text>
                         </Group>
                         <Group>
-                            <UnstyledButton component={Link} to={prevEpisodeUrl(animeSlug, parseInt(episodeNumber))}>
-                                <IconPlayerTrackPrev size={14} />
-                            </UnstyledButton>
-                            <UnstyledButton component={Link} to={nextEpisodeUrl(animeSlug, parseInt(episodeNumber), episodeData.animeDetails.episodes)}>
-                                <IconPlayerTrackNext size={14} />
-                            </UnstyledButton>
-                            <UnstyledButton>
-                                <IconDownload size={14} />
-                            </UnstyledButton>
-                            <UnstyledButton>
-                                <IconBug size={14} />
-                            </UnstyledButton>
+                            <Tooltip label="Previous Episode">
+                                <UnstyledButton component={Link} to={prevEpisodeUrl(animeSlug, parseInt(episodeNumber))}>
+                                    <IconPlayerTrackPrev size={14} />
+                                </UnstyledButton>
+                            </Tooltip>
+                            <Tooltip label="Next Episode">
+                                <UnstyledButton component={Link} to={nextEpisodeUrl(animeSlug, parseInt(episodeNumber), episodeData.animeDetails.episodes)}>
+                                    <IconPlayerTrackNext size={14} />
+                                </UnstyledButton>
+                            </Tooltip>
+                            <Tooltip label="Download Episode">
+                                <UnstyledButton
+                                    onClick={(e) => {
+                                        window.open(
+                                            `${GOGO_DOWNLOAD_LINK}/download?id=${
+                                                episodeData.sources.others
+                                                    .filter((source) => source.name === "Vidstreaming")[0]
+                                                    .iframe.split("?id=")[1]
+                                                    .split("&")[0]
+                                            }`,
+                                            "_blank"
+                                        );
+                                    }}
+                                >
+                                    <IconDownload size={14} />
+                                </UnstyledButton>
+                            </Tooltip>
+                            <Tooltip label="Enable Autoplay">
+                                <UnstyledButton>
+                                    <IconDeviceTv size={14} />
+                                </UnstyledButton>
+                            </Tooltip>
                         </Group>
                     </Group>
                     {adfreeServer ? <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} data={episodeDecoderData} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}

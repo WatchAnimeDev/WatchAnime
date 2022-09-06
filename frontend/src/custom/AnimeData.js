@@ -43,7 +43,7 @@ const prepareVideoData = (videoData) => {
 };
 
 const getProxyUrl = (videoUrl) => {
-    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", document.location.hostname];
+    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", document.location.hostname];
     if (whitelist.some((link) => videoUrl.includes(link))) {
         return videoUrl;
     }

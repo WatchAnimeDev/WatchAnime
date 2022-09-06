@@ -15,6 +15,7 @@ import GenericScreen from "./screens/GenericScreen";
 import DmcaScreen from "./screens/DmcaScreen";
 import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
 import BugReportLayout from "./layouts/BugReportLayout";
+import ContactScreen from "./screens/ContactScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -64,6 +65,7 @@ function App() {
                             ></Route>
                             <Route path="/dmca" element={<DmcaScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                             <Route path="/privacy" element={<PrivacyPolicyScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
+                            <Route path="/contact" element={<ContactScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         </Routes>
                     </Container>
                 </main>

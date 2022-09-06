@@ -1,4 +1,4 @@
-import { Button, Dialog, Group, Text, TextInput } from "@mantine/core";
+import { Alert, Button, Dialog, Group, Text, TextInput } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconCircleX } from "@tabler/icons";
 import axios from "axios";
@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../constants/genricConstants";
 
 function BugReportLayout({ bugReportState, setBugReportState }) {
     const [bugReportMessage, setBugReportMessage] = useState();
+    const [errorLog, setErrorLog] = useState();
     const location = useLocation();
     const handleBugReportSubmitClick = async () => {
         showNotification({
@@ -42,18 +43,32 @@ function BugReportLayout({ bugReportState, setBugReportState }) {
             });
         }
     };
+    const validateInput = () => {
+        if (bugReportMessage.length < 20) {
+            setErrorLog("Please provide message with atleast 20 character in length!");
+            return false;
+        }
+        return true;
+    };
     return (
         <>
             <Dialog opened={bugReportState} withCloseButton onClose={() => setBugReportState(false)} size="md" radius="md">
                 <Text size="sm" style={{ marginBottom: 10 }} weight={500}>
                     Report Problem
                 </Text>
-
+                {errorLog && (
+                    <Alert color="red" sx={{ marginBottom: "10px" }}>
+                        {errorLog}
+                    </Alert>
+                )}
                 <Group align="flex-end">
                     <TextInput placeholder="Describe your problem here...." style={{ flex: 1 }} onChange={(event) => setBugReportMessage(event.currentTarget.value)} />
                     <Button
                         sx={{ backgroundColor: WATCHANIME_RED }}
                         onClick={(e) => {
+                            if (!validateInput()) {
+                                return;
+                            }
                             setBugReportState(false);
                             handleBugReportSubmitClick();
                         }}

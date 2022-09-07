@@ -77,6 +77,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                 src: preparedVideoDataAjax[0].link,
             });
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
+            playerRef.current.shouldAjax = true;
             return;
         }
         if (!firstRender.current && !selectedServer.includes("_ad")) {
@@ -139,6 +140,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
 
     const handlePlayerReady = (player) => {
         playerRef.current = player;
+        playerRef.current.shouldAjax = true;
         /**
          * Player Events
          */
@@ -198,12 +200,13 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
 
                 let preparedVideoData = prepareVideoData(playerRef.current.videoUrlList);
 
-                if (videoCounter.current >= preparedVideoData.length) {
+                if (videoCounter.current >= preparedVideoData.length && playerRef.current?.shouldAjax) {
                     const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
                     const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
                     const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${player.selectedServer}?invalidate_cache=true`)]);
                     preparedVideoData = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
                     playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
+                    playerRef.current.shouldAjax = false;
                     videoCounter.current = 0;
                 }
                 reload({

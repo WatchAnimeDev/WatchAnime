@@ -1,4 +1,5 @@
-import { Button, createStyles, Group, Paper, Text } from "@mantine/core";
+import { Button, createStyles, Group, Paper, Text, useMantineTheme } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IconCalendarTime, IconPlayerPlay, IconStar } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -32,8 +33,10 @@ const useStyles = createStyles((theme) => ({
 
 function HeaderSliderLayout({ anime, index }) {
     const { classes } = useStyles();
+    const theme = useMantineTheme();
+    const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
     return (
-        <Paper sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${anime.bannerImage ?? getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }} className="slider-slide">
+        <Paper sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${mobile ? getImageByRelevance(anime.images, "image_url") : anime.bannerImage ?? getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }} className="slider-slide">
             <div className={classes.sliderText}>
                 <Text sx={{ color: WATCHANIME_RED }}>{`#${index + 1} Trending`}</Text>
                 <Group>

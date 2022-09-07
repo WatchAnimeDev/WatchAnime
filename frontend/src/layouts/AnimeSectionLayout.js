@@ -93,7 +93,7 @@ function Card({ animeData }) {
                     </Group>
                 </Group>
 
-                <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent ?? 0}%` }}></Paper>
+                <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent * 0.9 ?? 0}%` }}></Paper>
                 {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
             </Paper>
             <div className={classes.backGroundFilter}></div>

@@ -1,14 +1,16 @@
 import { Button, createStyles, Divider, Group, Radio, Text, Title, Tooltip, UnstyledButton } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
 import { getAnimeTitleByRelevance, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
+import "videojs-hotkeys";
+import { showNotification } from "@mantine/notifications";
 import { getLastWatchedData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
-import { IconDeviceTv, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
+import { IconDeviceTv, IconDeviceTvOff, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
 import VideoScreenEpisodeDisplayPartial from "../partials/VideoScreenEpisodeDisplayPartial";
@@ -53,8 +55,10 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const videoCounter = useRef(0);
     const location = useLocation();
     const firstRender = useRef(true);
+    const navigate = useNavigate();
     const [selectedServer, setSelectedServer] = useState("Alpha");
     const [adfreeServer, setAdfreeServer] = useState(true);
+    const [autoPlay, setAutoPlay] = useState(false);
     const selectedServerModal = useRef("Alpha");
 
     videoCounter.current = 0;
@@ -140,6 +144,11 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
          */
         player.on("ready", () => {
             player.poster(episodeData.poster);
+            player.hotkeys({
+                volumeStep: 0.1,
+                seekStep: 5,
+                enableModifiersForNumbers: false,
+            });
         });
         player.on("waiting", () => {
             console.log("player is waiting");
@@ -150,6 +159,16 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         });
         player.on("ended", () => {
             console.log("player video ended");
+            if (autoPlay && episodeData.animeDetails.episodes !== parseInt(episodeNumber)) {
+                showNotification({
+                    title: "Autoplay!",
+                    message: "Next episode starting in 3 seconds",
+                    autoClose: 3000,
+                });
+                setTimeout(() => {
+                    navigate(nextEpisodeUrl(animeSlug, parseInt(episodeNumber), episodeData.animeDetails.episodes));
+                }, 3000);
+            }
         });
         player.reloadSourceOnError({
             getSource: async (reload) => {
@@ -170,7 +189,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     return videos_with_video_format;
                 };
                 const getProxyUrl = (videoUrl) => {
-                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", document.location.hostname];
+                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", "cache", document.location.hostname];
                     if (whitelist.some((link) => videoUrl.includes(link))) {
                         return videoUrl;
                     }
@@ -248,10 +267,8 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                                     <IconDownload size={14} />
                                 </UnstyledButton>
                             </Tooltip>
-                            <Tooltip label="Enable Autoplay">
-                                <UnstyledButton>
-                                    <IconDeviceTv size={14} />
-                                </UnstyledButton>
+                            <Tooltip label={autoPlay ? "Disable Autoplay" : "Enable Autoplay"}>
+                                <UnstyledButton onClick={() => setAutoPlay(!autoPlay)}>{autoPlay ? <IconDeviceTvOff size={14} /> : <IconDeviceTv size={14} />}</UnstyledButton>
                             </Tooltip>
                         </Group>
                     </Group>

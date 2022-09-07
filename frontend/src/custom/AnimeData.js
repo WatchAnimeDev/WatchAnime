@@ -28,7 +28,6 @@ const toTitleCase = (phrase) => {
 const prepareVideoData = (videoData) => {
     var videos_with_video_format = [];
     for (const result of videoData) {
-        // results.forEach(async (result) => {
         if (result.url.includes("mp4") || result.url.includes("m3u8")) {
             videos_with_video_format.push({
                 link: getProxyUrl(result.url),
@@ -43,7 +42,7 @@ const prepareVideoData = (videoData) => {
 };
 
 const getProxyUrl = (videoUrl) => {
-    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", document.location.hostname];
+    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", "cache", document.location.hostname];
     if (whitelist.some((link) => videoUrl.includes(link))) {
         return videoUrl;
     }

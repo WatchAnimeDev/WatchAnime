@@ -61,8 +61,12 @@ function FooterComponent() {
             <Group className={classes.socialAndFooterLinkDiv}>
                 <Group sx={{ fontWeight: "400" }}>
                     <Text>JOIN US</Text>
-                    <IconBrandDiscord size={16} stroke={1.5} color={"white"} className={classes.discordIcon} />
-                    <IconBrandFacebook size={16} stroke={1.5} color={"white"} className={classes.facebookIcon} />
+                    <Anchor href="https://discord.gg/SvH8VJWKzN" target="_blank">
+                        <IconBrandDiscord size={16} stroke={1.5} color={"white"} className={classes.discordIcon} />
+                    </Anchor>
+                    <Anchor href="https://www.facebook.com/groups/198603402431856" target="_blank">
+                        <IconBrandFacebook size={16} stroke={1.5} color={"white"} className={classes.facebookIcon} />
+                    </Anchor>
                 </Group>
                 <Group sx={{ fontWeight: "500" }}>
                     <Anchor component={Link} to={"/dmca"} className={classes.footerLink}>

@@ -27,7 +27,7 @@ function AnimeRelationRecommendationComponent({ animeData }) {
             return;
         }
         getAnimeDetails();
-    }, [location.pathname]);
+    }, []);
 
     const relatedData = [];
     for (const animeGroup of animeData.relations.map((anime) => anime?.entry)) {

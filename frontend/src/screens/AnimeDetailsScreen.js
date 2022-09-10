@@ -40,7 +40,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
             </Container>
         </>
     ) : (
-        (console.log("here"), (<Loader sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />))
+        <Loader sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
     );
 }
 

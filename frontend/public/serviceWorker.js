@@ -1,21 +1,21 @@
-// let CACHE_NAME = "watchanime-cache-v1";
-// const urlsToCache = ["/", "/index.html"];
-// self.addEventListener("fetch", function (event) {
-//     event.respondWith(
-//         caches.match(event.request).then(function (response) {
-//             // if (response) {
-//             //     return response;
-//             // }
-//             return fetch(event.request);
-//         })
-//     );
-// });
-// self.addEventListener("install", function (event) {
-//     // Perform install steps
-//     event.waitUntil(
-//         caches.open(CACHE_NAME).then(function (cache) {
-//             return cache.addAll(urlsToCache);
-//         })
-//     );
-//     self.skipWaiting();
-// });
+let CACHE_NAME = "watchanime-cache-v1";
+const urlsToCache = ["/", "/index.html"];
+self.addEventListener("fetch", function (event) {
+    event.respondWith(
+        caches.match(event.request).then(function (response) {
+            // if (response) {
+            //     return response;
+            // }
+            return fetch(event.request);
+        })
+    );
+});
+self.addEventListener("install", function (event) {
+    // Perform install steps
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(function (cache) {
+            return cache.addAll(urlsToCache);
+        })
+    );
+    self.skipWaiting();
+});

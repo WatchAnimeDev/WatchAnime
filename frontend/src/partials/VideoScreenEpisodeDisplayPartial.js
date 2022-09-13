@@ -2,6 +2,7 @@ import { Anchor, createStyles, Group, Text } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
+import { getWatchHistoryBySlug } from "../player/PlayerHelper";
 
 const useStyles = createStyles((theme) => ({
     parentEpisodeDiv: {
@@ -36,13 +37,20 @@ const useStyles = createStyles((theme) => ({
 
 function VideoScreenEpisodeDisplayPartial({ episodeCount, animeSlug, currentEpisode }) {
     const { classes } = useStyles();
+    const watchedEpisodes = getWatchHistoryBySlug(animeSlug)?.watchedEpisodes;
     return (
         <Group className={classes.parentEpisodeDiv}>
             {Array(episodeCount)
                 .fill(0)
                 .map((val, ind) => {
                     return (
-                        <Anchor key={ind} component={Link} to={`/anime/${animeSlug}/episode/${ind + 1}`} className={classes.eachEpisodeDiv} sx={ind + 1 === parseInt(currentEpisode) ? { pointerEvents: "none", backgroundColor: WATCHANIME_RED } : {}}>
+                        <Anchor
+                            key={ind}
+                            component={Link}
+                            to={`/anime/${animeSlug}/episode/${ind + 1}`}
+                            className={classes.eachEpisodeDiv}
+                            sx={ind + 1 === parseInt(currentEpisode) ? { pointerEvents: "none", backgroundColor: WATCHANIME_RED } : watchedEpisodes && watchedEpisodes[ind + 1] ? { backgroundColor: "#5e5e5e" } : {}}
+                        >
                             <Text>{`${ind + 1}`}</Text>
                         </Anchor>
                     );

@@ -36,7 +36,10 @@ function HeaderSliderLayout({ anime, index }) {
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
     return (
-        <Paper sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${mobile ? getImageByRelevance(anime.images, "image_url") : anime.bannerImage ?? getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }} className="slider-slide">
+        <Paper
+            sx={{ height: SLIDER_HEIGHT, backgroundImage: `url("${mobile ? getImageByRelevance(anime.images, "large_image_url") : anime.bannerImage ?? getImageByRelevance(anime.images, "image_url")}")`, backgroundSize: "cover" }}
+            className="slider-slide"
+        >
             <div className={classes.sliderText}>
                 <Text sx={{ color: WATCHANIME_RED }}>{`#${index + 1} Trending`}</Text>
                 <Group>

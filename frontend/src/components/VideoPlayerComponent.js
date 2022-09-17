@@ -145,7 +145,6 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
          * Player Events
          */
         player.on("ready", () => {
-            player.poster(episodeData.poster);
             player.hotkeys({
                 volumeStep: 0.1,
                 seekStep: 5,

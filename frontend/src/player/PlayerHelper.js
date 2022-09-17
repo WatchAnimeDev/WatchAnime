@@ -50,6 +50,7 @@ const setLastWatchedQueue = (slug, episodeNumber) => {
     lastWatched.unshift({
         slug: slug,
         episodeNumber: parseInt(episodeNumber),
+        updatedAt: Date.now(),
     });
     if (lastWatched.length > 20) {
         lastWatched.pop();

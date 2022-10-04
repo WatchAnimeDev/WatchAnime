@@ -56,4 +56,8 @@ const nextEpisodeUrl = (animeSlug, episodeNumber, totalEpisodes) => {
     return episodeNumber < totalEpisodes ? `/anime/${animeSlug}/episode/${episodeNumber + 1}` : false;
 };
 
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl };
+const getEpisodeCount = (animeData) => {
+    return animeData.airing ? (animeData.releasedEpisodes ? animeData.releasedEpisodes : animeData.episodes) : animeData.episodes;
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount };

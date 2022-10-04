@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
-import { getAnimeTitleByRelevance, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
+import { getAnimeTitleByRelevance, getEpisodeCount, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
@@ -283,7 +283,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                                 <Text sx={{ paddingLeft: "5px" }}>Change Server</Text>
                             </Button>
                         </Group>
-                        <VideoScreenEpisodeDisplayPartial episodeCount={episodeData.animeDetails.episodes} animeSlug={animeSlug} currentEpisode={episodeNumber} />
+                        <VideoScreenEpisodeDisplayPartial episodeCount={getEpisodeCount(episodeData.animeDetails)} animeSlug={animeSlug} currentEpisode={episodeNumber} />
                         <Divider sx={{ width: "100%", margin: "10px 0px" }} />
                         <Group sx={{ fontSize: "12px", flexDirection: "column", alignItems: "baseline", gap: "0px" }}>
                             <Group sx={{ gap: "5px" }}>

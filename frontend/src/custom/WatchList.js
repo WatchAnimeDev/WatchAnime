@@ -9,6 +9,9 @@ const setWatchListData = (animeData) => {
     if (animeData.currentReleasedEpisode) {
         delete animeData.currentReleasedEpisode;
     }
+    if (animeData.playbackPercent) {
+        delete animeData.playbackPercent;
+    }
     watchListData = watchListData.filter((anime) => anime.slug !== animeData.slug);
     watchListData.push(animeData);
     localStorage.setItem("watchListQueue", JSON.stringify(watchListData));

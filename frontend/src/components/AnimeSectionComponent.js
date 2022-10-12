@@ -17,7 +17,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, viewMoreLink, sliderConfig, refProp }) {
+function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, viewMoreLink, sliderConfig, refProp, otherData }) {
     const { classes } = useStyles();
     return (
         <>
@@ -33,7 +33,7 @@ function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, vi
                         </Anchor>
                     )}
                 </Group>
-                <SliderComponent sliderDatas={sectionAnimeData} sliderRenderComponent={"AnimeSectionLayout"} sliderConfig={sliderConfig} />
+                <SliderComponent sliderDatas={sectionAnimeData} sliderRenderComponent={"AnimeSectionLayout"} sliderConfig={sliderConfig} otherData={otherData} />
             </Group>
         </>
     );

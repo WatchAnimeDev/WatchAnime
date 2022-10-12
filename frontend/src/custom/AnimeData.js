@@ -59,5 +59,4 @@ const nextEpisodeUrl = (animeSlug, episodeNumber, totalEpisodes) => {
 const getEpisodeCount = (animeData) => {
     return animeData.airing ? (animeData.releasedEpisodes ? animeData.releasedEpisodes : animeData.episodes) : animeData.episodes;
 };
-
 export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount };

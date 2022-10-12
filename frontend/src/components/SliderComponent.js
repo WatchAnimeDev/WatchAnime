@@ -9,7 +9,18 @@ const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
         case "HeaderSliderLayout":
             return <HeaderSliderLayout anime={sliderData} index={ind} />;
         case "AnimeSectionLayout":
-            return <AnimeSectionLayout anime={sliderData} />;
+            return (
+                <AnimeSectionLayout
+                    anime={sliderData}
+                    isDeletable={otherData.isDeletable ?? false}
+                    isAddableToWatchList={otherData.isAddableToWatchList ?? false}
+                    reRenderLastWatched={otherData.reRenderLastWatched}
+                    setReRenderLastWatched={otherData.setReRenderLastWatched}
+                    featureId={otherData.featureId ?? null}
+                    reRenderHomepage={otherData.reRenderHomepage}
+                    setReRenderHomepage={otherData.setReRenderHomepage}
+                />
+            );
         case "ScheduleSectionLayout":
             return <ScheduleDateSliderPartial dayAndDate={sliderData} setSelectedDate={otherData.setSelectedDate} />;
         default:

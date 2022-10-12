@@ -12,6 +12,7 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { getLastWatchedData } from "../player/PlayerHelper";
+import { getWatchListAllData } from "../custom/WatchList";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -60,6 +61,9 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const [popularSeries, setPopularSeries] = useState([]);
 
     const lastWatchedData = getLastWatchedData();
+    const watchListData = getWatchListAllData();
+
+    const [reRenderHomepage, setReRenderHomepage] = useState(false);
 
     const { classes } = useStyles();
 
@@ -119,10 +123,29 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
-                {lastWatchedData.length ? <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Last Watched"} sectionAnimeData={lastWatchedData} sliderConfig={animeSliderConfig} /> : <></>}
+                {lastWatchedData.length ? (
+                    <AnimeSectionComponent
+                        sectionTitle={"Last Watched"}
+                        sectionAnimeData={lastWatchedData}
+                        sliderConfig={animeSliderConfig}
+                        otherData={{ isDeletable: true, reRenderHomepage: reRenderHomepage, setReRenderHomepage: setReRenderHomepage, featureId: "lastWatched", isAddableToWatchList: true }}
+                    />
+                ) : (
+                    <></>
+                )}
+                {watchListData.length ? (
+                    <AnimeSectionComponent
+                        sectionTitle={"WatchList"}
+                        sectionAnimeData={watchListData}
+                        sliderConfig={animeSliderConfig}
+                        otherData={{ isDeletable: true, reRenderHomepage: reRenderHomepage, setReRenderHomepage: setReRenderHomepage, featureId: "watchList" }}
+                    />
+                ) : (
+                    <></>
+                )}
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
-                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} />
+                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} otherData={{ isAddableToWatchList: true }} />
             </Container>
         </>
     ) : (

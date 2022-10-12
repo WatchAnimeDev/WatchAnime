@@ -3,6 +3,10 @@ import { createStyles, Paper, Text, Group, Anchor, Tooltip } from "@mantine/core
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
+import { IconPlus, IconTrash } from "@tabler/icons";
+import { openConfirmModal } from "@mantine/modals";
+import { deleteFromWatchListBySlug, handleWatchListAdd } from "../custom/WatchList";
+import { showGenericCheckBoxNotification } from "../custom/Notification";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -66,10 +70,85 @@ const useStyles = createStyles((theme) => ({
         top: "10px",
         color: "white",
     },
+    animeCardHoverState: {
+        transitionProperty: "opacity",
+        transitionTimingFunction: "cubic-bezier(.4,0,.2,1)",
+        transitionDuration: ".5s",
+        backgroundColor: "rgba(0,0,0,.8)",
+        opacity: 0,
+        width: "100%",
+        height: "100%",
+        transform: "translate(0%, -100%)",
+        position: "absolute",
+        zIndex: 2,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-evenly",
+        "&:hover": {
+            opacity: "1",
+        },
+    },
+    hoverContentBaseDiv: {
+        height: "40px",
+        width: "40px",
+        border: "2px solid",
+        borderRadius: "50%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 }));
 
-function Card({ animeData }) {
+function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, setReRenderHomepage, featureId }) {
     const { classes } = useStyles();
+
+    const handleDeleteFromAnimeCard = (e, featureId, selectedAnimeData) => {
+        e.preventDefault();
+        if (featureId === "lastWatched") {
+            return handleDeleteFromLastWatched(selectedAnimeData);
+        }
+        if (featureId === "watchList") {
+            return handleDeleteFromWatchList(selectedAnimeData);
+        }
+    };
+
+    const handleDeleteFromWatchList = (selectedAnimeData) => {
+        openConfirmModal({
+            title: "Please confirm your action",
+            children: <Text size="sm">Are you sure you want to delete {selectedAnimeData.title} from your watchlist?</Text>,
+            labels: { confirm: "Confirm", cancel: "Cancel" },
+            confirmProps: { color: "red" },
+            onCancel: () => {
+                //dont do anything
+            },
+            onConfirm: () => {
+                deleteFromWatchListBySlug(selectedAnimeData.slug);
+                setReRenderHomepage(!reRenderHomepage);
+                showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from watchlist!`);
+            },
+            centered: true,
+        });
+    };
+
+    const handleDeleteFromLastWatched = (selectedAnimeData) => {
+        openConfirmModal({
+            title: "Please confirm your action",
+            children: <Text size="sm">Are you sure you want to delete {selectedAnimeData.title} from your watch history?</Text>,
+            labels: { confirm: "Confirm", cancel: "Cancel" },
+            confirmProps: { color: "red" },
+            onCancel: () => {
+                //dont do anything
+            },
+            onConfirm: () => {
+                let currWatched = JSON.parse(localStorage.getItem("lastWatchedQueue"));
+                currWatched = currWatched.filter((anime) => anime.slug !== selectedAnimeData.slug);
+                localStorage.setItem("lastWatchedQueue", JSON.stringify(currWatched));
+                setReRenderHomepage(!reRenderHomepage);
+                showGenericCheckBoxNotification("Deleted from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from your watch history!`);
+            },
+            centered: true,
+        });
+    };
 
     return (
         <>
@@ -97,15 +176,40 @@ function Card({ animeData }) {
                 {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
             </Paper>
             <div className={classes.backGroundFilter}></div>
+            {isDeletable || isAddableToWatchList ? (
+                <Paper className={classes.animeCardHoverState} id={animeData.slug}>
+                    {isDeletable ? (
+                        <Tooltip label={featureId === "lastWatched" ? "Delete from Last Watched" : "Delete from WatchList"} withArrow position="bottom" transition="scale" transitionDuration={100}>
+                            <span className={classes.hoverContentBaseDiv} onClick={(e) => handleDeleteFromAnimeCard(e, featureId, animeData)}>
+                                <IconTrash size={20} />
+                            </span>
+                        </Tooltip>
+                    ) : (
+                        <></>
+                    )}
+                    {isAddableToWatchList ? (
+                        <Tooltip label="Add to WatchList" withArrow position="bottom" transition="scale" transitionDuration={100}>
+                            <span className={classes.hoverContentBaseDiv} onClick={(e) => handleWatchListAdd(e, animeData)}>
+                                <IconPlus size={20} />
+                            </span>
+                        </Tooltip>
+                    ) : (
+                        <></>
+                    )}
+                </Paper>
+            ) : (
+                <></>
+            )}
         </>
     );
 }
 
-function AnimeSectionLayout({ anime }) {
+function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, reRenderHomepage, setReRenderHomepage, featureId }) {
     const { classes } = useStyles();
+
     return (
         <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
-            <Card animeData={anime} />
+            <Card animeData={anime} isDeletable={isDeletable} reRenderHomepage={reRenderHomepage} setReRenderHomepage={setReRenderHomepage} featureId={featureId} isAddableToWatchList={isAddableToWatchList} />
         </Anchor>
     );
 }

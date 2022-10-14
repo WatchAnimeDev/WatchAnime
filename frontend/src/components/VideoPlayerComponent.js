@@ -8,8 +8,10 @@ import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import "videojs-hotkeys";
+import "videojs-overlay";
+import "videojs-overlay/dist/videojs-overlay.css";
 import { showNotification } from "@mantine/notifications";
-import { getLastWatchedData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
+import { getLastWatchedData, getAnimeSkipData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
 import { IconDeviceTv, IconDeviceTvOff, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
@@ -42,6 +44,26 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: "#2A2B2C",
         gap: 0,
         marginBottom: "25px",
+    },
+    skipButtonParentDiv: {
+        padding: "0 !important",
+        width: "fit-content !important",
+        right: "25px !important",
+        bottom: "5em !important",
+    },
+    skipButtonInternalDiv: {
+        padding: "10px 15px",
+        backgroundColor: "rgb(38 38 38 / 1)",
+        opacity: "0.8",
+        cursor: "pointer",
+        border: "1px solid white",
+        "&:hover": {
+            opacity: "1",
+        },
+    },
+    skipButtonTextDiv: {
+        opacity: "1",
+        fontSize: "15px",
     },
 }));
 
@@ -141,14 +163,29 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const handlePlayerReady = (player) => {
         playerRef.current = player;
         playerRef.current.shouldAjax = true;
+        playerRef.current.animeDetails = episodeData.animeDetails;
+
         /**
          * Player Events
          */
-        player.on("ready", () => {
+        player.on("ready", async () => {
+            window.player = player;
             player.hotkeys({
                 volumeStep: 0.1,
                 seekStep: 5,
                 enableModifiersForNumbers: false,
+            });
+            const allSkipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber);
+            player.overlay({
+                overlays: allSkipData.map((skipData) => {
+                    return {
+                        start: skipData.startTime,
+                        end: skipData.endTime,
+                        content: `<div class="${classes.skipButtonInternalDiv}" onclick="window.player.currentTime(${skipData.endTime + 1})"><div class="${classes.skipButtonTextDiv}">${skipData.displayString}</div></div>`,
+                        align: "bottom-right",
+                        class: classes.skipButtonParentDiv,
+                    };
+                }),
             });
         });
         player.on("waiting", () => {

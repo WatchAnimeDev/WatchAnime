@@ -259,8 +259,8 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
             let lastWatchedTime = lastWatchedData.length && lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug).length ? lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime : 0;
             player.currentTime(lastWatchedTime);
             //Only set poster if no watchtime found
-            if (lastWatchedTime == 0) {
-                player.poster(animeDetails.poster);
+            if (lastWatchedTime === 0) {
+                player.poster(episodeData.animeDetails.poster);
             }
             setLastWatchedQueue(animeSlug, episodeNumber);
             setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);

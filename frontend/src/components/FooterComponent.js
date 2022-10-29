@@ -69,6 +69,9 @@ function FooterComponent() {
                     </Anchor>
                 </Group>
                 <Group sx={{ fontWeight: "500" }}>
+                    <Anchor href="https://status.watchanime.dev/" target="_blank" className={classes.footerLink}>
+                        STATUS
+                    </Anchor>
                     <Anchor component={Link} to={"/dmca"} className={classes.footerLink}>
                         DMCA
                     </Anchor>

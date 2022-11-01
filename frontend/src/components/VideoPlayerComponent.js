@@ -227,7 +227,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     return videos_with_video_format;
                 };
                 const getProxyUrl = (videoUrl) => {
-                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", "cache", document.location.hostname];
+                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", "cache", "wix", document.location.hostname];
                     if (whitelist.some((link) => videoUrl.includes(link))) {
                         return videoUrl;
                     }

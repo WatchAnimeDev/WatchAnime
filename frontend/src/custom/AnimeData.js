@@ -43,7 +43,7 @@ const prepareVideoData = (videoData) => {
 
 const getProxyUrl = (videoUrl) => {
     var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "cache", "wix", document.location.hostname];
-    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.matches(/[\/]{2}[w]{3}[x][^\.]*/gi))) {
+    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[\/]{2}[w]{3}[x][^\.]*/gi))) {
         return videoUrl;
     }
     return API_REDIRECT_HOST + videoUrl;

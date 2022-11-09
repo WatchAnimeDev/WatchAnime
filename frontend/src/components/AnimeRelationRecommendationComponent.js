@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH } from "../constants/cssConstants";
 import { API_BASE_URL } from "../constants/genricConstants";
-import AnimeRecommendationLoaderPartial from "../partials/AnimeRecommendationLoaderPartial";
+import AnimeSectionLoaderPartial from "../partials/AnimeSectionLoaderPartial";
 import AnimeSectionComponent from "./AnimeSectionComponent";
 
 function AnimeRelationRecommendationComponent({ animeData }) {
@@ -75,7 +75,7 @@ function AnimeRelationRecommendationComponent({ animeData }) {
                     ""
                 )
             ) : (
-                <AnimeRecommendationLoaderPartial loaderTitle={"RECOMMENDED FOR YOU"} skeletonHeight={260} skeletonWidth={200} />
+                <AnimeSectionLoaderPartial loaderTitle={"RECOMMENDED FOR YOU"} skeletonHeight={260} skeletonWidth={200} />
             )}
         </>
     );

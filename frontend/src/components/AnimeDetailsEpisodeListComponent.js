@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ANIME_SLIDER_GAP } from "../constants/cssConstants";
 import { API_BASE_URL } from "../constants/genricConstants";
-import AnimeRecommendationLoaderPartial from "../partials/AnimeRecommendationLoaderPartial";
+import AnimeSectionLoaderPartial from "../partials/AnimeSectionLoaderPartial";
 import SliderComponent from "./SliderComponent";
 
 function AnimeDetailsEpisodeListComponent({ animeData }) {
@@ -66,7 +66,7 @@ function AnimeDetailsEpisodeListComponent({ animeData }) {
                     ""
                 )
             ) : (
-                <AnimeRecommendationLoaderPartial loaderTitle={"EPISODE LIST"} skeletonHeight={200} skeletonWidth={350} />
+                <AnimeSectionLoaderPartial loaderTitle={"EPISODE LIST"} skeletonHeight={200} skeletonWidth={350} />
             )}
         </>
     );

@@ -2,7 +2,7 @@ import { Group, Skeleton, Text } from "@mantine/core";
 import React from "react";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 
-function AnimeRecommendationLoaderPartial({ loaderTitle, skeletonHeight, skeletonWidth }) {
+function AnimeSectionLoaderPartial({ loaderTitle, skeletonHeight, skeletonWidth }) {
     const { width } = useWindowDimensions();
     return (
         <Group sx={{ width: "100%", marginBottom: "30px" }}>
@@ -18,4 +18,4 @@ function AnimeRecommendationLoaderPartial({ loaderTitle, skeletonHeight, skeleto
     );
 }
 
-export default AnimeRecommendationLoaderPartial;
+export default AnimeSectionLoaderPartial;

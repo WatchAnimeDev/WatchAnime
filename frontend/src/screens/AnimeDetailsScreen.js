@@ -2,6 +2,7 @@ import { Container, Loader } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import AnimeDetailsEpisodeListComponent from "../components/AnimeDetailsEpisodeListComponent";
 import AnimeDetailsOverviewComponent from "../components/AnimeDetailsOverviewComponent";
 import AnimeRelationRecommendationComponent from "../components/AnimeRelationRecommendationComponent";
 import SideBarComponent from "../components/SideBarComponent";
@@ -36,6 +37,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <AnimeDetailsOverviewComponent animeData={animeData} />
+                <AnimeDetailsEpisodeListComponent animeData={animeData} />
                 <AnimeRelationRecommendationComponent animeData={animeData} />
             </Container>
         </>

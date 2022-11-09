@@ -68,7 +68,15 @@ function AnimeRelationRecommendationComponent({ animeData }) {
     return (
         <>
             {relatedData.length ? <AnimeSectionComponent sectionTitle={"RELATED ANIME"} sectionAnimeData={relatedData} hasViewMore={false} sliderConfig={animeSliderConfig} /> : ""}
-            {ajaxComplete ? animeRecommendation.length ? <AnimeSectionComponent sectionTitle={"RECOMMENDED FOR YOU"} sectionAnimeData={animeRecommendation} hasViewMore={false} sliderConfig={animeSliderConfig} /> : "" : <AnimeRecommendationLoaderPartial />}
+            {ajaxComplete ? (
+                animeRecommendation.length ? (
+                    <AnimeSectionComponent sectionTitle={"RECOMMENDED FOR YOU"} sectionAnimeData={animeRecommendation} hasViewMore={false} sliderConfig={animeSliderConfig} />
+                ) : (
+                    ""
+                )
+            ) : (
+                <AnimeRecommendationLoaderPartial loaderTitle={"RECOMMENDED FOR YOU"} skeletonHeight={260} skeletonWidth={200} />
+            )}
         </>
     );
 }

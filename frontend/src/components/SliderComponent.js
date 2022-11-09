@@ -3,6 +3,7 @@ import { Carousel } from "@mantine/carousel";
 import HeaderSliderLayout from "../layouts/HeaderSliderLayout";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
 import ScheduleDateSliderPartial from "../partials/ScheduleDateSliderPartial";
+import AnimeDetailsEpisodeListLayout from "../layouts/AnimeDetailsEpisodeListLayout";
 
 const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
     switch (sliderRenderComponent) {
@@ -23,6 +24,8 @@ const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
             );
         case "ScheduleSectionLayout":
             return <ScheduleDateSliderPartial dayAndDate={sliderData} setSelectedDate={otherData.setSelectedDate} />;
+        case "AnimeDetailsEpisodeListLayout":
+            return <AnimeDetailsEpisodeListLayout episodeData={sliderData} index={ind} animeSlug={otherData.animeSlug} />;
         default:
             return <></>;
     }

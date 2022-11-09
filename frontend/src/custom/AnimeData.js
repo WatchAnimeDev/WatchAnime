@@ -17,12 +17,12 @@ function getAnimeTitleByRelevance(titles, isDub) {
     return `${defaultTitle.length ? defaultTitle[0].title : titles[0].title}${isDub ? " (DUB)" : ""}`;
 }
 
-const toTitleCase = (phrase) => {
+const toTitleCase = (phrase, delimiter = ",") => {
     return phrase
         .toLowerCase()
-        .split(",")
+        .split(delimiter)
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(",");
+        .join(delimiter);
 };
 
 const prepareVideoData = (videoData) => {
@@ -43,7 +43,7 @@ const prepareVideoData = (videoData) => {
 
 const getProxyUrl = (videoUrl) => {
     var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "cache", "wix", document.location.hostname];
-    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[\/]{2}[w]{3}[x][^\.]*/gi))) {
+    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;
     }
     return API_REDIRECT_HOST + videoUrl;

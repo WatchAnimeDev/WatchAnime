@@ -69,11 +69,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([
-                axios.get(`${API_BASE_URL}/popular/1`),
-                axios.get(`${API_BASE_URL}/recent/1`),
-                axios.get(`${API_BASE_URL}/schedule`),
-            ]);
+            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`), axios.get(`${API_BASE_URL}/schedule`)]);
             setRecentlyReleasedAnimes(recentlyReleasedData.data);
             setSliderAnimes(popularData.data.filter((anime) => anime.bannerImage).slice(0, 10));
             setPopularSeries(popularData.data);
@@ -124,12 +120,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     };
     return ajaxComplete ? (
         <>
-            <SideBarComponent
-                sideBarState={sideBarState}
-                setSideBarState={setSideBarState}
-                sideBarComponentConfig={sideBarComponentConfigForSideBarMenu}
-                otherData={{ bugReportState, setBugReportState }}
-            />
+            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
             <Container fluid className={classes.bodyContainer}>
                 {lastWatchedData.length ? (
@@ -152,24 +143,9 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                 ) : (
                     <></>
                 )}
-                <AnimeSectionComponent
-                    refProp={targetRefRecent}
-                    sectionTitle={"Recently Released"}
-                    sectionAnimeData={recentlyReleasedAnimes}
-                    hasViewMore={true}
-                    viewMoreLink={"/recent/1"}
-                    sliderConfig={animeSliderConfig}
-                />
+                <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
-                <AnimeSectionComponent
-                    refProp={targetRefPopular}
-                    sectionTitle={"Popular Series"}
-                    sectionAnimeData={popularSeries}
-                    hasViewMore={true}
-                    viewMoreLink={"/popular/1"}
-                    sliderConfig={animeSliderConfig}
-                    otherData={{ isAddableToWatchList: true }}
-                />
+                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} otherData={{ isAddableToWatchList: true }} />
             </Container>
         </>
     ) : (

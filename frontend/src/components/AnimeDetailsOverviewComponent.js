@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
 import { handleWatchListAdd } from "../custom/WatchList";
+import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
 
 const useStyles = createStyles((theme) => ({
     backgroundImageDiv: {
@@ -74,7 +75,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function AnimeDetailsOverviewComponent({ animeData }) {
+function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
     const { classes } = useStyles();
     return (
         <Group>
@@ -97,6 +98,7 @@ function AnimeDetailsOverviewComponent({ animeData }) {
                     <Text sx={{ fontSize: "13px" }} lineClamp={3}>
                         {animeData.synopsis}
                     </Text>
+                    <AnimeDetailsNextEpisodePartial episodeInfoData={episodeInfoData} />
                 </Group>
                 <Group p={10} className={classes.frostedDiv}>
                     <Paper className={classes.frostedDivChild}>

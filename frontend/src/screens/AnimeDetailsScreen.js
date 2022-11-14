@@ -11,6 +11,7 @@ import { API_BASE_URL } from "../constants/genricConstants";
 function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
     const [ajaxComplete, setAjaxComplete] = useState(false);
+    const [episodeInfoData, setEpisodeInfoData] = useState({});
 
     const [animeData, setAnimeData] = useState({});
 
@@ -36,8 +37,8 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
         <>
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
-                <AnimeDetailsOverviewComponent animeData={animeData} />
-                <AnimeDetailsEpisodeListComponent animeData={animeData} />
+                <AnimeDetailsOverviewComponent animeData={animeData} episodeInfoData={episodeInfoData} />
+                <AnimeDetailsEpisodeListComponent animeData={animeData} episodeInfoData={episodeInfoData} setEpisodeInfoData={setEpisodeInfoData} />
                 <AnimeRelationRecommendationComponent animeData={animeData} />
             </Container>
         </>

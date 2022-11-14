@@ -41,4 +41,16 @@ function getDateAndDayForMonthFromCurrentDate() {
     }
     return dateArray;
 }
-export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate, roundOffTime, getHoursIn12HoursFormat };
+function getDayHourMinuteSecondFromSecond(totalseconds) {
+    const dayInSec = 86400;
+    const hourInSec = 3600;
+    const minInSec = 60;
+
+    let days = Math.floor(totalseconds / dayInSec);
+    let hours = Math.floor((totalseconds - days * dayInSec) / hourInSec);
+    let mins = Math.floor((totalseconds - days * dayInSec - hours * hourInSec) / minInSec);
+    let secs = totalseconds - days * dayInSec - hours * hourInSec - mins * minInSec;
+
+    return { days, hours, mins, secs };
+}
+export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate, roundOffTime, getHoursIn12HoursFormat, getDayHourMinuteSecondFromSecond };

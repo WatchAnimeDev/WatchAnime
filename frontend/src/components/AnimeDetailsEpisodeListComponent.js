@@ -7,10 +7,8 @@ import { API_BASE_URL } from "../constants/genricConstants";
 import AnimeSectionLoaderPartial from "../partials/AnimeSectionLoaderPartial";
 import SliderComponent from "./SliderComponent";
 
-function AnimeDetailsEpisodeListComponent({ animeData }) {
+function AnimeDetailsEpisodeListComponent({ animeData, episodeInfoData, setEpisodeInfoData }) {
     const [ajaxComplete, setAjaxComplete] = useState(false);
-
-    const [episodeInfoData, setEpisodeInfoData] = useState({});
 
     useEffect(() => {
         async function getEpisodeInfoData() {
@@ -21,7 +19,7 @@ function AnimeDetailsEpisodeListComponent({ animeData }) {
             return;
         }
         getEpisodeInfoData();
-    }, [animeData.slug]);
+    }, [animeData.slug, setEpisodeInfoData]);
 
     const sliderConfig = {
         slideSize: 300, //mobile

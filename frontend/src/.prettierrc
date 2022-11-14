@@ -1,0 +1,9 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "parser": "typescript",
+    "endOfLine": "lf",
+    "printWidth": 256
+}

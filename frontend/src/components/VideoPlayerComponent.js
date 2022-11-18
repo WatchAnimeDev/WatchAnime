@@ -168,24 +168,12 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         /**
          * Player Events
          */
-        player.on("ready", async () => {
+        player.on("ready", () => {
             window.player = player;
             player.hotkeys({
                 volumeStep: 0.1,
                 seekStep: 5,
                 enableModifiersForNumbers: false,
-            });
-            const allSkipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber);
-            player.overlay({
-                overlays: allSkipData.map((skipData) => {
-                    return {
-                        start: skipData.startTime,
-                        end: skipData.endTime,
-                        content: `<div class="${classes.skipButtonInternalDiv}" onclick="window.player.currentTime(${skipData.endTime + 1})"><div class="${classes.skipButtonTextDiv}">${skipData.displayString}</div></div>`,
-                        align: "bottom-right",
-                        class: classes.skipButtonParentDiv,
-                    };
-                }),
             });
         });
         player.on("waiting", () => {
@@ -253,8 +241,22 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
             },
             errorInterval: 0,
         });
-        player.on("loadeddata", () => {
+        player.on("loadeddata", async () => {
             console.log("player have loadeddata");
+            //Init aniskip
+            const allSkipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber);
+            player.overlay({
+                overlays: allSkipData.map((skipData) => {
+                    return {
+                        start: skipData.startTime,
+                        end: skipData.endTime,
+                        content: `<div class="${classes.skipButtonInternalDiv}" onclick="window.player.currentTime(${skipData.endTime + 1})"><div class="${classes.skipButtonTextDiv}">${skipData.displayString}</div></div>`,
+                        align: "bottom-right",
+                        class: classes.skipButtonParentDiv,
+                    };
+                }),
+            });
+            //Get last watched info
             let lastWatchedData = getLastWatchedData(episodeNumber);
             let lastWatchedTime = lastWatchedData.length && lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug).length ? lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime : 0;
             player.currentTime(lastWatchedTime);

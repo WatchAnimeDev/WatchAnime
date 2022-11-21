@@ -1,4 +1,4 @@
-import { Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
+import { Anchor, Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
 import { IconPlayerPlay, IconPlus } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
 import { handleWatchListAdd } from "../custom/WatchList";
 import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
+
+import malImage from "../assets/images/mal.png";
+import aniImage from "../assets/images/ani.png";
 
 const useStyles = createStyles((theme) => ({
     backgroundImageDiv: {
@@ -73,6 +76,29 @@ const useStyles = createStyles((theme) => ({
             maxWidth: "100%",
         },
     },
+    titleParentDiv: {
+        display: "flex",
+        flexDirection: "column",
+        gap: 0,
+        justifyContent: "center",
+        alignItems: "flex-start",
+    },
+    ratingText: {
+        color: "rgb(70, 211, 105)",
+        fontWeight: "bolder",
+    },
+    aniDiv: {
+        height: 24,
+        width: 24,
+        backgroundImage: `url(${aniImage})`,
+        backgroundSize: "cover",
+    },
+    malDiv: {
+        height: 24,
+        width: 24,
+        backgroundImage: `url(${malImage})`,
+        backgroundSize: "cover",
+    },
 }));
 
 function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
@@ -84,7 +110,10 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                     <Paper sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})`, height: "250px", width: "200px", backgroundSize: "cover", backgroundPosition: "center center" }}></Paper>
                 </Group>
                 <Group className={classes.animeInfoDiv}>
-                    <Title sx={{ fontSize: "20px" }}>{getAnimeTitleByRelevance(animeData.titles)}</Title>
+                    <Group className={classes.titleParentDiv}>
+                        {animeData.score ? <Text className={classes.ratingText}>{`${parseInt(parseFloat(animeData.score) * 10)}% rating`}</Text> : ""}
+                        <Title sx={{ fontSize: "30px" }}>{getAnimeTitleByRelevance(animeData.titles)}</Title>
+                    </Group>
                     <Group>
                         <Button fullWidth={false} size={"md"} radius={5} component={Link} to={`/anime/${animeData.slug}/episode/1`} className={classes.playButton}>
                             <IconPlayerPlay size={12} stroke={1.5} />
@@ -137,9 +166,21 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                         <Text className={classes.frostedDivChildAnimeDetailsValue}>{animeData.studios?.length ? animeData.studios.map((studio) => studio.name).join(", ") : "NA"}</Text>
                     </Paper>
                     <Paper className={classes.frostedDivChild}>
-                        <Text className={classes.frostedDivChildAnimeDetails}>Rating:</Text>
+                        <Text className={classes.frostedDivChildAnimeDetails}>Episodes(Released):</Text>
                         <Space w="5px" />
-                        <Text className={classes.frostedDivChildAnimeDetailsValue}>{animeData.score ?? "NA"}</Text>
+                        <Text className={classes.frostedDivChildAnimeDetailsValue}>{animeData.episodes ?? "NA"}</Text>
+                    </Paper>
+                    <Paper className={classes.frostedDivChild}>
+                        <Text className={classes.frostedDivChildAnimeDetails}>External Links:</Text>
+                        <Space w="5px" />
+                        {animeData.malId || animeData.aniId ? (
+                            <Group sx={{ gap: 5 }}>
+                                {animeData.malId ? <Anchor className={classes.malDiv} href={`https://myanimelist.net/anime/${animeData.malId}`} target="_blank"></Anchor> : ""}
+                                {animeData.aniId ? <Anchor className={classes.aniDiv} href={`https://anilist.co/anime/${animeData.aniId}`} target="_blank"></Anchor> : ""}
+                            </Group>
+                        ) : (
+                            ""
+                        )}
                     </Paper>
                 </Group>
             </Group>

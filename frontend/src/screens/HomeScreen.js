@@ -95,7 +95,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         slideGap: ANIME_SLIDER_GAP,
         align: "start",
         includeGapInSize: false,
-        dragFree: true,
+        skipSnaps: true,
         styles: {
             control: {
                 backgroundColor: "rgb(37, 38, 43)",

@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     actionBody: {
-        flex: 1,
+        flexGrow: "1",
     },
 }));
 

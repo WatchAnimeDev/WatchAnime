@@ -49,6 +49,7 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: "rgba(145, 145, 145, 0.21)",
         borderRadius: "10px",
         maxWidth: "350px",
+        minWidth: "300px",
         [theme.fn.smallerThan("lg")]: {
             maxWidth: "100%",
         },

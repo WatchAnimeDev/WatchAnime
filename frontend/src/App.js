@@ -18,6 +18,8 @@ import BugReportLayout from "./layouts/BugReportLayout";
 import ContactScreen from "./screens/ContactScreen";
 import { getOrSetUid } from "./custom/User";
 
+import Snowfall from "react-snowfall";
+
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
     const [bugReportState, setBugReportState] = useState(false);
@@ -76,6 +78,15 @@ function App() {
                 </main>
                 <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
                 <FooterComponent />
+                <Snowfall
+                    style={{
+                        position: "fixed",
+                        width: "100vw",
+                        height: "100vh",
+                    }}
+                    snowflakeCount={30}
+                    radius={[1.5, 3]}
+                />
             </Router>
         </SpotlightProvider>
     );

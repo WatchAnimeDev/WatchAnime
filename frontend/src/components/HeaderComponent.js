@@ -1,12 +1,13 @@
-import { createStyles, Header, Group, Burger, Image, UnstyledButton, Text, useMantineTheme, Paper } from "@mantine/core";
-import { IconSearch, IconCalendarEvent, IconUserCircle } from "@tabler/icons";
+import { createStyles, Header, Group, Burger, Image, UnstyledButton, Text, useMantineTheme, Paper, Menu, Avatar } from "@mantine/core";
+import { IconSearch, IconCalendarEvent, IconSettings, IconMessageCircle } from "@tabler/icons";
 import { Link, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 
 import React, { useEffect, useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useSpotlight } from "@mantine/spotlight";
-import { showNotification } from "@mantine/notifications";
+import { STATIC_BUCKET_URL } from "../constants/genricConstants";
+import NotificationComponent from "./NotificationComponent";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -123,52 +124,55 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
     }, []);
 
     return (
-        <Header fixed height={56} className={classes.header} mb={120} sx={scrollPosition && { backgroundColor: "#1A1B1E", borderBottom: "1px solid #2C2E33" }}>
-            <div className={classes.inner}>
-                <Group>
-                    <Burger opened={sideBarState} onClick={setSideBarState} size="sm" />
-                    <Link to="/">
-                        <Image src="https://d33wubrfki0l68.cloudfront.net/9410fce5c5c19ee15bf2b5e4872391aad38a6981/8f410/assets/logo/watchanime-logo-w-christ.png" width={200} />
-                    </Link>
-                </Group>
-
-                <Group>
-                    <UnstyledButton onClick={handleSpotLightClick} className={classes.searchBarUnstyledButton}>
-                        <Group>
-                            <IconSearch size={16} stroke={1.5} />
-                            <Text className={classes.searchBarText}>Search</Text>
-                            <Group className={classes.searchBarShortCut}>Ctrl+k</Group>
-                        </Group>
-                    </UnstyledButton>
-                    <Group spacing={5}>
-                        <Paper className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
-                            <IconSearch size={20} stroke={1.5} />
-                        </Paper>
-                        <Paper
-                            className={[classes.navIcons, classes.searchBarScheduleIcon]}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                otherData.executeTargetRefSchedule();
-                            }}
-                        >
-                            <IconCalendarEvent size={20} stroke={1.5} />
-                        </Paper>
-                        <Paper
-                            className={[classes.navIcons, classes.searchBarAccountIcon]}
-                            onClick={() => {
-                                showNotification({
-                                    title: "Coming Soon!",
-                                    message: "Hey there, account features are on the way! 🤥",
-                                    autoClose: 5000,
-                                });
-                            }}
-                        >
-                            <IconUserCircle size={20} stroke={1.5} />
-                        </Paper>
+        <>
+            <Header fixed height={56} className={classes.header} mb={120} sx={scrollPosition && { backgroundColor: "#1A1B1E", borderBottom: "1px solid #2C2E33" }}>
+                <div className={classes.inner}>
+                    <Group>
+                        <Burger opened={sideBarState} onClick={setSideBarState} size="sm" />
+                        <Link to="/">
+                            <Image src="https://d33wubrfki0l68.cloudfront.net/9410fce5c5c19ee15bf2b5e4872391aad38a6981/8f410/assets/logo/watchanime-logo-w-christ.png" width={200} />
+                        </Link>
                     </Group>
-                </Group>
-            </div>
-        </Header>
+
+                    <Group>
+                        <UnstyledButton onClick={handleSpotLightClick} className={classes.searchBarUnstyledButton}>
+                            <Group>
+                                <IconSearch size={16} stroke={1.5} />
+                                <Text className={classes.searchBarText}>Search</Text>
+                                <Group className={classes.searchBarShortCut}>Ctrl+k</Group>
+                            </Group>
+                        </UnstyledButton>
+                        <Group spacing={5}>
+                            <Paper className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
+                                <IconSearch size={20} stroke={1.5} />
+                            </Paper>
+                            <Paper
+                                className={[classes.navIcons, classes.searchBarScheduleIcon]}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    otherData.executeTargetRefSchedule();
+                                }}
+                            >
+                                <IconCalendarEvent size={22} stroke={1.5} />
+                            </Paper>
+                            <NotificationComponent />
+                            <Menu shadow="md" width={200} position="bottom-end" transition="pop-top-right" withArrow>
+                                <Menu.Target>
+                                    <Paper className={[classes.navIcons, classes.searchBarAccountIcon]}>
+                                        <Avatar src={`${STATIC_BUCKET_URL}/killua.jpg`} radius={"xl"} sx={{ height: "30px", width: "30px", minWidth: "30px" }} />
+                                    </Paper>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                    <Menu.Label>Application</Menu.Label>
+                                    <Menu.Item icon={<IconSettings size={14} />}>Stuff</Menu.Item>
+                                    <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                        </Group>
+                    </Group>
+                </div>
+            </Header>
+        </>
     );
 }
 

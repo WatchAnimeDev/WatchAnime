@@ -19,6 +19,10 @@ function getCurrentDate() {
     let currentDate = new Date();
     return `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 }
+function getFormattedDateFromTimestamp(timestamp) {
+    let currentDate = new Date(timestamp);
+    return `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+}
 function getDayAndDateFromDateString(dateObj) {
     let dateString = dateObj.toDateString();
     let dayMap = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday", Sun: "Sunday" };
@@ -53,4 +57,4 @@ function getDayHourMinuteSecondFromSecond(totalseconds) {
 
     return { days, hours, mins, secs };
 }
-export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate, roundOffTime, getHoursIn12HoursFormat, getDayHourMinuteSecondFromSecond };
+export { getCurrentTime, getTimeZoneOffesetFromGMT, getCurrentDate, getDateAndDayForMonthFromCurrentDate, roundOffTime, getHoursIn12HoursFormat, getDayHourMinuteSecondFromSecond, getFormattedDateFromTimestamp };

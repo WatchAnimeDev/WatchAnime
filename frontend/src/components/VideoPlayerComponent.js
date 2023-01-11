@@ -202,7 +202,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                 const prepareVideoData = (videoData) => {
                     var videos_with_video_format = [];
                     for (const result of videoData) {
-                        if (result.url.includes("mp4") || result.url.includes("m3u8")) {
+                        if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4")) {
                             videos_with_video_format.push({
                                 link: getProxyUrl(result.url),
                                 type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
@@ -215,8 +215,8 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     return videos_with_video_format;
                 };
                 const getProxyUrl = (videoUrl) => {
-                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "gogocdn", "cache", "wix", document.location.hostname];
-                    if (whitelist.some((link) => videoUrl.includes(link))) {
+                    var whitelist = ["v.vrv.co", "akamai", "midorii", "loadfast", "peliscdn", "cache", "wix", "sharepoint", "pstatic.net", document.location.hostname];
+                    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
                         return videoUrl;
                     }
                     return "https://in.watchanime.dev/" + videoUrl;

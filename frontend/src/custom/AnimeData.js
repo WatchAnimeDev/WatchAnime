@@ -28,7 +28,7 @@ const toTitleCase = (phrase, delimiter = ",") => {
 const prepareVideoData = (videoData) => {
     var videos_with_video_format = [];
     for (const result of videoData) {
-        if (result.url.includes("mp4") || result.url.includes("m3u8")) {
+        if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4")) {
             videos_with_video_format.push({
                 link: getProxyUrl(result.url),
                 type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",

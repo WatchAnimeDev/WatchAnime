@@ -188,7 +188,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
                     )}
                     {isAddableToWatchList ? (
                         <Tooltip label="Add to WatchList" withArrow position="bottom" transition="scale" transitionDuration={100}>
-                            <span className={classes.hoverContentBaseDiv} onClick={(e) => handleWatchListAdd(e, animeData)}>
+                            <span className={classes.hoverContentBaseDiv} onClick={async (e) => await handleWatchListAdd(e, animeData)}>
                                 <IconPlus size={20} />
                             </span>
                         </Tooltip>

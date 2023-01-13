@@ -122,7 +122,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>
                         {!Object.keys(watchListData).length ? (
-                            <Button fullWidth={false} size={"md"} radius={5} onClick={(e) => handleWatchListAdd(e, animeData, setWatchListData)} className={classes.watchListButton}>
+                            <Button fullWidth={false} size={"md"} radius={5} onClick={async (e) => await handleWatchListAdd(e, animeData, setWatchListData)} className={classes.watchListButton}>
                                 <IconPlus size={12} stroke={1.5} />
                                 <Text sx={{ marginLeft: "5px" }}>Add to Watchlist</Text>
                             </Button>
@@ -131,8 +131,8 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                                 fullWidth={false}
                                 size={"md"}
                                 radius={5}
-                                onClick={(e) => {
-                                    handleWatchListDelete(e, animeData, setWatchListData);
+                                onClick={async (e) => {
+                                    await handleWatchListDelete(e, animeData, setWatchListData);
                                 }}
                                 className={classes.watchListButton}
                             >

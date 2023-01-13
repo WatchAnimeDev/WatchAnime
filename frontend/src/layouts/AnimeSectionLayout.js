@@ -121,8 +121,8 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
             onCancel: () => {
                 //dont do anything
             },
-            onConfirm: () => {
-                handleWatchListDelete(null, selectedAnimeData);
+            onConfirm: async () => {
+                await handleWatchListDelete(null, selectedAnimeData);
                 setReRenderHomepage(!reRenderHomepage);
             },
             centered: true,

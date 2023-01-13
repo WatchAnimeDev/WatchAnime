@@ -1,10 +1,10 @@
 import { Anchor, Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
-import { IconPlayerPlay, IconPlus } from "@tabler/icons";
-import React from "react";
+import { IconPlayerPlay, IconPlus, IconX } from "@tabler/icons";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
-import { handleWatchListAdd } from "../custom/WatchList";
+import { deleteFromWatchListBySlug, getWatchListDataBySlug, handleWatchListAdd, handleWatchListDeleteFromAnimeDetails } from "../custom/WatchList";
 import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
 
 import malImage from "../assets/images/mal.png";
@@ -104,6 +104,7 @@ const useStyles = createStyles((theme) => ({
 
 function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
     const { classes } = useStyles();
+    const [watchListData, setWatchListData] = useState(getWatchListDataBySlug(animeData.slug));
     return (
         <Group>
             <Group px={"5%"} pt={"calc(5% + 56px)"} pb={"5%"} sx={{ minHeight: "600px", zIndex: "1", justifyContent: "space-evenly", width: "100%" }}>
@@ -120,10 +121,25 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                             <IconPlayerPlay size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>
-                        <Button fullWidth={false} size={"md"} radius={5} onClick={(e) => handleWatchListAdd(e, animeData)} className={classes.watchListButton}>
-                            <IconPlus size={12} stroke={1.5} />
-                            <Text sx={{ marginLeft: "5px" }}>Add to Watchlist</Text>
-                        </Button>
+                        {!Object.keys(watchListData).length ? (
+                            <Button fullWidth={false} size={"md"} radius={5} onClick={(e) => handleWatchListAdd(e, animeData, setWatchListData)} className={classes.watchListButton}>
+                                <IconPlus size={12} stroke={1.5} />
+                                <Text sx={{ marginLeft: "5px" }}>Add to Watchlist</Text>
+                            </Button>
+                        ) : (
+                            <Button
+                                fullWidth={false}
+                                size={"md"}
+                                radius={5}
+                                onClick={(e) => {
+                                    handleWatchListDeleteFromAnimeDetails(e, animeData, setWatchListData);
+                                }}
+                                className={classes.watchListButton}
+                            >
+                                <IconX size={12} stroke={1.5} color="white" />
+                                <Text sx={{ marginLeft: "5px" }}>Delete Watchlist</Text>
+                            </Button>
+                        )}
                     </Group>
                     <Text sx={{ fontSize: "13px" }} lineClamp={3}>
                         {animeData.synopsis}

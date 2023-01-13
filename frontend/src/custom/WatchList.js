@@ -26,9 +26,16 @@ const deleteFromWatchListBySlug = (slug) => {
     watchListData = watchListData.filter((anime) => anime.slug !== slug);
     localStorage.setItem("watchListQueue", JSON.stringify(watchListData));
 };
-const handleWatchListAdd = (e, selectedAnimeData) => {
+const handleWatchListAdd = (e, selectedAnimeData, setWatchListDataState) => {
     e.preventDefault();
     setWatchListData(selectedAnimeData);
     showGenericCheckBoxNotification("Added to watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been added to watchlist!`);
+    setWatchListDataState(getWatchListDataBySlug(selectedAnimeData.slug));
 };
-export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd };
+const handleWatchListDeleteFromAnimeDetails = (e, selectedAnimeData, setWatchListData) => {
+    e.preventDefault();
+    deleteFromWatchListBySlug(selectedAnimeData.slug);
+    showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`, { color: "red" });
+    setWatchListData({});
+};
+export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDeleteFromAnimeDetails };

@@ -137,7 +137,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                                 className={classes.watchListButton}
                             >
                                 <IconX size={12} stroke={1.5} color="white" />
-                                <Text sx={{ marginLeft: "5px" }}>Delete Watchlist</Text>
+                                <Text sx={{ marginLeft: "5px" }}>Delete From Watchlist</Text>
                             </Button>
                         )}
                     </Group>

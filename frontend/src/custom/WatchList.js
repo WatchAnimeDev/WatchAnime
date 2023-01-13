@@ -1,5 +1,7 @@
+import axios from "axios";
 import { getAnimeTitleByRelevance } from "./AnimeData";
 import { showGenericCheckBoxNotification } from "./Notification";
+import { getOrSetUid } from "./User";
 
 const getWatchListAllData = () => {
     return JSON.parse(localStorage.getItem("watchListQueue") || "[]");
@@ -26,16 +28,34 @@ const deleteFromWatchListBySlug = (slug) => {
     watchListData = watchListData.filter((anime) => anime.slug !== slug);
     localStorage.setItem("watchListQueue", JSON.stringify(watchListData));
 };
-const handleWatchListAdd = (e, selectedAnimeData, setWatchListDataState) => {
-    e.preventDefault();
+const handleWatchListAdd = async (e, selectedAnimeData, setWatchListDataState) => {
+    if (e) e.preventDefault();
+    await subscribeToEpisodeNotification(selectedAnimeData.slug);
     setWatchListData(selectedAnimeData);
     showGenericCheckBoxNotification("Added to watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been added to watchlist!`);
     if (setWatchListDataState) setWatchListDataState(getWatchListDataBySlug(selectedAnimeData.slug));
 };
-const handleWatchListDelete = (e, selectedAnimeData, setWatchListData) => {
+const handleWatchListDelete = async (e, selectedAnimeData, setWatchListData) => {
     if (e) e.preventDefault();
+    await unSubscribeToEpisodeNotification(selectedAnimeData.slug);
     deleteFromWatchListBySlug(selectedAnimeData.slug);
     showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`, { color: "red" });
     if (setWatchListData) setWatchListData({});
+};
+const subscribeToEpisodeNotification = async (slug) => {
+    try {
+        await axios.post(`https://notifications.watchanime.dev/notifications/subscribe/${slug}/${getOrSetUid()}`);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+const unSubscribeToEpisodeNotification = async (slug) => {
+    try {
+        await axios.post(`https://notifications.watchanime.dev/notifications/unsubscribe/${slug}/${getOrSetUid()}`);
+        return true;
+    } catch (e) {
+        return false;
+    }
 };
 export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete };

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
-import { deleteFromWatchListBySlug, getWatchListDataBySlug, handleWatchListAdd, handleWatchListDeleteFromAnimeDetails } from "../custom/WatchList";
+import { getWatchListDataBySlug, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
 
 import malImage from "../assets/images/mal.png";
@@ -132,7 +132,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                                 size={"md"}
                                 radius={5}
                                 onClick={(e) => {
-                                    handleWatchListDeleteFromAnimeDetails(e, animeData, setWatchListData);
+                                    handleWatchListDelete(e, animeData, setWatchListData);
                                 }}
                                 className={classes.watchListButton}
                             >

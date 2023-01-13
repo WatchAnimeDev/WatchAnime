@@ -30,12 +30,12 @@ const handleWatchListAdd = (e, selectedAnimeData, setWatchListDataState) => {
     e.preventDefault();
     setWatchListData(selectedAnimeData);
     showGenericCheckBoxNotification("Added to watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been added to watchlist!`);
-    setWatchListDataState(getWatchListDataBySlug(selectedAnimeData.slug));
+    if (setWatchListDataState) setWatchListDataState(getWatchListDataBySlug(selectedAnimeData.slug));
 };
-const handleWatchListDeleteFromAnimeDetails = (e, selectedAnimeData, setWatchListData) => {
-    e.preventDefault();
+const handleWatchListDelete = (e, selectedAnimeData, setWatchListData) => {
+    if (e) e.preventDefault();
     deleteFromWatchListBySlug(selectedAnimeData.slug);
     showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`, { color: "red" });
-    setWatchListData({});
+    if (setWatchListData) setWatchListData({});
 };
-export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDeleteFromAnimeDetails };
+export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete };

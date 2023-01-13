@@ -5,7 +5,7 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
 import { IconPlus, IconTrash } from "@tabler/icons";
 import { openConfirmModal } from "@mantine/modals";
-import { deleteFromWatchListBySlug, handleWatchListAdd } from "../custom/WatchList";
+import { handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 
 const useStyles = createStyles((theme) => ({
@@ -122,9 +122,8 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
                 //dont do anything
             },
             onConfirm: () => {
-                deleteFromWatchListBySlug(selectedAnimeData.slug);
+                handleWatchListDelete(null, selectedAnimeData);
                 setReRenderHomepage(!reRenderHomepage);
-                showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from watchlist!`);
             },
             centered: true,
         });

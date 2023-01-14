@@ -1,7 +1,6 @@
-import axios from "axios";
 import { getAnimeTitleByRelevance } from "./AnimeData";
 import { showGenericCheckBoxNotification } from "./Notification";
-import { getOrSetUid } from "./User";
+import { subscribeToEpisodeNotification, unSubscribeToEpisodeNotification } from "./Notifications";
 
 const getWatchListAllData = () => {
     return JSON.parse(localStorage.getItem("watchListQueue") || "[]");
@@ -42,20 +41,5 @@ const handleWatchListDelete = async (e, selectedAnimeData, setWatchListData) => 
     showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`, { color: "red" });
     if (setWatchListData) setWatchListData({});
 };
-const subscribeToEpisodeNotification = async (slug) => {
-    try {
-        await axios.post(`https://notifications.watchanime.dev/notifications/subscribe/${slug}/${getOrSetUid()}`);
-        return true;
-    } catch (e) {
-        return false;
-    }
-};
-const unSubscribeToEpisodeNotification = async (slug) => {
-    try {
-        await axios.post(`https://notifications.watchanime.dev/notifications/unsubscribe/${slug}/${getOrSetUid()}`);
-        return true;
-    } catch (e) {
-        return false;
-    }
-};
+
 export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete };

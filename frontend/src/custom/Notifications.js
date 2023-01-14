@@ -16,7 +16,6 @@ const getNotificationTitleFromNotificationData = (notificationData) => {
             return "Well this isnt expected";
     }
 };
-
 const getNotificationPreviewImageFromNotificationData = (notificationData) => {
     switch (notificationData.notif_type) {
         case 1:
@@ -25,5 +24,21 @@ const getNotificationPreviewImageFromNotificationData = (notificationData) => {
             return `${STATIC_BUCKET_URL}/watchanime-512x512.png`;
     }
 };
+const subscribeToEpisodeNotification = async (slug) => {
+    try {
+        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/subscribe/${slug}/${getOrSetUid()}`);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+const unSubscribeToEpisodeNotification = async (slug) => {
+    try {
+        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/unsubscribe/${slug}/${getOrSetUid()}`);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
 
-export { getUserNotifications, getNotificationTitleFromNotificationData, getNotificationPreviewImageFromNotificationData };
+export { getUserNotifications, getNotificationTitleFromNotificationData, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification };

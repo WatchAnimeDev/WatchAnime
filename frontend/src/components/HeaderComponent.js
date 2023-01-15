@@ -43,6 +43,7 @@ const useStyles = createStyles((theme) => ({
         },
     },
     navIcons: {
+        cursor:"pointer",
         display: "block",
         lineHeight: 1,
         padding: "8px 12px",
@@ -153,7 +154,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                                     otherData.executeTargetRefSchedule();
                                 }}
                             >
-                                <IconCalendarEvent size={22} stroke={1.5} />
+                                <IconCalendarEvent size={22} stroke={1.5}/>
                             </Paper>
                             <NotificationComponent />
                             <Menu shadow="md" width={200} position="bottom-end" transition="pop-top-right" withArrow>

@@ -13,7 +13,7 @@ function ScheduleDateSliderPartial({ dayAndDate, setSelectedDate }) {
     return (
         <Group
             key={dayAndDate.date}
-            sx={{ display: "flex", flexDirection: "column", gap: "5px", padding: "5px 3%", backgroundColor: "#353738", borderRadius: "10px" }}
+            sx={{ display: "flex", flexDirection: "column", gap: "5px", padding: "5px 3%", backgroundColor: "#353738", borderRadius: "10px", cursor:"pointer" }}
             onClick={(e) => handleScheduleClick(dayAndDate, schduleSliderDivRef)}
             ref={schduleSliderDivRef}
             className={dayAndDate.dateObj.getDate() === new Date().getDate() && "bg-red"}

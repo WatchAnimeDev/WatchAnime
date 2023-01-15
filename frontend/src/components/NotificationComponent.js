@@ -7,6 +7,7 @@ import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
+        cursor:"pointer",
         display: "block",
         lineHeight: 1,
         padding: "8px 12px",

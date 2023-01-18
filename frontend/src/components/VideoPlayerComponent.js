@@ -164,7 +164,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         playerRef.current = player;
         playerRef.current.shouldAjax = true;
         playerRef.current.animeDetails = episodeData.animeDetails;
-
+        window.initHlsSelector = initHlsSelector;
         /**
          * Player Events
          */
@@ -244,6 +244,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         player.on("loadeddata", async () => {
             console.log("player have loadeddata");
             //Init aniskip
+            window.initHlsSelector(player);
             const allSkipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber);
             player.overlay({
                 overlays: allSkipData.map((skipData) => {
@@ -270,7 +271,6 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         });
         player.selectedServer = selectedServer;
         player.playsinline(true);
-        initHlsSelector(player);
         playerRef.current.videoUrlList = episodeDecoderData.videoUrlList;
     };
 

@@ -143,7 +143,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
                 currWatched = currWatched.filter((anime) => anime.slug !== selectedAnimeData.slug);
                 localStorage.setItem("lastWatchedQueue", JSON.stringify(currWatched));
                 setReRenderHomepage(!reRenderHomepage);
-                showGenericCheckBoxNotification("Deleted from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from your watch history!`);
+                showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from your watch history!`);
             },
             centered: true,
         });

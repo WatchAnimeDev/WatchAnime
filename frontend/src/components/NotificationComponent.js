@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { IconBell, IconPoint, IconSettings } from "@tabler/icons";
 import { getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications } from "../custom/Notifications";
@@ -7,7 +7,7 @@ import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
-        cursor:"pointer",
+        cursor: "pointer",
         display: "block",
         lineHeight: 1,
         padding: "8px 12px",
@@ -77,14 +77,24 @@ function NotificationComponent() {
     const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
+    const [notificationDataCount, setNotificationDataCount] = useState(0);
+    useEffect(() => {
+        async function fetchNotificationData() {
+            const notifData = await getUserNotifications();
+            setNotificationData(notifData);
+            setNotificationDataCount(notifData.length);
+        }
+        fetchNotificationData();
+    }, []);
 
     const handleUserNotification = async (e) => {
-        setNotificationData(await getUserNotifications());
         e.preventDefault();
+        setNotificationDataCount(0);
         setIsLoading(false);
         setTimeout(() => {
             setIsMounted(true);
         }, 1);
+        setNotificationData(await getUserNotifications());
     };
 
     return (
@@ -99,6 +109,8 @@ function NotificationComponent() {
                     setIsLoading(true);
                 }, 500);
                 setIsMounted(false);
+                //Enable after mark as read feature
+                // setNotificationDataCount(notificationData.length);
             }}
         >
             <Menu.Target>
@@ -108,7 +120,9 @@ function NotificationComponent() {
                         handleUserNotification(e);
                     }}
                 >
-                    <IconBell size={22} stroke={1.5} />
+                    <Indicator size={15} color={WATCHANIME_RED} offset={2} label={notificationDataCount} showZero={false} dot={false}>
+                        <IconBell size={22} stroke={1.5} />
+                    </Indicator>
                 </Paper>
             </Menu.Target>
             <Menu.Dropdown className={classes.menuDropDown}>

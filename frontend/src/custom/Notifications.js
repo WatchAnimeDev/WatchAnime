@@ -26,7 +26,10 @@ const getNotificationPreviewImageFromNotificationData = (notificationData) => {
 };
 const subscribeToEpisodeNotification = async (slug) => {
     try {
-        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/subscribe/${slug}/${getOrSetUid()}`);
+        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/subscribe`, {
+            slug: slug,
+            userId: getOrSetUid(),
+        });
         return true;
     } catch (e) {
         return false;
@@ -34,7 +37,10 @@ const subscribeToEpisodeNotification = async (slug) => {
 };
 const unSubscribeToEpisodeNotification = async (slug) => {
     try {
-        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/unsubscribe/${slug}/${getOrSetUid()}`);
+        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/unsubscribe`, {
+            slug: slug,
+            userId: getOrSetUid(),
+        });
         return true;
     } catch (e) {
         return false;

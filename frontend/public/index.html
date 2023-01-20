@@ -52,6 +52,19 @@
             gtag("js", new Date());
 
             gtag("config", "G-9MMBH4GFGZ");
+            (function () {
+                var cors_api_host = "cors.proxy.consumet.org";
+                var cors_api_url = "https://" + cors_api_host + "/";
+                var slice = [].slice;
+                var open = XMLHttpRequest.prototype.open;
+                XMLHttpRequest.prototype.open = function () {
+                    var args = slice.call(arguments);
+                    if (args && args.length > 1 && args[1].includes("prod.gccrunchyroll.com")) {
+                        args[1] = cors_api_url + args[1];
+                    }
+                    return open.apply(this, args);
+                };
+            })();
         </script>
     </body>
 </html>

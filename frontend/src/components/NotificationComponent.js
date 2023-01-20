@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { IconBell, IconPoint, IconSettings } from "@tabler/icons";
-import { getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications } from "../custom/Notifications";
+import { generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -74,10 +75,14 @@ const useStyles = createStyles((theme) => ({
 
 function NotificationComponent() {
     const { classes } = useStyles();
+    const [opened, setOpened] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [notificationDataCount, setNotificationDataCount] = useState(0);
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         async function fetchNotificationData() {
             const notifData = await getUserNotifications();
@@ -89,6 +94,7 @@ function NotificationComponent() {
 
     const handleUserNotification = async (e) => {
         e.preventDefault();
+        setOpened(true);
         setNotificationDataCount(0);
         setIsLoading(false);
         setTimeout(() => {
@@ -112,6 +118,8 @@ function NotificationComponent() {
                 //Enable after mark as read feature
                 // setNotificationDataCount(notificationData.length);
             }}
+            opened={opened}
+            onChange={setOpened}
         >
             <Menu.Target>
                 <Paper
@@ -137,7 +145,19 @@ function NotificationComponent() {
                             <div style={styles}>
                                 {notificationData.map((notification, ind) => {
                                     return (
-                                        <Card p="lg" radius="md" mb={"5px"} className={classes.notificationCard} key={ind}>
+                                        <Card
+                                            p="lg"
+                                            radius="md"
+                                            mb={"5px"}
+                                            className={classes.notificationCard}
+                                            key={ind}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleNotificationClick(notification, navigate);
+                                                setOpened(false);
+                                            }}
+                                            sx={generateNotificationCss(notification)}
+                                        >
                                             <Box sx={{ width: "5%" }}>
                                                 <IconPoint size={18} stroke={1.5} />
                                             </Box>

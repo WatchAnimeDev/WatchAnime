@@ -47,4 +47,25 @@ const unSubscribeToEpisodeNotification = async (slug) => {
     }
 };
 
-export { getUserNotifications, getNotificationTitleFromNotificationData, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification };
+const handleNotificationClick = (notificationData, navigate) => {
+    switch (notificationData.notif_type) {
+        case 1:
+            navigate(`/anime/${notificationData.slug_id}/episode/${notificationData.episode_number}`);
+            break;
+
+        default:
+            break;
+    }
+};
+
+const generateNotificationCss = (notificationData) => {
+    switch (notificationData.notif_type) {
+        case 1:
+            return { cursor: "pointer" };
+
+        default:
+            break;
+    }
+};
+
+export { getUserNotifications, getNotificationTitleFromNotificationData, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification, handleNotificationClick, generateNotificationCss };

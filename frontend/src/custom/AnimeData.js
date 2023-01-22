@@ -52,6 +52,7 @@ const getProxyUrl = (videoUrl) => {
 const prevEpisodeUrl = (animeSlug, episodeNumber) => {
     return episodeNumber > 1 ? `/anime/${animeSlug}/episode/${episodeNumber - 1}` : false;
 };
+
 const nextEpisodeUrl = (animeSlug, episodeNumber, totalEpisodes) => {
     return episodeNumber < totalEpisodes ? `/anime/${animeSlug}/episode/${episodeNumber + 1}` : false;
 };
@@ -59,4 +60,13 @@ const nextEpisodeUrl = (animeSlug, episodeNumber, totalEpisodes) => {
 const getEpisodeCount = (animeData) => {
     return animeData.airing ? (animeData.releasedEpisodes ? animeData.releasedEpisodes : animeData.episodes) : animeData.episodes;
 };
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount };
+
+const malStatusToMediaStatus = (status) => {
+    status = (status || "").toLowerCase();
+    if (status === "currently airing") return "Ongoing";
+    else if (status === "finished airing") return "Finished Airing";
+    else if (status === "not yet aired") return "Not yet aired";
+    return "Unknown";
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount, malStatusToMediaStatus };

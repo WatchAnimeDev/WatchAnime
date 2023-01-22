@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
-import { getAnimeTitleByRelevance, getEpisodeCount, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
+import { getAnimeTitleByRelevance, getEpisodeCount, malStatusToMediaStatus, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
@@ -335,7 +335,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                             </Group>
                             <Group sx={{ gap: "5px" }}>
                                 <Text>Status:</Text>
-                                <Text>{episodeData.animeDetails.airing ? "Ongoing" : "Finished Airing"}</Text>
+                                <Text>{malStatusToMediaStatus(episodeData.animeDetails.status)}</Text>
                                 <Divider orientation="vertical" />
                                 <UnstyledButton sx={{ fontSize: "10px", padding: "1px 7px", backgroundColor: "#636363" }} component={Link} to={`/anime/${animeSlug}`}>
                                     More Info

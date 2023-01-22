@@ -3,7 +3,7 @@ import { IconPlayerPlay, IconPlus, IconX } from "@tabler/icons";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
+import { getAnimeTitleByRelevance, getImageByRelevance, malStatusToMediaStatus } from "../custom/AnimeData";
 import { getWatchListDataBySlug, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
 
@@ -170,7 +170,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                     <Paper className={classes.frostedDivChild}>
                         <Text className={classes.frostedDivChildAnimeDetails}>Status:</Text>
                         <Space w="5px" />
-                        <Text className={classes.frostedDivChildAnimeDetailsValue}>{animeData.airing ? "Airing" : "Finished"}</Text>
+                        <Text className={classes.frostedDivChildAnimeDetailsValue}>{malStatusToMediaStatus(animeData.status)}</Text>
                     </Paper>
                     <Paper className={classes.frostedDivChild}>
                         <Text className={classes.frostedDivChildAnimeDetails}>Genres:</Text>

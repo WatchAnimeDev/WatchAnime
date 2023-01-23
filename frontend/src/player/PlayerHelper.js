@@ -2,7 +2,7 @@ import axios from "axios";
 
 const initHlsSelector = (player) => {
     if (player.currentSrc().includes(".m3u8") && typeof player.hlsQualitySelector === "function") {
-        player.load();
+        // player.load();
         player.hlsQualitySelector({
             displayCurrentQuality: true,
         });

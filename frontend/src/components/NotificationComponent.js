@@ -5,6 +5,7 @@ import { IconBell, IconPoint, IconSettings } from "@tabler/icons";
 import { generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -20,18 +21,6 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: "transparent",
         "&:hover": {
             color: WATCHANIME_RED,
-        },
-    },
-    searchBarUnstyledButton: {
-        padding: "0px 5px 0px 12px",
-        color: "rgb(144, 146, 150)",
-        backgroundColor: "rgb(37, 38, 43)",
-        border: "1px solid rgb(55, 58, 64)",
-        fontSize: "16px",
-        height: "34px",
-        borderRadius: "8px",
-        [theme.fn.smallerThan("sm")]: {
-            display: "none",
         },
     },
     menuDropDown: {
@@ -81,6 +70,8 @@ function NotificationComponent() {
     const [notificationData, setNotificationData] = useState([]);
     const [notificationDataCount, setNotificationDataCount] = useState(0);
 
+    const isMobileView = useMediaQuery("(min-width: 430px)");
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -122,16 +113,20 @@ function NotificationComponent() {
             onChange={setOpened}
         >
             <Menu.Target>
-                <Paper
-                    className={[classes.navIcons, classes.searchBarAccountIcon]}
-                    onClick={(e) => {
-                        handleUserNotification(e);
-                    }}
-                >
-                    <Indicator size={15} color={WATCHANIME_RED} offset={2} label={notificationDataCount} showZero={false} dot={false}>
-                        <IconBell size={22} stroke={1.5} />
-                    </Indicator>
-                </Paper>
+                {isMobileView ? (
+                    <Paper
+                        className={[classes.navIcons, classes.searchBarAccountIcon]}
+                        onClick={(e) => {
+                            handleUserNotification(e);
+                        }}
+                    >
+                        <Indicator size={15} color={WATCHANIME_RED} offset={2} label={notificationDataCount} showZero={false} dot={false}>
+                            <IconBell size={22} stroke={1.5} />
+                        </Indicator>
+                    </Paper>
+                ) : (
+                    <Paper></Paper>
+                )}
             </Menu.Target>
             <Menu.Dropdown className={classes.menuDropDown}>
                 <Container className={classes.notificationTopBar}>

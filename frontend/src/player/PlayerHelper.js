@@ -7,8 +7,8 @@ const initHlsSelector = (player) => {
         });
     }
     setTimeout(() => {
-        player.hlsQualitySelector.onAddQualityLevel();
-    }, 1000);
+        if (typeof player?.hlsQualitySelector?.onAddQualityLevel === "function") player.hlsQualitySelector.onAddQualityLevel();
+    }, 10);
 };
 
 const getAnimeSkipData = async (animeData, episodeNumber) => {

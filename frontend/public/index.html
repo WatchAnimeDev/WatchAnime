@@ -59,7 +59,7 @@
                 var open = XMLHttpRequest.prototype.open;
                 XMLHttpRequest.prototype.open = function () {
                     var args = slice.call(arguments);
-                    if (args && args.length > 1 && (args[1].includes("crunchyroll") || args[1].includes("vrv"))) {
+                    if (args && args.length > 1 && (args[1].includes("crunchyroll") || args[1].includes("vrv")) && !args[1].includes("fy.v.vrv.co")) {
                         args[1] = cors_api_url + args[1];
                     }
                     return open.apply(this, args);

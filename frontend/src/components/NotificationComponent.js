@@ -85,13 +85,13 @@ function NotificationComponent() {
 
     const handleUserNotification = async (e) => {
         e.preventDefault();
+        setNotificationData(await getUserNotifications());
         setOpened(true);
         setNotificationDataCount(0);
         setIsLoading(false);
         setTimeout(() => {
             setIsMounted(true);
         }, 1);
-        setNotificationData(await getUserNotifications());
     };
 
     return (

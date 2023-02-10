@@ -46,7 +46,6 @@ const unSubscribeToEpisodeNotification = async (slug) => {
         return false;
     }
 };
-
 const handleNotificationClick = (notificationData, navigate) => {
     switch (notificationData.notif_type) {
         case 1:
@@ -57,7 +56,6 @@ const handleNotificationClick = (notificationData, navigate) => {
             break;
     }
 };
-
 const generateNotificationCss = (notificationData) => {
     switch (notificationData.notif_type) {
         case 1:
@@ -67,5 +65,25 @@ const generateNotificationCss = (notificationData) => {
             break;
     }
 };
+const dismissNotification = async (notificatonId) => {
+    try {
+        await axios.post(`${NOTIFICATION_BASE_URL}/notifications/dismiss`, {
+            notificatonId: notificatonId,
+            userId: getOrSetUid(),
+        });
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
 
-export { getUserNotifications, getNotificationTitleFromNotificationData, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification, handleNotificationClick, generateNotificationCss };
+export {
+    getUserNotifications,
+    getNotificationTitleFromNotificationData,
+    getNotificationPreviewImageFromNotificationData,
+    subscribeToEpisodeNotification,
+    unSubscribeToEpisodeNotification,
+    handleNotificationClick,
+    generateNotificationCss,
+    dismissNotification,
+};

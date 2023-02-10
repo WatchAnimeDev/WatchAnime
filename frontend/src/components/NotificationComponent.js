@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator } from "@mantine/core";
+import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconBell, IconPoint, IconSettings } from "@tabler/icons";
-import { generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
+import { IconBell, IconEyeCheck, IconSettings } from "@tabler/icons";
+import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
+import { showGenericCheckBoxNotification } from "../custom/Notification";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -42,10 +43,11 @@ const useStyles = createStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "5px !important",
-        margin: "10px !important",
+        margin: "5px",
+        padding: "5px 0px",
         "&:hover": {
             backgroundColor: "#353738",
+            borderRadius: "5px",
         },
     },
     dot: {
@@ -59,6 +61,13 @@ const useStyles = createStyles((theme) => ({
         left: "50%",
         top: "50%",
         transform: "translate(-50%,-50%)",
+    },
+    notificationCardParent: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "5px !important",
+        margin: "0px 5px !important",
     },
 }));
 
@@ -140,31 +149,42 @@ function NotificationComponent() {
                             <div style={styles}>
                                 {notificationData.map((notification, ind) => {
                                     return (
-                                        <Card
-                                            p="lg"
-                                            radius="md"
-                                            mb={"5px"}
-                                            className={classes.notificationCard}
-                                            key={ind}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleNotificationClick(notification, navigate);
-                                                setOpened(false);
-                                            }}
-                                            sx={generateNotificationCss(notification)}
-                                        >
-                                            <Box sx={{ width: "5%" }}>
-                                                <IconPoint size={18} stroke={1.5} />
+                                        <Card p="lg" radius="md" key={ind} sx={classes.notificationCardParent}>
+                                            <Box
+                                                sx={{ width: "5%" }}
+                                                onClick={async (e) => {
+                                                    e.preventDefault();
+                                                    await dismissNotification(notification.usernotifstatusid);
+                                                    const notifData = await getUserNotifications();
+                                                    setNotificationData(notifData);
+                                                    showGenericCheckBoxNotification("Notificaton dismissed!", `Your notification has been dismissed successfully.`);
+                                                }}
+                                            >
+                                                <Tooltip label="Dismiss">
+                                                    <UnstyledButton>
+                                                        <IconEyeCheck size={18} stroke={1.5} />
+                                                    </UnstyledButton>
+                                                </Tooltip>
                                             </Box>
-                                            <Container sx={{ padding: "0px", width: "85%" }} mx={"10px"}>
-                                                <Text sx={{ fontSize: "14px" }}>{getNotificationTitleFromNotificationData(notification)}</Text>
-                                                <Group sx={{ fontSize: "12px", color: "#7a7a7a", gap: "0px" }}>
-                                                    <Text>{notification.sender}</Text>
-                                                    <Box className={classes.dot} mx="5px"></Box>
-                                                    <Text>{getFormattedDateFromTimestamp(notification.createdAt * 1000)}</Text>
-                                                </Group>
-                                            </Container>
-                                            <Avatar src={getNotificationPreviewImageFromNotificationData(notification)} mx={"5px"} sx={{ width: "10%" }} />
+                                            <Box
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleNotificationClick(notification, navigate);
+                                                    setOpened(false);
+                                                }}
+                                                className={classes.notificationCard}
+                                                sx={generateNotificationCss(notification)}
+                                            >
+                                                <Container sx={{ padding: "0px", width: "85%" }} mx={"10px"}>
+                                                    <Text sx={{ fontSize: "14px" }}>{getNotificationTitleFromNotificationData(notification)}</Text>
+                                                    <Group sx={{ fontSize: "12px", color: "#7a7a7a", gap: "0px" }}>
+                                                        <Text>{notification.sender}</Text>
+                                                        <Box className={classes.dot} mx="5px"></Box>
+                                                        <Text>{getFormattedDateFromTimestamp(notification.createdAt * 1000)}</Text>
+                                                    </Group>
+                                                </Container>
+                                                <Avatar src={getNotificationPreviewImageFromNotificationData(notification)} mr={"10px"} sx={{ width: "10%" }} />
+                                            </Box>
                                         </Card>
                                     );
                                 })}

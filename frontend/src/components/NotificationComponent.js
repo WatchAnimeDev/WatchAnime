@@ -187,7 +187,7 @@ function NotificationComponent() {
                                                     handleUserNotificationDismiss(e, notification);
                                                 }}
                                             >
-                                                <Tooltip label="Dismiss">
+                                                <Tooltip label="Dismiss notification">
                                                     <UnstyledButton>
                                                         <IconEyeCheck size={18} stroke={1.5} />
                                                     </UnstyledButton>

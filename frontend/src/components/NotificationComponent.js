@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconBell, IconEyeCheck, IconSettings } from "@tabler/icons";
+import { IconBell, IconChecks, IconEyeCheck, IconSettings } from "@tabler/icons";
 import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
-import { showGenericCheckBoxNotification } from "../custom/Notification";
+import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
+import { uuidv4 } from "../custom/User";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -69,6 +70,10 @@ const useStyles = createStyles((theme) => ({
         padding: "5px !important",
         margin: "0px 5px !important",
     },
+    notificationCardParentIcon: {
+        display: "flex",
+        alignItems: "center",
+    },
 }));
 
 function NotificationComponent() {
@@ -101,6 +106,16 @@ function NotificationComponent() {
         setTimeout(() => {
             setIsMounted(true);
         }, 1);
+    };
+
+    const handleUserNotificationDismiss = async (e, notification = { usernotifstatusid: null }) => {
+        e.preventDefault();
+        const notificationId = uuidv4();
+        showGenericDynamicNotification(notificationId, "Processing request!", "Dismissing your notification. Please wait!");
+        await dismissNotification(notification.usernotifstatusid);
+        const notifData = await getUserNotifications();
+        setNotificationData(notifData);
+        dismissGenericDynamicNotification(notificationId, "Notificaton dismissed!", "Your notification has been dismissed successfully.");
     };
 
     return (
@@ -140,7 +155,23 @@ function NotificationComponent() {
             <Menu.Dropdown className={classes.menuDropDown}>
                 <Container className={classes.notificationTopBar}>
                     <Text>Notification</Text>
-                    <IconSettings size={18} stroke={1.5} />
+                    <Box sx={{ display: "flex", gap: "5px" }}>
+                        <Tooltip label="Dismiss all notifiation">
+                            <UnstyledButton
+                                className={classes.notificationCardParentIcon}
+                                onClick={async (e) => {
+                                    handleUserNotificationDismiss(e);
+                                }}
+                            >
+                                <IconChecks size={18} stroke={1.5} />
+                            </UnstyledButton>
+                        </Tooltip>
+                        <Tooltip label="Notification settings">
+                            <UnstyledButton className={classes.notificationCardParentIcon}>
+                                <IconSettings size={18} stroke={1.5} />
+                            </UnstyledButton>
+                        </Tooltip>
+                    </Box>
                 </Container>
                 <LoadingOverlay visible={isLoading} overlayBlur={20} loaderProps={{ color: WATCHANIME_RED }} />
                 {notificationData.length ? (
@@ -153,11 +184,7 @@ function NotificationComponent() {
                                             <Box
                                                 sx={{ width: "5%" }}
                                                 onClick={async (e) => {
-                                                    e.preventDefault();
-                                                    await dismissNotification(notification.usernotifstatusid);
-                                                    const notifData = await getUserNotifications();
-                                                    setNotificationData(notifData);
-                                                    showGenericCheckBoxNotification("Notificaton dismissed!", `Your notification has been dismissed successfully.`);
+                                                    handleUserNotificationDismiss(e, notification);
                                                 }}
                                             >
                                                 <Tooltip label="Dismiss">

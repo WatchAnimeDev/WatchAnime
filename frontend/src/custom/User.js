@@ -15,4 +15,4 @@ function getOrSetUid() {
     return getUid();
 }
 
-export { getOrSetUid };
+export { getOrSetUid, uuidv4 };

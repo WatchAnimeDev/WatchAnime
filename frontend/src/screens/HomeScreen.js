@@ -82,7 +82,10 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Recently Added", refs: executeTargetRefRecent }, { label: "Popular", refs: executeTargetRefPopular }, { label: "Random" }],
+        data: [
+            { label: "Recently Added", refs: executeTargetRefRecent },
+            { label: "Popular", refs: executeTargetRefPopular },
+        ],
     };
     const headerSliderConfig = {
         withIndicators: true,

@@ -1,6 +1,9 @@
 import { createStyles, Drawer, Group } from "@mantine/core";
+import axios from "axios";
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../constants/genricConstants";
 import SideBarMenuLayout from "../layouts/SideBarMenuLayout";
 
 const useStyles = createStyles((theme) => ({
@@ -14,7 +17,9 @@ const useStyles = createStyles((theme) => ({
 
 function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfig = {}, otherData = {} }) {
     const { classes } = useStyles();
-    sideBarComponentConfig = specificActionsOnSideBarComponentType(sideBarComponentConfig.type, sideBarComponentConfig, otherData);
+    const navigate = useNavigate();
+
+    sideBarComponentConfig = specificActionsOnSideBarComponentType(sideBarComponentConfig.type, sideBarComponentConfig, { ...otherData, ...{ navigate: navigate } });
     const sideBarItems = sideBarComponentConfig.data.map((data, ind) => {
         return sideBarComponentConfig.type === "SideBarMenuLayout" ? <SideBarMenuLayout menuData={data} key={ind} setSideBarState={setSideBarState} /> : <></>;
     });
@@ -32,6 +37,13 @@ function specificActionsOnSideBarComponentType(componentType, sideBarComponentCo
             sideBarComponentConfig.data = [
                 ...sideBarComponentConfig.data,
                 ...[
+                    {
+                        label: "Random",
+                        callBack: async () => {
+                            const animeData = await Promise.all([axios.get(`${API_BASE_URL}/anime/random`)]);
+                            otherData.navigate(`/anime/${animeData[0].data.slug}`);
+                        },
+                    },
                     {
                         label: "Report a Problem",
                         callBack: () => {

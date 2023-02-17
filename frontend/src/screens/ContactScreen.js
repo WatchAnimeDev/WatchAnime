@@ -14,7 +14,7 @@ function ContactScreen({ sideBarState, setSideBarState, bugReportState, setBugRe
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }],
+        data: [{ label: "Home", href: "/" }],
     };
 
     const handleContactFormSubmit = async (formData) => {

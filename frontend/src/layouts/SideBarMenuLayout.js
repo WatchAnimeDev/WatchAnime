@@ -23,20 +23,21 @@ function SideBarMenuLayout({ menuData, setSideBarState }) {
         <>
             <Anchor
                 component={Link}
-                to={`${menuData.href ?? "/"}`}
+                to={`${menuData?.href ?? "/"}`}
                 className={classes.sideBarMenuLayoutAnchor}
                 onClick={(e) => {
                     if (menuData.refs) {
                         e.preventDefault();
                         menuData.refs();
+                        setSideBarState(false);
                     }
                     if (menuData.href) {
                         setSideBarState(false);
                     }
                     if (menuData.callBack) {
                         e.preventDefault();
-                        setSideBarState(false);
                         menuData.callBack();
+                        setSideBarState(false);
                     }
                 }}
             >

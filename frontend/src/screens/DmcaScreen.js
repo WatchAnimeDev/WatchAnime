@@ -6,7 +6,7 @@ function DmcaScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }],
+        data: [{ label: "Home", href: "/" }],
     };
     return (
         <>

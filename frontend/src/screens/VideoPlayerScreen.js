@@ -15,7 +15,7 @@ function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setB
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }],
+        data: [{ label: "Home", href: "/" }],
     };
 
     useEffect(() => {

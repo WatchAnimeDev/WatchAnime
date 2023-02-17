@@ -30,7 +30,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",
-        data: [{ label: "Home", href: "/" }, { label: "Random" }],
+        data: [{ label: "Home", href: "/" }],
     };
 
     return ajaxComplete ? (

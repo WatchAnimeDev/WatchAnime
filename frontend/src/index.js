@@ -8,6 +8,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
+import { BrowserRouter as Router } from "react-router-dom";
 
 Sentry.init({
     dsn: "https://a84854924fe143aea950783419453fc9@o412163.ingest.sentry.io/6723311",
@@ -25,7 +26,9 @@ root.render(
     <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
         <NotificationsProvider>
             <ModalsProvider>
-                <App />
+                <Router>
+                    <App />
+                </Router>
             </ModalsProvider>
         </NotificationsProvider>
     </MantineProvider>

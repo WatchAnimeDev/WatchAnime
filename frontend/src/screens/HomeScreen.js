@@ -6,6 +6,7 @@ import SideBarComponent from "../components/SideBarComponent";
 import AnimeSectionComponent from "../components/AnimeSectionComponent";
 import { Container, createStyles, Loader, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import Autoplay from "embla-carousel-autoplay";
 
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH, SLIDER_HEIGHT } from "../constants/cssConstants";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
@@ -65,6 +66,8 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     const [reRenderHomepage, setReRenderHomepage] = useState(false);
 
+    const autoplay = useRef(Autoplay({ delay: 5000 }));
+
     const { classes } = useStyles();
 
     useEffect(() => {
@@ -92,6 +95,9 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         height: SLIDER_HEIGHT,
         loop: true,
         withControls: false,
+        plugins: [autoplay.current],
+        onMouseEnter: autoplay.current.stop,
+        onMouseLeave: autoplay.current.reset,
     };
     const animeSliderConfig = {
         slideSize: mobile ? ANIME_SLIDER_MOBILE_WIDTH : ANIME_SLIDER_WIDTH,

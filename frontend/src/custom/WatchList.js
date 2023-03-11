@@ -5,6 +5,9 @@ import { subscribeToEpisodeNotification, unSubscribeToEpisodeNotification } from
 const getWatchListAllData = () => {
     return JSON.parse(localStorage.getItem("watchListQueue") || "[]");
 };
+const replaceAllWatchListData = (animeData) => {
+    localStorage.setItem("watchListQueue", JSON.stringify(animeData));
+};
 const setWatchListData = (animeData) => {
     let watchListData = JSON.parse(localStorage.getItem("watchListQueue") || "[]");
     if (animeData.currentReleasedEpisode) {
@@ -42,4 +45,4 @@ const handleWatchListDelete = async (e, selectedAnimeData, setWatchListData) => 
     if (setWatchListData) setWatchListData({});
 };
 
-export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete };
+export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete, replaceAllWatchListData };

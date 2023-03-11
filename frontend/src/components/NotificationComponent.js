@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconBell, IconChecks, IconEyeCheck, IconSettings } from "@tabler/icons";
+import { IconBell, IconChecks, IconEyeCheck, IconPoint, IconSettings } from "@tabler/icons";
 import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,7 @@ const useStyles = createStyles((theme) => ({
         alignItems: "center",
         margin: "5px",
         padding: "5px 0px",
+        width: "100%",
         "&:hover": {
             backgroundColor: "#353738",
             borderRadius: "5px",
@@ -181,18 +182,27 @@ function NotificationComponent() {
                                 {notificationData.map((notification, ind) => {
                                     return (
                                         <Card p="lg" radius="md" key={ind} sx={classes.notificationCardParent}>
-                                            <Box
-                                                sx={{ width: "5%" }}
-                                                onClick={async (e) => {
-                                                    handleUserNotificationDismiss(e, notification);
-                                                }}
-                                            >
-                                                <Tooltip label="Dismiss notification">
-                                                    <UnstyledButton>
-                                                        <IconEyeCheck size={18} stroke={1.5} />
+                                            {notification.notif_type === 0 ? (
+                                                <Box sx={{ width: "5%" }}>
+                                                    <UnstyledButton sx={{ pointerEvents: "none" }}>
+                                                        <IconPoint size={18} stroke={1.5} />
                                                     </UnstyledButton>
-                                                </Tooltip>
-                                            </Box>
+                                                </Box>
+                                            ) : (
+                                                <Box
+                                                    sx={{ width: "5%" }}
+                                                    onClick={async (e) => {
+                                                        handleUserNotificationDismiss(e, notification);
+                                                    }}
+                                                >
+                                                    <Tooltip label="Dismiss notification">
+                                                        <UnstyledButton>
+                                                            <IconEyeCheck size={18} stroke={1.5} />
+                                                        </UnstyledButton>
+                                                    </Tooltip>
+                                                </Box>
+                                            )}
+
                                             <Box
                                                 onClick={(e) => {
                                                     e.preventDefault();

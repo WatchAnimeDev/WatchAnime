@@ -7,6 +7,7 @@ import { IconPlus, IconTrash } from "@tabler/icons";
 import { openConfirmModal } from "@mantine/modals";
 import { handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
+import { getWatchHistoryBySlug } from "../player/PlayerHelper";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -67,6 +68,17 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "4px",
         position: "absolute",
         left: "10px",
+        top: "10px",
+        color: "white",
+    },
+    animeCardNewEpisodeDiv: {
+        fontSize: "10px",
+        background: WATCHANIME_RED,
+        display: "inline-block",
+        padding: "2px 12px",
+        borderRadius: "4px",
+        position: "absolute",
+        right: "10px",
         top: "10px",
         color: "white",
     },
@@ -149,6 +161,18 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
         });
     };
 
+    const hasNewEpisodeReleasedForWatchlistAnime = (animeData, featureId) => {
+        if (featureId !== "watchList") {
+            return false;
+        }
+        const watchHistoryData = getWatchHistoryBySlug(animeData.slug);
+        if (Object.keys(watchHistoryData) && Object.keys(watchHistoryData).includes("watchedEpisodes") && Math.max(...Object.keys(watchHistoryData.watchedEpisodes)) < (animeData.releasedEpisodes ?? 0)) {
+            console.log("he");
+            return true;
+        }
+        return false;
+    };
+
     return (
         <>
             <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }} className={classes.card}>
@@ -173,6 +197,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
 
                 <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent * 0.9 ?? 0}%` }}></Paper>
                 {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
+                {hasNewEpisodeReleasedForWatchlistAnime(animeData, featureId) ? <Paper className={classes.animeCardNewEpisodeDiv}>NEW</Paper> : <></>}
             </Paper>
             <div className={classes.backGroundFilter}></div>
             {isDeletable || isAddableToWatchList ? (

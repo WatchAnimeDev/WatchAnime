@@ -13,7 +13,7 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { getLastWatchedData } from "../player/PlayerHelper";
-import { getWatchListAllData } from "../custom/WatchList";
+import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchList";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -60,9 +60,9 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const [scheduleData, setScheduleData] = useState([]);
     const [sliderAnimes, setSliderAnimes] = useState([]);
     const [popularSeries, setPopularSeries] = useState([]);
+    const [watchListData, setWatchListData] = useState(getWatchListAllData());
 
     const lastWatchedData = getLastWatchedData();
-    const watchListData = getWatchListAllData();
 
     const [reRenderHomepage, setReRenderHomepage] = useState(false);
 
@@ -82,6 +82,31 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         }
         getRecentlyReleasedAnimes();
     }, []);
+
+    useEffect(() => {
+        async function getLatestEpisodeInfoForWatchlist() {
+            const [latestEpisodeInfo] = await Promise.all([
+                axios.post(`${API_BASE_URL}/anime/episode/latest`, {
+                    slugs: watchListData.filter((anime) => anime.airing).map((anime) => anime.slug),
+                }),
+            ]);
+            for (let animeIndex = 0; animeIndex < watchListData.length; animeIndex++) {
+                if (latestEpisodeInfo.data[watchListData[animeIndex].slug]) {
+                    watchListData[animeIndex].releasedEpisodes = latestEpisodeInfo.data[watchListData[animeIndex].slug].episode;
+                    watchListData[animeIndex].airing = latestEpisodeInfo.data[watchListData[animeIndex].slug].airing;
+                }
+            }
+            replaceAllWatchListData(watchListData);
+            setWatchListData([...watchListData]);
+            return;
+        }
+        if (!watchListData.length) {
+            return;
+        }
+        getLatestEpisodeInfoForWatchlist();
+        // eslint-disable-next-line
+    }, []);
+
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
         type: "SideBarMenuLayout",

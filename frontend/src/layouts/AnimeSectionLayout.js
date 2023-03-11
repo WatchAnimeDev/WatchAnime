@@ -167,7 +167,6 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
         }
         const watchHistoryData = getWatchHistoryBySlug(animeData.slug);
         if (Object.keys(watchHistoryData) && Object.keys(watchHistoryData).includes("watchedEpisodes") && Math.max(...Object.keys(watchHistoryData.watchedEpisodes)) < (animeData.releasedEpisodes ?? 0)) {
-            console.log("he");
             return true;
         }
         return false;

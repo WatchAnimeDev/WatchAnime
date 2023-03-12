@@ -87,13 +87,14 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         async function getLatestEpisodeInfoForWatchlist() {
             const [latestEpisodeInfo] = await Promise.all([
                 axios.post(`${API_BASE_URL}/anime/episode/latest`, {
-                    slugs: watchListData.filter((anime) => anime.airing).map((anime) => anime.slug),
+                    slugs: watchListData.filter((anime) => anime.airing || anime.status === "Not yet aired").map((anime) => anime.slug),
                 }),
             ]);
             for (let animeIndex = 0; animeIndex < watchListData.length; animeIndex++) {
                 if (latestEpisodeInfo.data[watchListData[animeIndex].slug]) {
                     watchListData[animeIndex].releasedEpisodes = latestEpisodeInfo.data[watchListData[animeIndex].slug].episode;
                     watchListData[animeIndex].airing = latestEpisodeInfo.data[watchListData[animeIndex].slug].airing;
+                    watchListData[animeIndex].status = latestEpisodeInfo.data[watchListData[animeIndex].slug].status;
                 }
             }
             replaceAllWatchListData(watchListData);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { IconBell, IconChecks, IconEyeCheck, IconPoint, IconSettings } from "@tabler/icons";
-import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
+import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotificationCount, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
@@ -91,9 +91,8 @@ function NotificationComponent() {
 
     useEffect(() => {
         async function fetchNotificationData() {
-            const notifData = await getUserNotifications();
-            setNotificationData(notifData);
-            setNotificationDataCount(notifData.length);
+            const notifDataCount = await getUserNotificationCount();
+            setNotificationDataCount(notifDataCount);
         }
         fetchNotificationData();
     }, []);

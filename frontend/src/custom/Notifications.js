@@ -6,6 +6,9 @@ import { getOrSetUid } from "./User";
 const getUserNotifications = async () => {
     return (await axios.get(`${NOTIFICATION_BASE_URL}/notifications/get/${getOrSetUid()}`)).data;
 };
+const getUserNotificationCount = async () => {
+    return (await axios.get(`${NOTIFICATION_BASE_URL}/notifications/get/${getOrSetUid()}/count`)).data.count;
+};
 const getNotificationTitleFromNotificationData = (notificationData) => {
     switch (notificationData.notif_type) {
         case 0:
@@ -86,4 +89,5 @@ export {
     handleNotificationClick,
     generateNotificationCss,
     dismissNotification,
+    getUserNotificationCount,
 };

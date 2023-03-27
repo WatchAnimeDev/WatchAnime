@@ -215,7 +215,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     return videos_with_video_format;
                 };
                 const getProxyUrl = (videoUrl) => {
-                    var whitelist = ["vrv", "pl.", "midorii", "loadfast", "peliscdn", "cache", "wix", "sharepoint", "pstatic.net", "gofcdn", "workfields", "asuncdn", "akamai-video-content", document.location.hostname];
+                    var whitelist = ["vrv", "pl.", "midorii", "loadfast", "peliscdn", "cache", "wix", "sharepoint", "pstatic.net", "gofcdn", "workfields", "akamai-video-content", document.location.hostname];
                     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
                         return videoUrl;
                     }

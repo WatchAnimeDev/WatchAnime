@@ -52,21 +52,21 @@
             gtag("js", new Date());
 
             gtag("config", "G-9MMBH4GFGZ");
-            (function () {
-                var cors_api_url = "https://cronchy.watchanime.dev/";
-                var cors_api_url_akamai = "https://cronchy-akamai.watchanime.dev/";
+            // (function () {
+            //     var cors_api_url = "https://cronchy.watchanime.dev/";
+            //     var cors_api_url_akamai = "https://cronchy-akamai.watchanime.dev/";
 
-                var slice = [].slice;
-                var open = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function () {
-                    var args = slice.call(arguments);
-                    var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-                    if (args && args.length > 1 && (args[1].includes("crunchyroll") || args[1].includes("vrv"))) {
-                        args[1] = (!args[1].includes("akamaized") ? cors_api_url : cors_api_url_akamai) + args[1];
-                    }
-                    return open.apply(this, args);
-                };
-            })();
+            //     var slice = [].slice;
+            //     var open = XMLHttpRequest.prototype.open;
+            //     XMLHttpRequest.prototype.open = function () {
+            //         var args = slice.call(arguments);
+            //         var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+            //         if (args && args.length > 1 && (args[1].includes("crunchyroll") || args[1].includes("vrv"))) {
+            //             args[1] = (!args[1].includes("akamaized") ? cors_api_url : cors_api_url_akamai) + args[1];
+            //         }
+            //         return open.apply(this, args);
+            //     };
+            // })();
         </script>
     </body>
 </html>

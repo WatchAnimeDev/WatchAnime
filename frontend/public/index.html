@@ -17,12 +17,16 @@
         <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon/favicon-16x16.png" />
         <link rel="mask-icon" href="%PUBLIC_URL%/favicon/safari-pinned-tab.svg" color="#5bbad5" />
         <link rel="shortcut icon" href="%PUBLIC_URL%/favicon/favicon.ico" />
+
         <!--Preconnect-->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://api.watchanime.dev" />
         <!--Manifest for PWA-->
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+        <!--Google font-->
+        <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
 
         <title>Watch Anime</title>
     </head>
@@ -53,13 +57,13 @@
 
             gtag("config", "G-9MMBH4GFGZ");
             (function () {
-                var cors_api_url = "https://cronchy.watchanime.dev/";
+                var cors_api_url = "https://streamsbs.watchanime.dev/";
                 var slice = [].slice;
                 var open = XMLHttpRequest.prototype.open;
                 XMLHttpRequest.prototype.open = function () {
                     var args = slice.call(arguments);
                     var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-                    if (args && args.length > 1 && (args[1].includes("crunchyroll") || args[1].includes("vrv"))) {
+                    if (args && args.length > 1 && args[1].includes("akamai-video-content")) {
                         args[1] = cors_api_url + args[1];
                     }
                     return open.apply(this, args);

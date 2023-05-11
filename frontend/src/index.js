@@ -23,7 +23,7 @@ Sentry.init({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark", fontFamily: "'Schibsted Grotesk', sans-serif" }}>
         <NotificationsProvider>
             <ModalsProvider>
                 <Router>

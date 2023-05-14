@@ -48,6 +48,7 @@ function AnimeDetailsEpisodeListComponent({ animeData, episodeInfoData, setEpiso
         nextControlIcon: <IconChevronRight size={20} stroke={1.5} />,
         previousControlIcon: <IconChevronLeft size={20} stroke={1.5} />,
         sx: { width: "100%" },
+        containScroll: "keepSnaps",
     };
 
     return (

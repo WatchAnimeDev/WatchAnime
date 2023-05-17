@@ -7,7 +7,6 @@ function SpotlightActionComponent({ children }) {
     return (
         <div>
             {children}
-            {console.log(children)}
             <Group
                 position="apart"
                 px={15}
@@ -26,7 +25,7 @@ function SpotlightActionComponent({ children }) {
                 </Flex>
 
                 {children.props.query && children.props.actions.length ? (
-                    <Anchor size="xs" href="#" component={Link} to={`/search?q=${children.props.query}`} onClick={(e) => closeSpotlight()}>
+                    <Anchor size="xs" href="#" component={Link} to={`/search?name=${children.props.query}`} onClick={(e) => closeSpotlight()}>
                         View more
                     </Anchor>
                 ) : (

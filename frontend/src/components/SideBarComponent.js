@@ -50,7 +50,6 @@ function specificActionsOnSideBarComponentType(componentType, sideBarComponentCo
                             otherData.setBugReportState(!otherData.bugReportState);
                         },
                     },
-                    { label: "Install App" },
                 ],
             ];
             return sideBarComponentConfig;

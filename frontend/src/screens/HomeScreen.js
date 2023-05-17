@@ -14,6 +14,7 @@ import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { getLastWatchedData } from "../player/PlayerHelper";
 import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchList";
+import { showGenericCheckBoxNotification } from "../custom/Notification";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -62,6 +63,8 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const [popularSeries, setPopularSeries] = useState([]);
     const [watchListData, setWatchListData] = useState(getWatchListAllData());
 
+    const [promptInstall, setPromptInstall] = useState(null);
+
     const lastWatchedData = getLastWatchedData();
 
     const [reRenderHomepage, setReRenderHomepage] = useState(false);
@@ -82,6 +85,24 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         }
         getRecentlyReleasedAnimes();
     }, []);
+
+    useEffect(() => {
+        const handler = (e) => {
+            e.preventDefault();
+            setPromptInstall(e);
+        };
+        window.addEventListener("beforeinstallprompt", handler);
+
+        return () => window.removeEventListener("transitionend", handler);
+    }, []);
+
+    const installPWA = () => {
+        if (!promptInstall) {
+            showGenericCheckBoxNotification("Install Failed", "Failed to install PWA.", { color: "red" });
+            return;
+        }
+        promptInstall.prompt();
+    };
 
     useEffect(() => {
         async function getLatestEpisodeInfoForWatchlist() {
@@ -114,6 +135,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         data: [
             { label: "Recently Added", refs: executeTargetRefRecent },
             { label: "Popular", refs: executeTargetRefPopular },
+            { label: "Install App", callBack: () => installPWA() },
         ],
     };
     const headerSliderConfig = {

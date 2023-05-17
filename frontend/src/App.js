@@ -17,6 +17,7 @@ import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
 import BugReportLayout from "./layouts/BugReportLayout";
 import ContactScreen from "./screens/ContactScreen";
 import { getOrSetUid } from "./custom/User";
+import SpotlightActionComponent from "./components/SpotlightActionComponent";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -38,12 +39,12 @@ function App() {
             searchIcon={<IconSearch size={18} />}
             searchPlaceholder="Search..."
             shortcut="ctrl + k"
-            nothingFoundMessage="Nothing found..."
             onChange={(e) => handleSpotLightSearch(e, setSearchData, navigate)}
             closeOnActionTrigger={true}
             cleanQueryOnClose={true}
             limit={5}
             actionComponent={SearchLayout}
+            actionsWrapperComponent={SpotlightActionComponent}
         >
             <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />
             <main className="py-3">

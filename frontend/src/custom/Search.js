@@ -7,7 +7,7 @@ export function handleSpotLightSearch(e, setSearchData, navigate) {
         return;
     }
     let searchActionData = [];
-    axios.get(`${API_BASE_URL}/search/${e.target.value}`).then((animeData) => {
+    axios.get(`${API_BASE_URL}/search?name=${e.target.value}`).then((animeData) => {
         for (const anime of animeData.data) {
             searchActionData.push({
                 image: getImageByRelevance(anime.images, "image_url"),

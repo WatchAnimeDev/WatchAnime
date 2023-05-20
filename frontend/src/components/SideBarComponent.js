@@ -38,6 +38,12 @@ function specificActionsOnSideBarComponentType(componentType, sideBarComponentCo
                 ...sideBarComponentConfig.data,
                 ...[
                     {
+                        label: "Search",
+                        callBack: () => {
+                            otherData.navigate(`/search`);
+                        },
+                    },
+                    {
                         label: "Random",
                         callBack: async () => {
                             const animeData = await Promise.all([axios.get(`${API_BASE_URL}/anime/random`)]);

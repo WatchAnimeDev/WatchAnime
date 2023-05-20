@@ -18,6 +18,7 @@ import BugReportLayout from "./layouts/BugReportLayout";
 import ContactScreen from "./screens/ContactScreen";
 import { getOrSetUid } from "./custom/User";
 import SpotlightActionComponent from "./components/SpotlightActionComponent";
+import AnimeSearchScreen from "./screens/AnimeSearchScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -72,6 +73,7 @@ function App() {
                         <Route path="/dmca" element={<DmcaScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         <Route path="/privacy" element={<PrivacyPolicyScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         <Route path="/contact" element={<ContactScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
+                        <Route path="/search" element={<AnimeSearchScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                     </Routes>
                 </Container>
             </main>

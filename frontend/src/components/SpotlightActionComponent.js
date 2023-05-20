@@ -25,7 +25,7 @@ function SpotlightActionComponent({ children }) {
                 </Flex>
 
                 {children.props.query && children.props.actions.length ? (
-                    <Anchor size="xs" href="#" component={Link} to={`/search?name=${children.props.query}`} onClick={(e) => closeSpotlight()}>
+                    <Anchor size="xs" href="#" component={Link} to={`/catalog?name=${children.props.query}`} onClick={(e) => closeSpotlight()}>
                         View more
                     </Anchor>
                 ) : (

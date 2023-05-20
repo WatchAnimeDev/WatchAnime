@@ -38,9 +38,9 @@ function specificActionsOnSideBarComponentType(componentType, sideBarComponentCo
                 ...sideBarComponentConfig.data,
                 ...[
                     {
-                        label: "Search",
+                        label: "Catalog",
                         callBack: () => {
-                            otherData.navigate(`/search`);
+                            otherData.navigate(`/catalog`);
                         },
                     },
                     {

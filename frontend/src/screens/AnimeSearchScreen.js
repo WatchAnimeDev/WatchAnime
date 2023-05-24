@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SideBarComponent from "../components/SideBarComponent";
-import { Box, Button, Container, Flex, Group, Input, Loader, MultiSelect, Pagination, RangeSlider, Select, Text, createStyles } from "@mantine/core";
+import { Box, Button, Container, Flex, Group, Input, Loader, MultiSelect, Pagination, RangeSlider, Select, Text, createStyles, useMantineTheme } from "@mantine/core";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
 import { API_BASE_URL } from "../constants/genricConstants";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
+import { useMediaQuery } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -24,6 +25,9 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
     };
 
     const { classes } = useStyles();
+    const theme = useMantineTheme();
+    const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [activePage, setActivePage] = useState(1);
 
@@ -82,10 +86,10 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
                         ]}
                     />
                 </Flex>
-                <Flex mt={"lg"}>
+                <Flex mt={"lg"} direction={mobile ? "column" : "row"}>
                     <Flex direction={"column"} gap={"1rem"}>
                         <Input placeholder="Search" sx={{ borderRadius: "8px", border: "1px solid #25262b" }} value={nameValue} onChange={(event) => setNameValue(event.currentTarget.value)} />
-                        <Flex direction={"column"} sx={{ width: "300px", backgroundColor: "rgb(37, 38, 43)", borderRadius: "8px" }} p={"lg"}>
+                        <Flex direction={"column"} sx={{ width: "300px", backgroundColor: "rgb(37, 38, 43)", borderRadius: "8px" }} p={"lg"} m={mobile ? "auto" : "0px"}>
                             <Select
                                 label="Anime Type"
                                 placeholder="All"
@@ -271,12 +275,12 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
                                 onChange={setGenreValue}
                             />
                         </Flex>
-                        <Button sx={{ backgroundColor: "rgb(37, 38, 43)" }} onClick={getSearchDetails}>
+                        <Button sx={{ backgroundColor: "rgb(37, 38, 43)" }} onClick={getSearchDetails} mb={"md"}>
                             Filter
                         </Button>
                     </Flex>
 
-                    <Box sx={{ width: "calc(100% - 300px)", borderRadius: "8px" }} pl={"lg"}>
+                    <Box sx={{ width: mobile ? "100%" : "calc(100% - 300px)", borderRadius: "8px" }} pl={"lg"}>
                         <Group>
                             {searchPageData.map((genericData, ind) => (
                                 <AnimeSectionLayout anime={genericData} key={ind} />

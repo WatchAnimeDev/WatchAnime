@@ -43,7 +43,7 @@ const useStyles = createStyles((theme) => ({
         },
     },
     navIcons: {
-        cursor:"pointer",
+        cursor: "pointer",
         display: "block",
         lineHeight: 1,
         padding: "8px 12px",
@@ -99,6 +99,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
     const spotlight = useSpotlight();
     const theme = useMantineTheme();
     const [scrollPosition, onScrollPositionChange] = useState(false);
+    const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
 
     const handleSpotLightClick = (e) => {
         e.preventDefault();
@@ -131,7 +132,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                     <Group>
                         <Burger opened={sideBarState} onClick={setSideBarState} size="sm" />
                         <Link to="/">
-                            <Image src="https://d33wubrfki0l68.cloudfront.net/9410fce5c5c19ee15bf2b5e4872391aad38a6981/8f410/assets/logo/watchanime-logo-w-christ.png" width={200} />
+                            <Image src="https://d33wubrfki0l68.cloudfront.net/9410fce5c5c19ee15bf2b5e4872391aad38a6981/8f410/assets/logo/watchanime-logo-w-christ.png" width={mobile ? 150 : 200} />
                         </Link>
                     </Group>
 
@@ -154,7 +155,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                                     otherData.executeTargetRefSchedule();
                                 }}
                             >
-                                <IconCalendarEvent size={22} stroke={1.5}/>
+                                <IconCalendarEvent size={22} stroke={1.5} />
                             </Paper>
                             <NotificationComponent />
                             <Menu shadow="md" width={200} position="bottom-end" transition="pop-top-right" withArrow>

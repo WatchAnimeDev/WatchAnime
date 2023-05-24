@@ -273,6 +273,8 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
                                 mt={"md"}
                                 value={genreValue}
                                 onChange={setGenreValue}
+                                searchable
+                                nothingFound="Nothing found"
                             />
                         </Flex>
                         <Button sx={{ backgroundColor: "rgb(37, 38, 43)" }} onClick={getSearchDetails} mb={"md"}>

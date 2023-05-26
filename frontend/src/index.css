@@ -12,7 +12,7 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-.slider-slide:before {
+/* .slider-slide:before {
     content: "";
     z-index: 1;
     position: absolute;
@@ -38,7 +38,7 @@ code {
     background: -webkit-linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
     background: linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
     z-index: 2;
-}
+} */
 .slider--text {
     position: absolute;
     bottom: 4em;

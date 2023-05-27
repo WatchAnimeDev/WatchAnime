@@ -46,7 +46,7 @@ const useStyles = createStyles((theme) => ({
         width: "100%",
         height: "70%",
         zIndex: "1",
-        background: "linear-gradient(0deg,#12111a,transparent)",
+        background: "linear-gradient(0deg,#1A1B1E,transparent)",
         opacity: ".9",
     },
 }));

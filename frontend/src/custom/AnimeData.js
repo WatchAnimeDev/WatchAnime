@@ -12,7 +12,7 @@ function getImageByRelevance(images, size, type = "") {
     }
 }
 
-function getAnimeTitleByRelevance(titles, isDub) {
+function getAnimeTitleByRelevance(titles, isDub = false) {
     const defaultTitle = titles.filter((eachTitle) => eachTitle.type === "Default");
     return `${defaultTitle.length ? defaultTitle[0].title : titles[0].title}${isDub ? " (DUB)" : ""}`;
 }
@@ -68,5 +68,23 @@ const malStatusToMediaStatus = (status) => {
     else if (status === "not yet aired") return "Not yet aired";
     return "Unknown";
 };
+/**
+ * Returns a tmdb image based on type and relevance
+ * @param {*} tmdbData Tmdb image result object
+ * @param {*} type backdrops | logos | posters
+ * @returns
+ */
+const getTmdbImageByRelevanceAndType = (tmdbData, type = "backdrops") => {
+    return tmdbData && Object.keys(tmdbData).length ? (tmdbData[type].length ? `https://www.themoviedb.org/t/p/original${tmdbData[type][0].file_path}` : "") : "";
+};
 
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount, malStatusToMediaStatus };
+/**
+ * Returns if anime object has tmdbData
+ * @param {*} tmdbData
+ * @returns
+ */
+const hasTmdbData = (animeData) => {
+    return animeData.tmdbData && Object.keys(animeData.tmdbData).length;
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount, malStatusToMediaStatus, getTmdbImageByRelevanceAndType, hasTmdbData };

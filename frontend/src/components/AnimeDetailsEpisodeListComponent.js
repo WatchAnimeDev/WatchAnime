@@ -54,7 +54,7 @@ function AnimeDetailsEpisodeListComponent({ animeData, episodeInfoData, setEpiso
     return (
         <>
             {ajaxComplete ? (
-                episodeInfoData.episodes ? (
+                episodeInfoData.episodes?.length ? (
                     <Group sx={{ width: "100%", marginBottom: "30px", height: "300px" }}>
                         <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
                             <Text sx={{ fontSize: "20px", fontWeight: "700" }}>{"EPISODE LIST"}</Text>

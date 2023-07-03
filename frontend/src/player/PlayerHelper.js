@@ -77,7 +77,7 @@ const setLastWatchedQueue = (slug, episodeNumber) => {
     lastWatched = lastWatched.filter((anime) => anime.slug !== slug);
     lastWatched.unshift({
         slug: slug,
-        episodeNumber: parseInt(episodeNumber),
+        episodeNumber: parseFloat(episodeNumber),
         updatedAt: Date.now(),
     });
     if (lastWatched.length > 20) {

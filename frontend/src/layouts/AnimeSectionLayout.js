@@ -231,7 +231,12 @@ function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, reRender
     const { classes } = useStyles();
 
     return (
-        <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
+        <Anchor
+            component={Link}
+            to={`/anime/${anime.slug}${anime.hasOwnProperty("currentReleasedEpisode") ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`}
+            className={classes.noTextDecoration}
+            sx={{ position: "relative" }}
+        >
             <Card animeData={anime} isDeletable={isDeletable} reRenderHomepage={reRenderHomepage} setReRenderHomepage={setReRenderHomepage} featureId={featureId} isAddableToWatchList={isAddableToWatchList} />
         </Anchor>
     );

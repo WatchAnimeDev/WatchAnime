@@ -35,26 +35,43 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function VideoScreenEpisodeDisplayPartial({ episodeCount, animeSlug, currentEpisode }) {
+function VideoScreenEpisodeDisplayPartial({ episodeCount, episodeList, animeSlug, currentEpisode }) {
+    episodeList = Object.keys(episodeList)
+        .map((val) => parseFloat(val))
+        .sort((x, y) => x - y);
     const { classes } = useStyles();
     const watchedEpisodes = getWatchHistoryBySlug(animeSlug)?.watchedEpisodes;
     return (
         <Group className={classes.parentEpisodeDiv}>
-            {Array(episodeCount)
-                .fill(0)
-                .map((val, ind) => {
-                    return (
-                        <Anchor
-                            key={ind}
-                            component={Link}
-                            to={`/anime/${animeSlug}/episode/${ind + 1}`}
-                            className={classes.eachEpisodeDiv}
-                            sx={ind + 1 === parseInt(currentEpisode) ? { pointerEvents: "none", backgroundColor: WATCHANIME_RED } : watchedEpisodes && watchedEpisodes[ind + 1] ? { backgroundColor: "#5e5e5e" } : {}}
-                        >
-                            <Text>{`${ind + 1}`}</Text>
-                        </Anchor>
-                    );
-                })}
+            {episodeList.length && episodeCount <= episodeList.length
+                ? episodeList.map((val, ind) => {
+                      return (
+                          <Anchor
+                              key={val}
+                              component={Link}
+                              to={`/anime/${animeSlug}/episode/${val}`}
+                              className={classes.eachEpisodeDiv}
+                              sx={val === parseFloat(currentEpisode) ? { pointerEvents: "none", backgroundColor: WATCHANIME_RED } : watchedEpisodes && watchedEpisodes[val] ? { backgroundColor: "#5e5e5e" } : {}}
+                          >
+                              <Text>{`${val}`}</Text>
+                          </Anchor>
+                      );
+                  })
+                : Array(episodeCount)
+                      .fill(0)
+                      .map((val, ind) => {
+                          return (
+                              <Anchor
+                                  key={ind}
+                                  component={Link}
+                                  to={`/anime/${animeSlug}/episode/${ind + 1}`}
+                                  className={classes.eachEpisodeDiv}
+                                  sx={ind + 1 === parseInt(currentEpisode) ? { pointerEvents: "none", backgroundColor: WATCHANIME_RED } : watchedEpisodes && watchedEpisodes[ind + 1] ? { backgroundColor: "#5e5e5e" } : {}}
+                              >
+                                  <Text>{`${ind + 1}`}</Text>
+                              </Anchor>
+                          );
+                      })}
         </Group>
     );
 }

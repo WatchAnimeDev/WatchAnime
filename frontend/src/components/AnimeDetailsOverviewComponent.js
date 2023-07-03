@@ -117,7 +117,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                         <Title sx={{ fontSize: "30px" }}>{getAnimeTitleByRelevance(animeData.titles)}</Title>
                     </Group>
                     <Group>
-                        <Button fullWidth={false} size={"md"} radius={5} component={Link} to={`/anime/${animeData.slug}/episode/1`} className={classes.playButton}>
+                        <Button fullWidth={false} size={"md"} radius={5} component={Link} to={`/anime/${animeData.slug}/episode/${animeData?.episodeList["0"] ? 0 : 1}`} className={classes.playButton}>
                             <IconPlayerPlay size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>

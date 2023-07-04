@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function VideoScreenEpisodeDisplayPartial({ episodeCount, episodeList, animeSlug, currentEpisode }) {
-    episodeList = Object.keys(episodeList)
+    episodeList = Object.keys(episodeList ?? {})
         .map((val) => parseFloat(val))
         .sort((x, y) => x - y);
     const { classes } = useStyles();

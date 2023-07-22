@@ -127,7 +127,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
 
     return (
         <>
-            <Header fixed height={56} className={classes.header} mb={120} sx={scrollPosition && { backgroundColor: "#1A1B1E", borderBottom: "1px solid #2C2E33" }}>
+            <Header fixed height={56} className={classes.header} mb={120} sx={scrollPosition && { backgroundColor: "#1A1B1E", borderBottom: "1px solid #2C2E33", zIndex: 100 }}>
                 <div className={classes.inner}>
                     <Group>
                         <Burger opened={sideBarState} onClick={setSideBarState} size="sm" />

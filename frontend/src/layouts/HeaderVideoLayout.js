@@ -187,7 +187,7 @@ function HeaderVideoLayout({ anime, index }) {
             const scrollFactorCalculated = 1 - Math.max(0, window.innerHeight - document.documentElement.scrollTop) / window.innerHeight;
             setScrollFactor(scrollFactorCalculated);
             if (videoPlayerRef.current?.classList && !videoPlayerRef.current.classList.contains("opacityhide")) {
-                videoPlayerRef.current.volume = 1 - scrollFactorCalculated * 1.3;
+                videoPlayerRef.current.volume = Math.max(0, 1 - scrollFactorCalculated * 1.3);
                 scrollFactorCalculated > 0.7 ? videoPlayerRef.current.pause() : videoPlayerRef.current.play();
             }
         };

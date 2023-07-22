@@ -1,26 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import SliderComponent from "../components/SliderComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 import SideBarComponent from "../components/SideBarComponent";
 import AnimeSectionComponent from "../components/AnimeSectionComponent";
 import { Container, createStyles, Loader, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import Autoplay from "embla-carousel-autoplay";
 
-import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH, SLIDER_HEIGHT } from "../constants/cssConstants";
+import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH } from "../constants/cssConstants";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { getLastWatchedData } from "../player/PlayerHelper";
 import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
+import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
         margin: "20px 30px",
+        paddingTop: "max(40%, 750px)",
+        position: "relative",
+        zIndex: 1,
+        marginTop: 0,
         [theme.fn.smallerThan("md")]: {
             margin: "20px 10px",
+            marginTop: 0,
         },
     },
 }));
@@ -59,7 +63,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const [recentlyReleasedAnimes, setRecentlyReleasedAnimes] = useState([]);
 
     const [scheduleData, setScheduleData] = useState([]);
-    const [sliderAnimes, setSliderAnimes] = useState([]);
+    const [headerVideoData, setHeaderVideoData] = useState({});
     const [popularSeries, setPopularSeries] = useState([]);
     const [watchListData, setWatchListData] = useState(getWatchListAllData());
 
@@ -69,15 +73,16 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     const [reRenderHomepage, setReRenderHomepage] = useState(false);
 
-    const autoplay = useRef(Autoplay({ delay: 5000 }));
-
     const { classes } = useStyles();
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
             const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`), axios.get(`${API_BASE_URL}/schedule`)]);
             setRecentlyReleasedAnimes(recentlyReleasedData.data);
-            setSliderAnimes(popularData.data.filter((anime) => anime.bannerImage).slice(0, 10));
+            let headerVideoData = popularData.data.filter((anime) => anime?.trailer?.deliveryUrl);
+            headerVideoData = headerVideoData.length ? headerVideoData : popularData.data;
+            const headerVideoIndex = Math.floor(Math.random() * headerVideoData.length);
+            setHeaderVideoData({ data: headerVideoData[headerVideoIndex], index: headerVideoIndex });
             setPopularSeries(popularData.data);
             setScheduleData(prepareScheduleData(scheduleData.data));
             setAjaxComplete(true);
@@ -138,15 +143,6 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             { label: "Install App", callBack: () => installPWA() },
         ],
     };
-    const headerSliderConfig = {
-        withIndicators: true,
-        height: SLIDER_HEIGHT,
-        loop: true,
-        withControls: false,
-        plugins: [autoplay.current],
-        onMouseEnter: autoplay.current.stop,
-        onMouseLeave: autoplay.current.reset,
-    };
     const animeSliderConfig = {
         slideSize: mobile ? ANIME_SLIDER_MOBILE_WIDTH : ANIME_SLIDER_WIDTH,
         slideGap: ANIME_SLIDER_GAP,
@@ -179,7 +175,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     return ajaxComplete ? (
         <>
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
-            <SliderComponent sliderDatas={sliderAnimes} sliderRenderComponent={"HeaderSliderLayout"} sliderConfig={headerSliderConfig} />
+            <HeaderVideoLayout anime={headerVideoData.data} index={headerVideoData.index} />
             <Container fluid className={classes.bodyContainer}>
                 {lastWatchedData.length ? (
                     <AnimeSectionComponent

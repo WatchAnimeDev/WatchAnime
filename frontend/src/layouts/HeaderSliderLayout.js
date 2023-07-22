@@ -3,7 +3,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconCalendarTime, IconPlayerPlay, IconStar } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
-import { SLIDER_HEIGHT } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, getTmdbImageByRelevanceAndType, hasTmdbData } from "../custom/AnimeData";
 
 import topTenImage from "../assets/images/topten.svg";
@@ -56,14 +55,14 @@ const useStyles = createStyles((theme) => ({
         marginBottom: "10px",
     },
 }));
-
+//Deprecated
 function HeaderSliderLayout({ anime, index }) {
     const { classes } = useStyles();
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
 
     return (
-        <Paper sx={{ height: SLIDER_HEIGHT }} className="slider-slide">
+        <Paper sx={{ height: 800 }} className="slider-slide">
             <Paper
                 className={classes.sliderImageDiv}
                 sx={{

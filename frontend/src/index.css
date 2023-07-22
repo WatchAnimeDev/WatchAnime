@@ -68,3 +68,7 @@ code {
     background-color: #ff0000;
     color: white;
 }
+
+.opacityhide {
+  opacity: 0;
+}

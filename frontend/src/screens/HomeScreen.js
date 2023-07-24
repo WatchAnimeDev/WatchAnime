@@ -18,7 +18,7 @@ import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
         margin: "20px 30px",
-        paddingTop: "max(40%, 750px)",
+        paddingTop: "max(35%, 500px)",
         position: "relative",
         zIndex: 1,
         marginTop: 0,
@@ -176,7 +176,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         <>
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <HeaderVideoLayout anime={headerVideoData.data} index={headerVideoData.index} />
-            <Container fluid className={classes.bodyContainer}>
+            <Container fluid className={[classes.bodyContainer, "main-wrapper"]}>
                 {lastWatchedData.length ? (
                     <AnimeSectionComponent
                         sectionTitle={"Last Watched"}

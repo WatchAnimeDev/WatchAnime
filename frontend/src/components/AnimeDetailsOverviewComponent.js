@@ -66,6 +66,7 @@ const useStyles = createStyles((theme) => ({
     },
     frostedDivChildAnimeDetailsValue: {
         fontSize: "12px",
+        backgroundColor: "transparent",
     },
     animeInfoDiv: {
         display: "flex",
@@ -175,7 +176,17 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                     <Paper className={classes.frostedDivChild}>
                         <Text className={classes.frostedDivChildAnimeDetails}>Genres:</Text>
                         <Space w="5px" />
-                        <Text className={classes.frostedDivChildAnimeDetailsValue}>{animeData.genres?.length ? animeData.genres.map((genre) => genre.name).join(", ") : "NA"}</Text>
+                        <Paper className={classes.frostedDivChildAnimeDetailsValue}>
+                            {animeData.genres?.length
+                                ? animeData.genres
+                                      .map((genre, ind) => (
+                                          <Anchor key={ind} href={`/catalog?genre=${genre.name}`}>
+                                              {genre.name}
+                                          </Anchor>
+                                      ))
+                                      .reduce((prev, curr) => [prev, ", ", curr])
+                                : "NA"}
+                        </Paper>
                     </Paper>
                     <Paper className={classes.frostedDivChild}>
                         <Text className={classes.frostedDivChildAnimeDetails}>Studios:</Text>

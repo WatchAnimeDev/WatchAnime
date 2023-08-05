@@ -42,7 +42,7 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
     const [ratingValue, setRatingValue] = useState("ALL");
     const [seasonValue, setSeasonValue] = useState("ALL");
     const [scoreValue, setScoreValue] = useState([0, 100]);
-    const [genreValue, setGenreValue] = useState(["ALL"]);
+    const [genreValue, setGenreValue] = useState(searchParams.get("genre") ? searchParams.get("genre").split("|") : ["ALL"]);
 
     async function getSearchDetails() {
         setAjaxComplete(false);

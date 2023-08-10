@@ -1,4 +1,4 @@
-import { Anchor, createStyles, Group, Text } from "@mantine/core";
+import { Anchor, createStyles, Group, Paper, Text } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons";
 import React from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
@@ -17,13 +17,16 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, viewMoreLink, sliderConfig, refProp, otherData }) {
+function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, viewMoreLink, sliderConfig, refProp, otherData, actionComponent }) {
     const { classes } = useStyles();
     return (
         <>
             <Group sx={{ width: "100%", marginBottom: "30px" }} ref={refProp}>
                 <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
-                    <Text sx={{ fontSize: "20px", fontWeight: "700" }}>{sectionTitle}</Text>
+                    <Paper sx={{ backgroundColor: "transparent", display: "flex", alignItems: "center" }}>
+                        <Text sx={{ fontSize: "20px", fontWeight: "700", marginRight: "5px" }}>{sectionTitle}</Text>
+                        {actionComponent ? actionComponent : ``}
+                    </Paper>
                     {hasViewMore && (
                         <Anchor className={classes.viewMore} href={`${viewMoreLink}`}>
                             <Text size={13} transform={"uppercase"}>

@@ -14,6 +14,7 @@ import { getLastWatchedData } from "../player/PlayerHelper";
 import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
+import WatchListEditComponent from "../components/WatchListEditComponent";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -193,6 +194,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                         sectionAnimeData={watchListData}
                         sliderConfig={animeSliderConfig}
                         otherData={{ isDeletable: true, reRenderHomepage: reRenderHomepage, setReRenderHomepage: setReRenderHomepage, featureId: "watchList" }}
+                        actionComponent={<WatchListEditComponent watchListData={watchListData} setWatchListData={setWatchListData} />}
                     />
                 ) : (
                     <></>

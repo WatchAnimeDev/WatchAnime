@@ -9,6 +9,8 @@ const useStyles = createStyles((theme) => ({
     editWrapperParent: {
         listStyle: "none",
         paddingLeft: "0",
+        height: "90vh",
+        overflow: "auto",
     },
     editWrapperLi: {
         display: "flex",

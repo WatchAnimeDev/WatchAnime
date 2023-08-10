@@ -76,3 +76,11 @@ code {
 .main-wrapper >  div:nth-child(1) {
   margin-top: 6vw;
 }
+
+.watchlist-edit-wrapper {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.watchlist-edit-wrapper::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}

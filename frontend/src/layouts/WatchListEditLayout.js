@@ -11,6 +11,11 @@ const useStyles = createStyles((theme) => ({
         paddingLeft: "0",
         height: "90vh",
         overflow: "auto",
+        MsOverflowStyle: "none",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
     },
     editWrapperLi: {
         display: "flex",

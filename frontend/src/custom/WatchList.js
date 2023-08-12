@@ -41,7 +41,7 @@ const handleWatchListDelete = async (e, selectedAnimeData, setWatchListData) => 
     if (e) e.preventDefault();
     await unSubscribeToEpisodeNotification(selectedAnimeData.slug);
     deleteFromWatchListBySlug(selectedAnimeData.slug);
-    showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`, { color: "red" });
+    showGenericCheckBoxNotification("Removed from watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been removed to watchlist!`);
     if (setWatchListData) setWatchListData({});
 };
 

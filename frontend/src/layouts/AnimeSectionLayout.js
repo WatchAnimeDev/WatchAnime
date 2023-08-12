@@ -5,9 +5,9 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
 import { IconPlus, IconTrash } from "@tabler/icons";
 import { openConfirmModal } from "@mantine/modals";
-import { handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
+import { getWatchListAllData, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
-import { getWatchHistoryBySlug } from "../player/PlayerHelper";
+import { getLastWatchedData, getWatchHistoryBySlug } from "../player/PlayerHelper";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -111,7 +111,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, setReRenderHomepage, featureId }) {
+function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, setWatchListData }) {
     const { classes } = useStyles();
 
     const handleDeleteFromAnimeCard = (e, featureId, selectedAnimeData) => {
@@ -127,7 +127,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
     const handleDeleteFromWatchList = (selectedAnimeData) => {
         openConfirmModal({
             title: "Please confirm your action",
-            children: <Text size="sm">Are you sure you want to delete {selectedAnimeData.title} from your watchlist?</Text>,
+            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles)} from your watchlist?</Text>,
             labels: { confirm: "Confirm", cancel: "Cancel" },
             confirmProps: { color: "red" },
             onCancel: () => {
@@ -135,7 +135,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
             },
             onConfirm: async () => {
                 await handleWatchListDelete(null, selectedAnimeData);
-                setReRenderHomepage(!reRenderHomepage);
+                setWatchListData(getWatchListAllData());
             },
             centered: true,
         });
@@ -144,7 +144,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
     const handleDeleteFromLastWatched = (selectedAnimeData) => {
         openConfirmModal({
             title: "Please confirm your action",
-            children: <Text size="sm">Are you sure you want to delete {selectedAnimeData.title} from your watch history?</Text>,
+            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles)} from your watch history?</Text>,
             labels: { confirm: "Confirm", cancel: "Cancel" },
             confirmProps: { color: "red" },
             onCancel: () => {
@@ -154,7 +154,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
                 let currWatched = JSON.parse(localStorage.getItem("lastWatchedQueue"));
                 currWatched = currWatched.filter((anime) => anime.slug !== selectedAnimeData.slug);
                 localStorage.setItem("lastWatchedQueue", JSON.stringify(currWatched));
-                setReRenderHomepage(!reRenderHomepage);
+                setLastWatchedData(getLastWatchedData());
                 showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from your watch history!`);
             },
             centered: true,
@@ -212,7 +212,13 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
                     )}
                     {isAddableToWatchList ? (
                         <Tooltip label="Add to WatchList" withArrow position="bottom" transition="scale" transitionDuration={100}>
-                            <span className={classes.hoverContentBaseDiv} onClick={async (e) => await handleWatchListAdd(e, animeData)}>
+                            <span
+                                className={classes.hoverContentBaseDiv}
+                                onClick={async (e) => {
+                                    await handleWatchListAdd(e, animeData);
+                                    setWatchListData(getWatchListAllData());
+                                }}
+                            >
                                 <IconPlus size={20} />
                             </span>
                         </Tooltip>
@@ -227,7 +233,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, reRenderHomepage, 
     );
 }
 
-function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, reRenderHomepage, setReRenderHomepage, featureId }) {
+function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, setWatchListData }) {
     const { classes } = useStyles();
 
     return (
@@ -237,7 +243,7 @@ function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, reRender
             className={classes.noTextDecoration}
             sx={{ position: "relative" }}
         >
-            <Card animeData={anime} isDeletable={isDeletable} reRenderHomepage={reRenderHomepage} setReRenderHomepage={setReRenderHomepage} featureId={featureId} isAddableToWatchList={isAddableToWatchList} />
+            <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} setWatchListData={setWatchListData} />
         </Anchor>
     );
 }

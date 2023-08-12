@@ -70,9 +70,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     const [promptInstall, setPromptInstall] = useState(null);
 
-    const lastWatchedData = getLastWatchedData();
-
-    const [reRenderHomepage, setReRenderHomepage] = useState(false);
+    const [lastWatchedData, setLastWatchedData] = useState(getLastWatchedData());
 
     const { classes } = useStyles();
 
@@ -183,7 +181,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                         sectionTitle={"Last Watched"}
                         sectionAnimeData={lastWatchedData}
                         sliderConfig={animeSliderConfig}
-                        otherData={{ isDeletable: true, reRenderHomepage: reRenderHomepage, setReRenderHomepage: setReRenderHomepage, featureId: "lastWatched", isAddableToWatchList: true }}
+                        otherData={{ isDeletable: true, featureId: "lastWatched", isAddableToWatchList: true, setLastWatchedData, setWatchListData }}
                     />
                 ) : (
                     <></>
@@ -193,7 +191,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                         sectionTitle={"WatchList"}
                         sectionAnimeData={watchListData}
                         sliderConfig={animeSliderConfig}
-                        otherData={{ isDeletable: true, reRenderHomepage: reRenderHomepage, setReRenderHomepage: setReRenderHomepage, featureId: "watchList" }}
+                        otherData={{ isDeletable: true, featureId: "watchList", setWatchListData }}
                         actionComponent={<WatchListEditComponent watchListData={watchListData} setWatchListData={setWatchListData} />}
                     />
                 ) : (
@@ -201,7 +199,15 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                 )}
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
-                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} otherData={{ isAddableToWatchList: true }} />
+                <AnimeSectionComponent
+                    refProp={targetRefPopular}
+                    sectionTitle={"Popular Series"}
+                    sectionAnimeData={popularSeries}
+                    hasViewMore={true}
+                    viewMoreLink={"/popular/1"}
+                    sliderConfig={animeSliderConfig}
+                    otherData={{ isAddableToWatchList: true, setWatchListData }}
+                />
             </Container>
         </>
     ) : (

@@ -15,11 +15,11 @@ const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
                     anime={sliderData}
                     isDeletable={otherData.isDeletable ?? false}
                     isAddableToWatchList={otherData.isAddableToWatchList ?? false}
-                    reRenderLastWatched={otherData.reRenderLastWatched}
-                    setReRenderLastWatched={otherData.setReRenderLastWatched}
                     featureId={otherData.featureId ?? null}
                     reRenderHomepage={otherData.reRenderHomepage}
                     setReRenderHomepage={otherData.setReRenderHomepage}
+                    setLastWatchedData={otherData.setLastWatchedData}
+                    setWatchListData={otherData.setWatchListData}
                 />
             );
         case "ScheduleSectionLayout":

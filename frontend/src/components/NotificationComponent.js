@@ -128,7 +128,7 @@ function NotificationComponent() {
             onClose={() => {
                 setTimeout(() => {
                     setIsLoading(true);
-                }, 500);
+                }, 1);
                 setIsMounted(false);
                 //Enable after mark as read feature
                 // setNotificationDataCount(notificationData.length);

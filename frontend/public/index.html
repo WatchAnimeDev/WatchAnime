@@ -64,7 +64,7 @@
                 XMLHttpRequest.prototype.open = function () {
                     var args = slice.call(arguments);
                     var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-                    if (args && args.length > 1 && args[1].includes("akamai-video-content") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== "streamsbs.watchanime.dev") {
+                    if (args && args.length > 1 && args[1].includes("sw-cdnstream.com") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== "streamsbs.watchanime.dev") {
                         args[1] = cors_api_url + args[1];
                     }
                     return open.apply(this, args);

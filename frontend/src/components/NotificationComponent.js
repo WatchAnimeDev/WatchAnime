@@ -137,20 +137,16 @@ function NotificationComponent() {
             onChange={setOpened}
         >
             <Menu.Target>
-                {isMobileView ? (
-                    <Paper
-                        className={[classes.navIcons, classes.searchBarAccountIcon]}
-                        onClick={(e) => {
-                            handleUserNotification(e);
-                        }}
-                    >
-                        <Indicator size={15} color={WATCHANIME_RED} offset={2} label={notificationDataCount} showZero={false} dot={false}>
-                            <IconBell size={22} stroke={1.5} />
-                        </Indicator>
-                    </Paper>
-                ) : (
-                    <Paper></Paper>
-                )}
+                <Paper
+                    className={[classes.navIcons, classes.searchBarAccountIcon]}
+                    onClick={(e) => {
+                        handleUserNotification(e);
+                    }}
+                >
+                    <Indicator size={15} color={WATCHANIME_RED} offset={2} label={notificationDataCount} showZero={false} dot={false}>
+                        <IconBell size={22} stroke={1.5} />
+                    </Indicator>
+                </Paper>
             </Menu.Target>
             <Menu.Dropdown className={classes.menuDropDown}>
                 <Container className={classes.notificationTopBar}>

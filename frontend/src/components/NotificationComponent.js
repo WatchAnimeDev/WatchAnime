@@ -5,7 +5,6 @@ import { IconBell, IconChecks, IconEyeCheck, IconPoint, IconSettings } from "@ta
 import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotificationCount, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@mantine/hooks";
 import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
 import { uuidv4 } from "../custom/User";
 
@@ -84,8 +83,6 @@ function NotificationComponent() {
     const [isMounted, setIsMounted] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [notificationDataCount, setNotificationDataCount] = useState(0);
-
-    const isMobileView = useMediaQuery("(min-width: 430px)");
 
     const navigate = useNavigate();
 

@@ -35,7 +35,7 @@ function AnimeDetailsNextEpisodePartial({ episodeInfoData }) {
     return episodeInfoData.nextAiringEpisode ? (
         <Group className={classes.nextEpisodeInfoDiv}>
             <Text className={classes.nextEpisodeInfoDivNextEpisodeText}>Next Episode in:</Text>
-            <Text className={classes.nextEpisodeInfoDivTimeDisplayDiv}>{formatTime(episodeInfoData.nextAiringEpisode.timeUntilAiring)}</Text>
+            <Text className={classes.nextEpisodeInfoDivTimeDisplayDiv}>{formatTime(episodeInfoData.nextAiringEpisode.airingAt - parseInt(Date.now() / 1000))}</Text>
         </Group>
     ) : (
         <></>

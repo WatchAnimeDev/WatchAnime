@@ -1,4 +1,4 @@
-import { Alert, Button, Dialog, Group, Text, TextInput } from "@mantine/core";
+import { Alert, Button, Group, Modal, Text, TextInput, Textarea } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { IconCheck, IconCircleX } from "@tabler/icons";
 import axios from "axios";
@@ -8,7 +8,8 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { API_BASE_URL } from "../constants/genricConstants";
 
 function BugReportLayout({ bugReportState, setBugReportState }) {
-    const [bugReportMessage, setBugReportMessage] = useState();
+    const [bugReportMessage, setBugReportMessage] = useState("");
+    const [bugReportContactDetails, setBugReportContactDetails] = useState("");
     const [errorLog, setErrorLog] = useState();
     const location = useLocation();
     const handleBugReportSubmitClick = async () => {
@@ -23,7 +24,8 @@ function BugReportLayout({ bugReportState, setBugReportState }) {
         try {
             const animeSlug = location.pathname?.split("/anime/")[1]?.split("/")[0] ?? null;
             const episodeNumber = location.pathname?.split("/anime/")[1]?.split("/")[2] ?? null;
-            await Promise.all([axios.post(`${API_BASE_URL}/reporting/bug?message=${bugReportMessage}&slug=${animeSlug}&episodeNumber=${episodeNumber}`)]);
+            const message = `Details : ${bugReportMessage} | Contact : ${bugReportContactDetails}`;
+            await Promise.all([axios.post(`${API_BASE_URL}/reporting/bug?message=${message}&slug=${animeSlug}&episodeNumber=${episodeNumber}`)]);
             updateNotification({
                 id: "bug-report-notif",
                 color: "teal",
@@ -48,36 +50,46 @@ function BugReportLayout({ bugReportState, setBugReportState }) {
             setErrorLog("Please provide message with atleast 20 character in length!");
             return false;
         }
+        if (bugReportContactDetails && (/^.{3,32}#[0-9]{4}$/.test(bugReportContactDetails) === false || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(bugReportContactDetails) === false)) {
+            setErrorLog("Please provide a valid email or disord username!");
+            return false;
+        }
         return true;
     };
+
     return (
-        <>
-            <Dialog opened={bugReportState} withCloseButton onClose={() => setBugReportState(false)} size="md" radius="md">
-                <Text size="sm" style={{ marginBottom: 10 }} weight={500}>
-                    Report Problem
-                </Text>
-                {errorLog && (
-                    <Alert color="red" sx={{ marginBottom: "10px" }}>
-                        {errorLog}
-                    </Alert>
-                )}
-                <Group align="flex-end">
-                    <TextInput placeholder="Describe your problem here...." style={{ flex: 1 }} onChange={(event) => setBugReportMessage(event.currentTarget.value)} />
-                    <Button
-                        sx={{ backgroundColor: WATCHANIME_RED }}
-                        onClick={(e) => {
-                            if (!validateInput()) {
-                                return;
-                            }
-                            setBugReportState(false);
-                            handleBugReportSubmitClick();
-                        }}
-                    >
-                        Submit
-                    </Button>
-                </Group>
-            </Dialog>
-        </>
+        <Modal
+            opened={bugReportState}
+            onClose={() => {
+                setBugReportState(false);
+                setErrorLog("");
+            }}
+            title="Report Problem"
+        >
+            {errorLog && (
+                <Alert color="red" sx={{ marginBottom: "10px" }}>
+                    {errorLog}
+                </Alert>
+            )}
+            <Group sx={{ flexDirection: "column", alignItems: "flex-start" }}>
+                <TextInput sx={{ width: "100%" }} label="Contact Info" placeholder="Please mention your email or discord id." onChange={(event) => setBugReportContactDetails(event.currentTarget.value)}></TextInput>
+                <Textarea required={true} sx={{ width: "100%" }} label="Describe your problem here" placeholder="Describe your problem here...." onChange={(event) => setBugReportMessage(event.currentTarget.value)} />
+                <Text size={"12px"}>All fields marked with * are required</Text>
+                <Button
+                    sx={{ backgroundColor: WATCHANIME_RED }}
+                    onClick={(e) => {
+                        if (!validateInput()) {
+                            return;
+                        }
+                        setBugReportState(false);
+                        setErrorLog("");
+                        handleBugReportSubmitClick();
+                    }}
+                >
+                    Submit
+                </Button>
+            </Group>
+        </Modal>
     );
 }
 

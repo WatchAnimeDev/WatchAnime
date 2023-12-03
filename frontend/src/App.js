@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SpotlightProvider } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons";
 import { handleSpotLightSearch } from "./custom/Search";
+import Snowfall from "react-snowfall";
 
 import HomeScreen from "./screens/HomeScreen";
 import HeaderComponent from "./components/HeaderComponent";
@@ -19,6 +20,7 @@ import ContactScreen from "./screens/ContactScreen";
 import { getOrSetUid } from "./custom/User";
 import SpotlightActionComponent from "./components/SpotlightActionComponent";
 import AnimeSearchScreen from "./screens/AnimeSearchScreen";
+import { IS_CHRISTMAS_ENABLED } from "./constants/genricConstants";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -79,6 +81,21 @@ function App() {
             </main>
             <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
             <FooterComponent />
+            {IS_CHRISTMAS_ENABLED ? (
+                <Snowfall
+                    style={{
+                        position: "fixed",
+                        width: "100vw",
+                        height: "100vh",
+                        zIndex: 1000,
+                    }}
+                    snowflakeCount={60}
+                    radius={[1.5, 3]}
+                    color="white"
+                />
+            ) : (
+                <></>
+            )}
         </SpotlightProvider>
     );
 }

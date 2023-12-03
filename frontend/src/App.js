@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Container } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { SpotlightProvider } from "@mantine/spotlight";
@@ -27,6 +27,8 @@ function App() {
     const [bugReportState, setBugReportState] = useState(false);
     const [searchData, setSearchData] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const isPlayerPage = /\/episode\/\d+/.test(location.pathname) === true;
 
     const targetRefSchedule = useRef(null);
 
@@ -81,7 +83,7 @@ function App() {
             </main>
             <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
             <FooterComponent />
-            {IS_CHRISTMAS_ENABLED ? (
+            {IS_CHRISTMAS_ENABLED && !isPlayerPage ? (
                 <Snowfall
                     style={{
                         position: "fixed",
@@ -96,6 +98,7 @@ function App() {
             ) : (
                 <></>
             )}
+            {console.log()}
         </SpotlightProvider>
     );
 }

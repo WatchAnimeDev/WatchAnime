@@ -42,7 +42,7 @@ const prepareVideoData = (videoData) => {
 };
 
 const getProxyUrl = (videoUrl) => {
-    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", document.location.hostname];
+    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", document.location.hostname];
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;
     }

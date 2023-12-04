@@ -4,4 +4,4 @@ export const NOTIFICATION_BASE_URL = "https://notifications.watchanime.dev";
 export const GOGO_DOWNLOAD_LINK = "https://goone.pro";
 export const STATIC_BUCKET_URL = "https://webstatic.watchanime.dev/watchanime-static";
 
-export const IS_CHRISTMAS_ENABLED = true;
+export const IS_CHRISTMAS_ENABLED = new Date().getMonth() === 11;

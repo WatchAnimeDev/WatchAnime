@@ -11,7 +11,7 @@ import "videojs-hotkeys";
 import "videojs-overlay";
 import "videojs-overlay/dist/videojs-overlay.css";
 import { showNotification } from "@mantine/notifications";
-import { getLastWatchedData, getAnimeSkipData, initHlsSelector, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
+import { getLastWatchedData, getAnimeSkipData, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
 import { IconDeviceTv, IconDeviceTvOff, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
@@ -52,7 +52,7 @@ const useStyles = createStyles((theme) => ({
         bottom: "5em !important",
     },
     skipButtonInternalDiv: {
-        padding: "10px 15px",
+        padding: "10px 15px !important",
         backgroundColor: "rgb(38 38 38 / 1)",
         opacity: "0.8",
         cursor: "pointer",
@@ -68,7 +68,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const updatePlaybackInWathHistoryBySlug = (player, slug, episodeNumber) => {
-    setWatchHistoryBySlug({ slug: slug }, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
+    setWatchHistoryBySlug({ slug: slug }, { duration: player.duration, playBackTime: player.currentTime }, episodeNumber);
 };
 
 function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
@@ -94,10 +94,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         async function getAnimeDetails() {
             const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${selectedServer}`)]);
             const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
-            playerRef.current.src({
-                type: preparedVideoDataAjax[0].type,
-                src: preparedVideoDataAjax[0].link,
-            });
+            playerRef.current.switch = preparedVideoDataAjax[0].link;
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
             playerRef.current.shouldAjax = true;
             return;
@@ -107,17 +104,8 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         } else {
             firstRender.current = false;
         }
+        // eslint-disable-next-line
     }, [selectedServer]);
-
-    const videoJsOptions = {
-        controls: true,
-        responsive: true,
-        fluid: true,
-        sources: {
-            type: preparedVideoData[videoCounter.current].type,
-            src: preparedVideoData[videoCounter.current].link,
-        },
-    };
 
     const openModal = () =>
         openConfirmModal({
@@ -163,27 +151,41 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const handlePlayerReady = (player) => {
         playerRef.current = player;
         playerRef.current.shouldAjax = true;
-        playerRef.current.animeDetails = episodeData.animeDetails;
-        window.initHlsSelector = initHlsSelector;
+        playerRef.current.skipData = [];
         /**
          * Player Events
          */
-        player.on("ready", () => {
-            window.player = player;
-            player.hotkeys({
-                volumeStep: 0.1,
-                seekStep: 5,
-                enableModifiersForNumbers: false,
-            });
+        player.on("ready", async () => {
+            player.autoSize();
         });
-        player.on("waiting", () => {
+        player.on("video:timeupdate", async () => {
+            const currentSkipData = playerRef.current.skipData.filter((time) => time.startTime <= player.currentTime && time.endTime >= player.currentTime);
+            if (player.layers.cache.has("skipTime")) {
+                player.layers.remove("skipTime");
+            }
+            for (const skipData of currentSkipData) {
+                player.layers.add({
+                    name: "skipTime",
+                    html: `<div class="${classes.skipButtonInternalDiv}" ><div class="${classes.skipButtonTextDiv}">${skipData.displayString}</div></div>`,
+                    style: {
+                        position: "absolute",
+                        bottom: "75px",
+                        right: "25px",
+                    },
+                    click: function (...args) {
+                        player.currentTime = skipData.endTime + 1;
+                    },
+                });
+            }
+        });
+        player.on("video:waiting", () => {
             console.log("player is waiting");
         });
-        player.on("dispose", () => {
+        player.on("destroy", () => {
             console.log("player will dispose");
             clearInterval(player.watchTimeTracker);
         });
-        player.on("ended", () => {
+        player.on("video:ended", () => {
             console.log("player video ended");
             if (autoPlay && episodeData.animeDetails.episodes !== parseInt(episodeNumber)) {
                 showNotification({
@@ -196,81 +198,67 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                 }, 3000);
             }
         });
-        player.reloadSourceOnError({
-            getSource: async (reload) => {
-                console.log("Using another source!");
-                const prepareVideoData = (videoData) => {
-                    var videos_with_video_format = [];
-                    for (const result of videoData) {
-                        if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls")) {
-                            videos_with_video_format.push({
-                                link: getProxyUrl(result.url),
-                                type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
-                                resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
-                                priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,
-                            });
-                        }
-                    }
-                    videos_with_video_format.sort((b, a) => a.priority - b.priority);
-                    return videos_with_video_format;
-                };
-                const getProxyUrl = (videoUrl) => {
-                    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", document.location.hostname];
-                    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
-                        return videoUrl;
-                    }
-                    return "https://in.watchanime.dev/" + videoUrl;
-                };
-
-                let preparedVideoData = prepareVideoData(playerRef.current.videoUrlList);
-
-                if (videoCounter.current >= preparedVideoData.length && playerRef.current?.shouldAjax) {
-                    const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
-                    const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
-                    const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${player.selectedServer}?invalidate_cache=true`)]);
-                    preparedVideoData = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
-                    playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
-                    playerRef.current.shouldAjax = false;
-                    videoCounter.current = 0;
-                }
-                reload({
-                    src: preparedVideoData[videoCounter.current].link,
-                    type: preparedVideoData[videoCounter.current].type,
-                });
-                videoCounter.current = videoCounter.current + 1;
-            },
-            errorInterval: 0,
-        });
-        player.on("loadeddata", async () => {
+        // player.reloadSourceOnError({
+        //     getSource: async (reload) => {
+        //         console.log("Using another source!");
+        //         const prepareVideoData = (videoData) => {
+        //             var videos_with_video_format = [];
+        //             for (const result of videoData) {
+        //                 if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls")) {
+        //                     videos_with_video_format.push({
+        //                         link: getProxyUrl(result.url),
+        //                         type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
+        //                         resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
+        //                         priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,
+        //                     });
+        //                 }
+        //             }
+        //             videos_with_video_format.sort((b, a) => a.priority - b.priority);
+        //             return videos_with_video_format;
+        //         };
+        //         const getProxyUrl = (videoUrl) => {
+        //             var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", document.location.hostname];
+        //             if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
+        //                 return videoUrl;
+        //             }
+        //             return "https://in.watchanime.dev/" + videoUrl;
+        //         };
+        //         let preparedVideoData = prepareVideoData(playerRef.current.videoUrlList);
+        //         if (videoCounter.current >= preparedVideoData.length && playerRef.current?.shouldAjax) {
+        //             const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
+        //             const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
+        //             const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${player.selectedServer}?invalidate_cache=true`)]);
+        //             preparedVideoData = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
+        //             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
+        //             playerRef.current.shouldAjax = false;
+        //             videoCounter.current = 0;
+        //         }
+        //         reload({
+        //             src: preparedVideoData[videoCounter.current].link,
+        //             type: preparedVideoData[videoCounter.current].type,
+        //         });
+        //         videoCounter.current = videoCounter.current + 1;
+        //     },
+        //     errorInterval: 0,
+        // });
+        player.on("video:loadeddata", async () => {
             console.log("player have loadeddata");
-            //Init aniskip
-            window.initHlsSelector(player);
-            const allSkipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber);
-            player.overlay({
-                overlays: allSkipData.map((skipData) => {
-                    return {
-                        start: skipData.startTime,
-                        end: skipData.endTime,
-                        content: `<div class="${classes.skipButtonInternalDiv}" onclick="window.player.currentTime(${skipData.endTime + 1})"><div class="${classes.skipButtonTextDiv}">${skipData.displayString}</div></div>`,
-                        align: "bottom-right",
-                        class: classes.skipButtonParentDiv,
-                    };
-                }),
-            });
             //Get last watched info
             let lastWatchedData = getLastWatchedData(episodeNumber);
             let lastWatchedTime = lastWatchedData.length && lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug).length ? lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime : 0;
-            player.currentTime(lastWatchedTime);
+            //Use current time instead of seek to skip watched portions
+            player.currentTime = lastWatchedTime;
             //Only set poster if no watchtime found
             if (lastWatchedTime === 0) {
-                player.poster(episodeData.poster);
+                player.poster = episodeData.poster;
             }
             setLastWatchedQueue(animeSlug, episodeNumber);
-            setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration(), playBackTime: player.currentTime() }, episodeNumber);
+            setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration, playBackTime: player.currentTime }, episodeNumber);
             player.watchTimeTracker = setInterval(updatePlaybackInWathHistoryBySlug.bind(null, player, animeSlug, episodeNumber), 3000);
+            //Init and store aniskip
+            playerRef.current.skipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber, player.duration);
         });
         player.selectedServer = selectedServer;
-        player.playsinline(true);
         playerRef.current.videoUrlList = episodeDecoderData.videoUrlList;
     };
 
@@ -317,7 +305,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                             </Tooltip>
                         </Group>
                     </Group>
-                    {adfreeServer ? <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} data={episodeDecoderData} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}
+                    {adfreeServer ? <VideoPlayer onReady={handlePlayerReady} option={{ url: preparedVideoData[0].link }} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}
                     <Group className={classes.videoDetailsDiv}>
                         <Group sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                             <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{getAnimeTitleByRelevance(episodeData.animeDetails.titles)}</Title>

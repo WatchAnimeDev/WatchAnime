@@ -1,48 +1,100 @@
 import React from "react";
-import videojs from "video.js";
-import "video.js/dist/video-js.css";
+import Artplayer from "artplayer";
+import Hls from "hls.js/dist/hls.min";
+import dashjs from "dashjs";
+import artplayerPluginHlsQuality from "./plugins/HlsQuality";
+import { createStyles } from "@mantine/core";
+import artplayerPluginDashQuality from "./plugins/DashQuality";
 
-export const VideoPlayer = (props) => {
-    const videoRef = React.useRef(null);
-    const playerRef = React.useRef(null);
-    const { options, onReady } = props;
+const useStyles = createStyles((theme) => ({
+    parentPlayerDiv: { padding: "0", position: "relative", verticalAlign: "top", wordBreak: "normal", maxWidth: "100%", width: "100%", height: "0", paddingTop: "56.25%" },
+    playerDiv: { left: "0", position: "absolute", top: "0", height: "100%", width: "100%" },
+}));
+
+export const VideoPlayer = ({ option, onReady, ...rest }) => {
+    const { classes } = useStyles();
+    const artRef = React.useRef(null);
 
     React.useEffect(() => {
-        // Make sure Video.js player is only initialized once
-        if (!playerRef.current) {
-            const videoElement = videoRef.current;
+        window.hls = {};
+        const art = new Artplayer({
+            container: artRef.current,
+            setting: true,
+            fullscreen: true,
+            playbackRate: true,
+            mutex: true,
+            muted: true,
+            aspectRatio: true,
+            playsInline: true,
+            plugins: [
+                artplayerPluginHlsQuality({
+                    // Show quality in control
+                    control: true,
+                    // Get the resolution text from level
+                    getResolution: (level) => level.height + "P",
 
-            if (!videoElement) return;
+                    // I18n
+                    title: "Quality",
+                    auto: "1080P",
+                }),
+                artplayerPluginDashQuality({
+                    // Show quality in control
+                    control: true,
 
-            const player = (playerRef.current = videojs(videoElement, options, () => {
-                videojs.log("player is ready");
-                onReady && onReady(player);
-            }));
+                    // Show quality in setting
+                    setting: true,
 
-            // You could update an existing player in the `else` block here
-            // on prop change, for example:
-        } else {
-            // const player = playerRef.current;
-            // player.autoplay(options.autoplay);
-            // player.src(options.sources);
+                    // Get the resolution text from level
+                    getResolution: (level) => level.height + "P",
+
+                    // I18n
+                    title: "Quality",
+                    auto: "Auto",
+                }),
+            ],
+            customType: {
+                m3u8: function playM3u8(video, url, art) {
+                    if (Hls.isSupported()) {
+                        if (art.hls) art.hls.destroy();
+                        const hls = new Hls();
+                        hls.loadSource(url);
+                        hls.attachMedia(video);
+                        art.hls = hls;
+                        art.on("destroy", () => hls.destroy());
+                    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+                        video.src = url;
+                    } else {
+                        art.notice.show = "Unsupported playback format: m3u8";
+                    }
+                },
+                mpd: function playMpd(video, url, art) {
+                    if (dashjs.supportsMediaSource()) {
+                        if (art.dash) art.dash.destroy();
+                        const dash = dashjs.MediaPlayer().create();
+                        dash.initialize(video, url, art.option.autoplay);
+                        art.dash = dash;
+                        art.on("destroy", () => dash.destroy());
+                    } else {
+                        art.notice.show = "Unsupported playback format: mpd";
+                    }
+                },
+            },
+            ...option,
+        });
+        if (onReady && typeof onReady === "function") {
+            onReady(art);
         }
-    }, [options, videoRef]);
-
-    // Dispose the Video.js player when the functional component unmounts
-    React.useEffect(() => {
-        const player = playerRef.current;
 
         return () => {
-            if (player) {
-                player.dispose();
-                playerRef.current = null;
+            if (art && art.destroy) {
+                art.destroy(false);
             }
         };
-    }, [playerRef]);
+    }, []);
 
     return (
-        <div data-vjs-player>
-            <video ref={videoRef} className="video-js vjs-big-play-centered" />
+        <div data-vjs-player className={classes.parentPlayerDiv}>
+            <div ref={artRef} className={classes.playerDiv} />
         </div>
     );
 };

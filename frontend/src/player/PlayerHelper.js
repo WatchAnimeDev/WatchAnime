@@ -1,23 +1,12 @@
 import axios from "axios";
 
-const initHlsSelector = (player) => {
-    if (player.currentSrc().includes(".m3u8") && typeof player.hlsQualitySelector === "function") {
-        player.hlsQualitySelector({
-            displayCurrentQuality: true,
-        });
-    }
-    setTimeout(() => {
-        if (typeof player?.hlsQualitySelector?.onAddQualityLevel === "function") player.hlsQualitySelector.onAddQualityLevel();
-    }, 10);
-};
-
-const getAnimeSkipData = async (animeData, episodeNumber) => {
+const getAnimeSkipData = async (animeData, episodeNumber, duration) => {
     try {
         if (!animeData.malId) {
             return [];
         }
         const skipTypeMap = { ed: "SKIP ENDING", op: "SKIP OPENING" };
-        const skipData = (await axios.get(`https://api.aniskip.com/v2/skip-times/${animeData.malId}/${episodeNumber}?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=${window.player.duration()}`)).data.results;
+        const skipData = (await axios.get(`https://api.aniskip.com/v2/skip-times/${animeData.malId}/${episodeNumber}?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=${duration}`)).data.results;
         let formattedSkipData = [];
         for (const eachSkipData of skipData) {
             if (Object.keys(skipTypeMap).includes(eachSkipData.skipType))
@@ -106,4 +95,4 @@ const getLastWatchedData = (episode = false) => {
     return animeData;
 };
 
-export { initHlsSelector, getAnimeSkipData, getWatchHistoryBySlug, getPlaybackTimeFromWatchHistoryBySlug, setWatchHistoryBySlug, setLastWatchedQueue, getLastWatchedData };
+export { getAnimeSkipData, getWatchHistoryBySlug, getPlaybackTimeFromWatchHistoryBySlug, setWatchHistoryBySlug, setLastWatchedQueue, getLastWatchedData };

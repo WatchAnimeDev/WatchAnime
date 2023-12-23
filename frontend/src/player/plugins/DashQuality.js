@@ -16,7 +16,6 @@ export default function artplayerPluginDashQuality(option) {
         checkVersion(art);
 
         const { $video } = art.template;
-        const { errorHandle } = art.constructor.utils;
 
         function update() {
             const dash = art.dash || window.dash;

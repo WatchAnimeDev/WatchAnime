@@ -23,7 +23,6 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
             fullscreen: true,
             playbackRate: true,
             mutex: true,
-            muted: true,
             aspectRatio: true,
             playsInline: true,
             plugins: [

@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../constants/genricConstants";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
+import { IconSortDescending } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -70,21 +71,27 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
             <Container fluid className={classes.bodyContainer}>
                 <Flex justify={"space-between"} align={"center"}>
                     <Text sx={{ fontSize: "24px", fontWeight: 700 }}>Catalog</Text>
-                    <Select
-                        placeholder="Sort By"
-                        value={sortValue}
-                        onChange={setSortValue}
-                        data={[
-                            { value: "score asc", label: "Score asc" },
-                            { value: "score desc", label: "Score desc" },
+                    <Flex align={"center"} gap={"md"}>
+                        <Flex align={"center"}>
+                            <IconSortDescending size={18} />
+                            <Text sx={{ fontSize: "15px" }}>Sort By</Text>
+                        </Flex>
+                        <Select
+                            placeholder="Score desc"
+                            value={sortValue}
+                            onChange={setSortValue}
+                            data={[
+                                { value: "score asc", label: "Score asc" },
+                                { value: "score desc", label: "Score desc" },
 
-                            { value: "slug asc", label: "Title asc" },
-                            { value: "slug desc", label: "Title desc" },
+                                { value: "slug asc", label: "Title asc" },
+                                { value: "slug desc", label: "Title desc" },
 
-                            { value: "year asc", label: "Year asc" },
-                            { value: "year desc", label: "Year desc" },
-                        ]}
-                    />
+                                { value: "year asc", label: "Year asc" },
+                                { value: "year desc", label: "Year desc" },
+                            ]}
+                        />
+                    </Flex>
                 </Flex>
                 <Flex mt={"lg"} direction={mobile ? "column" : "row"}>
                     <Flex direction={"column"} gap={"1rem"}>

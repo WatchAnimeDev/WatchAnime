@@ -15,6 +15,7 @@ import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchLis
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 import WatchListEditComponent from "../components/WatchListEditComponent";
+import { getLatestData } from "../custom/AnimeData";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -76,7 +77,29 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`), axios.get(`${API_BASE_URL}/schedule`)]);
+            const [popularData, recentlyReleasedData, scheduleData, watchHistoryLatestData] = await Promise.all([
+                axios.get(`${API_BASE_URL}/popular/1`),
+                axios.get(`${API_BASE_URL}/recent/1`),
+                axios.get(`${API_BASE_URL}/schedule`),
+                await getLatestData(
+                    lastWatchedData.map((anime) => anime.slug),
+                    true
+                ),
+            ]);
+            let updatedWatchHistory = [];
+            if (watchHistoryLatestData.data) {
+                for (let index = 0; index < lastWatchedData.length; index++) {
+                    updatedWatchHistory.push({
+                        ...watchHistoryLatestData.data[lastWatchedData[index].slug],
+                        ...{
+                            playbackPercent: lastWatchedData[index].playbackPercent,
+                            playBackData: lastWatchedData[index].playBackData,
+                            currentReleasedEpisode: lastWatchedData[index].currentReleasedEpisode,
+                        },
+                    });
+                }
+                setLastWatchedData(updatedWatchHistory);
+            }
             setRecentlyReleasedAnimes(recentlyReleasedData.data);
             let headerVideoData = popularData.data.filter((anime) => anime?.trailer?.deliveryUrl);
             headerVideoData = headerVideoData.length ? headerVideoData : popularData.data;
@@ -89,6 +112,27 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         }
         getRecentlyReleasedAnimes();
     }, []);
+
+    // useEffect(() => {
+    //     let updatedWatchHistory = [];
+    //     const watchHistoryLatestData = getLatestData(
+    //         lastWatchedData.map((anime) => anime.slug),
+    //         true
+    //     );
+    //     if (watchHistoryLatestData.data) {
+    //         for (let index = 0; index < lastWatchedData.length; index++) {
+    //             updatedWatchHistory.push({
+    //                 ...watchHistoryLatestData.data[lastWatchedData[index].slug],
+    //                 ...{
+    //                     playbackPercent: lastWatchedData[index].playbackPercent,
+    //                     playBackData: lastWatchedData[index].playBackData,
+    //                     currentReleasedEpisode: lastWatchedData[index].currentReleasedEpisode,
+    //                 },
+    //             });
+    //         }
+    //         setLastWatchedData(updatedWatchHistory);
+    //     }
+    // }, [lastWatchedData]);
 
     useEffect(() => {
         const handler = (e) => {
@@ -110,11 +154,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getLatestEpisodeInfoForWatchlist() {
-            const [latestEpisodeInfo] = await Promise.all([
-                axios.post(`${API_BASE_URL}/anime/episode/latest`, {
-                    slugs: watchListData.filter((anime) => anime.airing || anime.status === "Not yet aired").map((anime) => anime.slug),
-                }),
-            ]);
+            const [latestEpisodeInfo] = await Promise.all([getLatestData(watchListData.filter((anime) => anime.airing || anime.status === "Not yet aired").map((anime) => anime.slug))]);
             for (let animeIndex = 0; animeIndex < watchListData.length; animeIndex++) {
                 if (latestEpisodeInfo.data[watchListData[animeIndex].slug]) {
                     watchListData[animeIndex].releasedEpisodes = latestEpisodeInfo.data[watchListData[animeIndex].slug].episode;

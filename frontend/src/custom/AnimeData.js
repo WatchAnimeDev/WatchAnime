@@ -1,4 +1,5 @@
-import { API_REDIRECT_HOST } from "../constants/genricConstants";
+import axios from "axios";
+import { API_BASE_URL, API_REDIRECT_HOST } from "../constants/genricConstants";
 
 function getImageByRelevance(images, size, type = "") {
     if (images.webp && (!type || type === "webp")) {
@@ -87,4 +88,12 @@ const hasTmdbData = (animeData) => {
     return animeData.tmdbData && Object.keys(animeData.tmdbData).length;
 };
 
-export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount, malStatusToMediaStatus, getTmdbImageByRelevanceAndType, hasTmdbData };
+const getLatestData = async (slugs, fullData = false) => {
+    const data = await axios.post(`${API_BASE_URL}/anime/episode/latest`, {
+        slugs: slugs,
+        ...(fullData && { fulldata: 1 }),
+    });
+    return data;
+};
+
+export { getImageByRelevance, getAnimeTitleByRelevance, toTitleCase, prepareVideoData, prevEpisodeUrl, nextEpisodeUrl, getEpisodeCount, malStatusToMediaStatus, getTmdbImageByRelevanceAndType, hasTmdbData, getLatestData };

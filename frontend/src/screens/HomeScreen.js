@@ -120,6 +120,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                     watchListData[animeIndex].releasedEpisodes = latestEpisodeInfo.data[watchListData[animeIndex].slug].episode;
                     watchListData[animeIndex].airing = latestEpisodeInfo.data[watchListData[animeIndex].slug].airing;
                     watchListData[animeIndex].status = latestEpisodeInfo.data[watchListData[animeIndex].slug].status;
+                    watchListData[animeIndex].images = latestEpisodeInfo.data[watchListData[animeIndex].slug].images;
                 }
             }
             replaceAllWatchListData(watchListData);

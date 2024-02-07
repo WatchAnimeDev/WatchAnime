@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { getAnimeTitleByRelevance, getImageByRelevance, getTmdbImageByRelevanceAndType, hasTmdbData } from "../custom/AnimeData";
 
 import topTenImage from "../assets/images/topten.svg";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     sliderButton: {
@@ -60,6 +62,7 @@ function HeaderSliderLayout({ anime, index }) {
     const { classes } = useStyles();
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
     return (
         <Paper sx={{ height: 800 }} className="slider-slide">
@@ -88,7 +91,7 @@ function HeaderSliderLayout({ anime, index }) {
                 </Group>
                 {!hasTmdbData(anime) || mobile ? (
                     <Text lineClamp={1} size={56} lh={1.2} mb={"xs"}>
-                        {getAnimeTitleByRelevance(anime.titles)}
+                        {getAnimeTitleByRelevance(anime.titles, false, language)}
                     </Text>
                 ) : (
                     <img src={getTmdbImageByRelevanceAndType(anime.tmdbData, "logos")} width="500" height="150" className={classes.logoImageDiv} alt="" />

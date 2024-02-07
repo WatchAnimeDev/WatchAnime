@@ -14,7 +14,10 @@ function getImageByRelevance(images, size, type = "") {
 }
 
 function getAnimeTitleByRelevance(titles, isDub = false, type = "Default") {
-    const defaultTitle = titles.filter((eachTitle) => eachTitle.type === type);
+    let defaultTitle = titles.filter((eachTitle) => eachTitle.type === type);
+    if (!defaultTitle.length && type !== "Default") {
+        defaultTitle = titles.filter((eachTitle) => eachTitle.type === "Default");
+    }
     return `${defaultTitle.length ? defaultTitle[0].title : titles[0].title}${isDub ? " (DUB)" : ""}`;
 }
 

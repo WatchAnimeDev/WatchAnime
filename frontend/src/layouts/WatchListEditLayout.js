@@ -4,6 +4,8 @@ import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeDa
 import { Paper, createStyles } from "@mantine/core";
 import { IconMenu2 } from "@tabler/icons";
 import { replaceAllWatchListData } from "../custom/WatchList";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     editWrapperParent: {
@@ -45,7 +47,7 @@ const useStyles = createStyles((theme) => ({
 
 function WatchListEditLayout({ watchListData, setWatchListData }) {
     const { classes } = useStyles();
-
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     function handleOnDragEnd(result) {
         if (!result.destination) return;
 
@@ -72,7 +74,7 @@ function WatchListEditLayout({ watchListData, setWatchListData }) {
                                             <div className={classes.editWrapperImageParent}>
                                                 <img className={classes.editWrapperImage} src={getImageByRelevance(images)} alt={`${slug} Thumb`} />
                                             </div>
-                                            <p className={classes.editWrapperTitle}>{getAnimeTitleByRelevance(titles)}</p>
+                                            <p className={classes.editWrapperTitle}>{(getAnimeTitleByRelevance(titles), false, language)}</p>
                                         </li>
                                     )}
                                 </Draggable>

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { IconBell, IconChecks, IconEyeCheck, IconPoint, IconSettings } from "@tabler/icons";
-import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotificationCount, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
+import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getUserNotificationCount, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
 import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
 import { uuidv4 } from "../custom/User";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
+import { getAnimeTitleByRelevance } from "../custom/AnimeData";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -83,6 +86,7 @@ function NotificationComponent() {
     const [isMounted, setIsMounted] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [notificationDataCount, setNotificationDataCount] = useState(0);
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
     const navigate = useNavigate();
 
@@ -113,6 +117,17 @@ function NotificationComponent() {
         const notifData = await getUserNotifications();
         setNotificationData(notifData);
         dismissGenericDynamicNotification(notificationId, "Notificaton dismissed!", "Your notification has been dismissed successfully.");
+    };
+
+    const getNotificationTitleFromNotificationData = (notificationData) => {
+        switch (notificationData.notif_type) {
+            case 0:
+                return notificationData.title;
+            case 1:
+                return `Episode ${notificationData.episode_number} of ${getAnimeTitleByRelevance(notificationData.animeTitle, notificationData.slug_id.includes("dub"), language)} is out now.`;
+            default:
+                return "Well this isnt expected";
+        }
     };
 
     return (

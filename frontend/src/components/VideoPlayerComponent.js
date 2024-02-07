@@ -12,6 +12,8 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
 import VideoScreenEpisodeDisplayPartial from "../partials/VideoScreenEpisodeDisplayPartial";
 import VideoScreenIframePartial from "../partials/VideoScreenIframePartial";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     parentPlayerDiv: {
@@ -77,6 +79,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const [adfreeServer, setAdfreeServer] = useState(true);
     const [autoPlay, setAutoPlay] = useState(false);
     const selectedServerModal = useRef("Alpha");
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
     videoCounter.current = 0;
 
@@ -303,7 +306,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     {adfreeServer ? <VideoPlayer onReady={handlePlayerReady} option={{ url: preparedVideoData[0].link }} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}
                     <Group className={classes.videoDetailsDiv}>
                         <Group sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                            <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{getAnimeTitleByRelevance(episodeData.animeDetails.titles)}</Title>
+                            <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{(getAnimeTitleByRelevance(episodeData.animeDetails.titles), false, language)}</Title>
                             <Button className={classes.changeServerButton} onClick={openModal}>
                                 <IconSettings size={14} />
                                 <Text sx={{ paddingLeft: "5px" }}>Change Server</Text>

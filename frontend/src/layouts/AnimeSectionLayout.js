@@ -8,6 +8,8 @@ import { openConfirmModal } from "@mantine/modals";
 import { getWatchListAllData, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import { getLastWatchedData, getWatchHistoryBySlug } from "../player/PlayerHelper";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -113,6 +115,7 @@ const useStyles = createStyles((theme) => ({
 
 function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, setWatchListData }) {
     const { classes } = useStyles();
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
     const handleDeleteFromAnimeCard = (e, featureId, selectedAnimeData) => {
         e.preventDefault();
@@ -127,7 +130,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
     const handleDeleteFromWatchList = (selectedAnimeData) => {
         openConfirmModal({
             title: "Please confirm your action",
-            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles)} from your watchlist?</Text>,
+            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles, false, language)} from your watchlist?</Text>,
             labels: { confirm: "Confirm", cancel: "Cancel" },
             confirmProps: { color: "red" },
             onCancel: () => {
@@ -144,7 +147,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
     const handleDeleteFromLastWatched = (selectedAnimeData) => {
         openConfirmModal({
             title: "Please confirm your action",
-            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles)} from your watch history?</Text>,
+            children: <Text size="sm">Are you sure you want to delete {getAnimeTitleByRelevance(selectedAnimeData.titles, false, language)} from your watch history?</Text>,
             labels: { confirm: "Confirm", cancel: "Cancel" },
             confirmProps: { color: "red" },
             onCancel: () => {
@@ -155,7 +158,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
                 currWatched = currWatched.filter((anime) => anime.slug !== selectedAnimeData.slug);
                 localStorage.setItem("lastWatchedQueue", JSON.stringify(currWatched));
                 setLastWatchedData(getLastWatchedData());
-                showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been deleted from your watch history!`);
+                showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles, false, language)} has been deleted from your watch history!`);
             },
             centered: true,
         });
@@ -177,9 +180,9 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
             <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }} className={classes.card}>
                 <Group sx={{ width: "100%" }}>
                     <Group className={classes.sliderInfoDisplayDiv}>
-                        <Tooltip label={getAnimeTitleByRelevance(animeData.titles)}>
+                        <Tooltip label={getAnimeTitleByRelevance(animeData.titles, false, language)}>
                             <Text lineClamp={1} sx={{ fontSize: "15px", fontWeight: "600" }}>
-                                {getAnimeTitleByRelevance(animeData.titles)}
+                                {getAnimeTitleByRelevance(animeData.titles, false, language)}
                             </Text>
                         </Tooltip>
                         <Text sx={{ fontSize: "10px" }}>{animeData.duration ? `${animeData?.duration?.split(" ")[0]} min` : ""}</Text>

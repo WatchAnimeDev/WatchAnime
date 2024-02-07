@@ -1,9 +1,7 @@
 import { createStyles, Drawer, Group, Paper } from "@mantine/core";
-import axios from "axios";
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../constants/genricConstants";
 import SideBarMenuLayout from "../layouts/SideBarMenuLayout";
 import WatchListEditLayout from "../layouts/WatchListEditLayout";
 
@@ -13,6 +11,10 @@ const useStyles = createStyles((theme) => ({
         flexWrap: "wrap",
         marginTop: "14px",
         gap: "0px",
+        width: "100%",
+    },
+    drawerHeader: {
+        margin: "16px",
     },
 }));
 
@@ -21,19 +23,27 @@ function SideBarComponent({ sideBarState, setSideBarState, sideBarComponentConfi
     const navigate = useNavigate();
 
     sideBarComponentConfig = specificActionsOnSideBarComponentType(sideBarComponentConfig.type, sideBarComponentConfig, { ...otherData, ...{ navigate: navigate } });
-    const sideBarItems = sideBarComponentConfig.data.map((data, ind) => {
-        switch (sideBarComponentConfig.type) {
-            case "SideBarMenuLayout":
-                return <SideBarMenuLayout menuData={data} key={ind} setSideBarState={setSideBarState} />;
-            case "SideBarWatchlistEditor":
-                return <WatchListEditLayout watchListData={data} key={ind} {...otherData} />;
-            default:
-                return <Paper key={ind}></Paper>;
-        }
-    });
+    var sideBarItems = <Paper></Paper>;
+    switch (sideBarComponentConfig.type) {
+        case "SideBarMenuLayout":
+            sideBarItems = <SideBarMenuLayout sideBarComponentConfig={sideBarComponentConfig} setSideBarState={setSideBarState} />;
+            break;
+        case "SideBarWatchlistEditor":
+            sideBarItems = <WatchListEditLayout watchListData={sideBarComponentConfig.data[0]} {...otherData} />;
+            break;
+        default:
+            break;
+    }
 
     return (
-        <Drawer opened={sideBarState} onClose={() => setSideBarState(false)} title={sideBarComponentConfig.title ?? ""} padding="xl" size={sideBarComponentConfig.size ?? "260px"} withCloseButton={sideBarComponentConfig.withCloseButton ?? true}>
+        <Drawer
+            opened={sideBarState}
+            onClose={() => setSideBarState(false)}
+            title={sideBarComponentConfig.title ?? ""}
+            size={sideBarComponentConfig.size ?? "300px"}
+            withCloseButton={sideBarComponentConfig.withCloseButton ?? true}
+            classNames={{ header: classes.drawerHeader }}
+        >
             <Group className={classes.sideBarGroup}>{sideBarItems}</Group>
         </Drawer>
     );
@@ -49,13 +59,6 @@ function specificActionsOnSideBarComponentType(componentType, sideBarComponentCo
                         label: "Catalog",
                         callBack: () => {
                             otherData.navigate(`/catalog`);
-                        },
-                    },
-                    {
-                        label: "Random",
-                        callBack: async () => {
-                            const animeData = await Promise.all([axios.get(`${API_BASE_URL}/anime/random`)]);
-                            otherData.navigate(`/anime/${animeData[0].data.slug}`);
                         },
                     },
                     {

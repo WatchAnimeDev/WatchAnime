@@ -9,6 +9,8 @@ import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodeP
 
 import malImage from "../assets/images/mal.png";
 import aniImage from "../assets/images/ani.png";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     backgroundImageDiv: {
@@ -106,6 +108,7 @@ const useStyles = createStyles((theme) => ({
 function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
     const { classes } = useStyles();
     const [watchListData, setWatchListData] = useState(getWatchListDataBySlug(animeData.slug));
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     return (
         <Group>
             <Group px={"5%"} pt={"calc(5% + 56px)"} pb={"5%"} sx={{ minHeight: "600px", zIndex: "1", justifyContent: "space-evenly", width: "100%" }}>
@@ -115,7 +118,7 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                 <Group className={classes.animeInfoDiv}>
                     <Group className={classes.titleParentDiv}>
                         {animeData.score ? <Text className={classes.ratingText}>{`${parseInt(parseFloat(animeData.score) * 10)}% rating`}</Text> : ""}
-                        <Title sx={{ fontSize: "30px" }}>{getAnimeTitleByRelevance(animeData.titles)}</Title>
+                        <Title sx={{ fontSize: "30px" }}>{getAnimeTitleByRelevance(animeData.titles, false, language)}</Title>
                     </Group>
                     <Group>
                         <Button fullWidth={false} size={"md"} radius={5} component={Link} to={`/anime/${animeData.slug}/episode/${animeData?.episodeList?.["0"] ? 0 : 1}`} className={classes.playButton}>

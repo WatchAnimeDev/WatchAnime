@@ -8,6 +8,8 @@ import { getAnimeTitleByRelevance, getImageByRelevance, getTmdbImageByRelevanceA
 
 import topTenImage from "../assets/images/topten.svg";
 import { isVideoHeaderEnabled, toggleVideoVolume } from "../custom/VideoBackground";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     sliderButton: {
@@ -162,6 +164,7 @@ function HeaderVideoLayout({ anime, index }) {
     const [scrollFactor, setScrollFactor] = useState(0);
     const [videoMuted, setVideoMuted] = useState(true);
     const [isHeaderVideoVisible, setIsHeaderVideoVisible] = useState(isVideoHeaderEnabled(anime, mobile));
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
     useEffect(() => {
         setIsHeaderVideoVisible(isVideoHeaderEnabled(anime, mobile));
@@ -224,7 +227,7 @@ function HeaderVideoLayout({ anime, index }) {
                 </Group>
                 {!hasTmdbData(anime) || mobile ? (
                     <Text lineClamp={1} size={56} lh={1.2} mb={"xs"}>
-                        {getAnimeTitleByRelevance(anime.titles)}
+                        {getAnimeTitleByRelevance(anime.titles, false, language)}
                     </Text>
                 ) : (
                     <img src={getTmdbImageByRelevanceAndType(anime.tmdbData, "logos")} width="500" height="150" className={logoClassArray} alt="" />

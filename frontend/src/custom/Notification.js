@@ -14,7 +14,7 @@ const showGenericCheckBoxNotification = (title, message, config) => {
     });
 };
 
-const showGenericDynamicNotification = (id, title, message, config) => {
+const showGenericDynamicNotification = (id, title, message, config = {}) => {
     showNotification({
         ...{
             id: id,
@@ -28,7 +28,7 @@ const showGenericDynamicNotification = (id, title, message, config) => {
     });
 };
 
-const dismissGenericDynamicNotification = (id, title, message, config) => {
+const dismissGenericDynamicNotification = (id, title, message, config = {}) => {
     updateNotification({
         ...{
             id: id,

@@ -5,7 +5,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
 import { getAnimeTitleByRelevance, getEpisodeCount, malStatusToMediaStatus, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
-import { showNotification } from "@mantine/notifications";
 import { getLastWatchedData, getAnimeSkipData, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
 import { IconDeviceTv, IconDeviceTvOff, IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
@@ -14,6 +13,8 @@ import VideoScreenEpisodeDisplayPartial from "../partials/VideoScreenEpisodeDisp
 import VideoScreenIframePartial from "../partials/VideoScreenIframePartial";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
+import { getPlayerSettings, setPlayerSettings } from "../custom/PlayerSettings";
+import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
 
 const useStyles = createStyles((theme) => ({
     parentPlayerDiv: {
@@ -77,9 +78,12 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const navigate = useNavigate();
     const [selectedServer, setSelectedServer] = useState("Alpha");
     const [adfreeServer, setAdfreeServer] = useState(true);
-    const [autoPlay, setAutoPlay] = useState(false);
+    const [autoPlay, setAutoPlay] = useState(getPlayerSettings("autoPlay"));
     const selectedServerModal = useRef("Alpha");
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
+
+    const autoSkipTimeout = 5000;
+    let autoSkipStarted = false;
 
     videoCounter.current = 0;
 
@@ -87,6 +91,11 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
 
     let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList);
+
+    const toggleAutoPlay = () => {
+        setAutoPlay(!autoPlay);
+        setPlayerSettings(!autoPlay, "autoPlay");
+    };
 
     useEffect(() => {
         async function getAnimeDetails() {
@@ -175,6 +184,17 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     },
                 });
             }
+            if (autoPlay && episodeData.animeDetails.episodes !== parseInt(episodeNumber) && Math.ceil(player.duration - player.currentTime) <= autoSkipTimeout / 1000 && !autoSkipStarted && player.playing) {
+                autoSkipStarted = true;
+                showGenericDynamicNotification("autoplaynextepisode", "Auto Play", `Next Episode starting in ${autoSkipTimeout / 1000} seconds`);
+                setTimeout(() => {
+                    dismissGenericDynamicNotification("autoplaynextepisode", "Auto Play", "Redirecting now...");
+                }, autoSkipTimeout);
+                setTimeout(() => {
+                    navigate(nextEpisodeUrl(animeSlug, parseInt(episodeNumber), episodeData.animeDetails.episodes));
+                    autoSkipStarted = false;
+                }, autoSkipTimeout + 1000);
+            }
         });
         player.on("video:waiting", () => {
             console.log("player is waiting");
@@ -185,16 +205,6 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         });
         player.on("video:ended", () => {
             console.log("player video ended");
-            if (autoPlay && episodeData.animeDetails.episodes !== parseInt(episodeNumber)) {
-                showNotification({
-                    title: "Autoplay!",
-                    message: "Next episode starting in 3 seconds",
-                    autoClose: 3000,
-                });
-                setTimeout(() => {
-                    navigate(nextEpisodeUrl(animeSlug, parseInt(episodeNumber), episodeData.animeDetails.episodes));
-                }, 3000);
-            }
         });
         // player.reloadSourceOnError({
         //     getSource: async (reload) => {
@@ -299,14 +309,14 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                                 </UnstyledButton>
                             </Tooltip>
                             <Tooltip label={autoPlay ? "Disable Autoplay" : "Enable Autoplay"}>
-                                <UnstyledButton onClick={() => setAutoPlay(!autoPlay)}>{autoPlay ? <IconDeviceTvOff size={14} /> : <IconDeviceTv size={14} />}</UnstyledButton>
+                                <UnstyledButton onClick={toggleAutoPlay}>{autoPlay ? <IconDeviceTvOff size={14} /> : <IconDeviceTv size={14} />}</UnstyledButton>
                             </Tooltip>
                         </Group>
                     </Group>
                     {adfreeServer ? <VideoPlayer onReady={handlePlayerReady} option={{ url: preparedVideoData[0].link }} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}
                     <Group className={classes.videoDetailsDiv}>
                         <Group sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                            <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{(getAnimeTitleByRelevance(episodeData.animeDetails.titles), false, language)}</Title>
+                            <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{getAnimeTitleByRelevance(episodeData.animeDetails.titles, false, language)}</Title>
                             <Button className={classes.changeServerButton} onClick={openModal}>
                                 <IconSettings size={14} />
                                 <Text sx={{ paddingLeft: "5px" }}>Change Server</Text>

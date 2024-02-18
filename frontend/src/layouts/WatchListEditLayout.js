@@ -74,7 +74,7 @@ function WatchListEditLayout({ watchListData, setWatchListData }) {
                                             <div className={classes.editWrapperImageParent}>
                                                 <img className={classes.editWrapperImage} src={getImageByRelevance(images)} alt={`${slug} Thumb`} />
                                             </div>
-                                            <p className={classes.editWrapperTitle}>{(getAnimeTitleByRelevance(titles), false, language)}</p>
+                                            <p className={classes.editWrapperTitle}>{getAnimeTitleByRelevance(titles, false, language)}</p>
                                         </li>
                                     )}
                                 </Draggable>

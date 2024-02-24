@@ -65,6 +65,12 @@ function SignUpLayout() {
                     Login
                 </Anchor>
             </Text>
+
+            <Paper sx={{ backgroundColor: "transparent" }}>
+                <Text ta="center" mt="xl" p="md" sx={{ backgroundColor: "rgb(53, 55, 56)" }} color="white">
+                    Need an invite code? Join us on our discord from the link below.
+                </Text>
+            </Paper>
         </>
     );
 }

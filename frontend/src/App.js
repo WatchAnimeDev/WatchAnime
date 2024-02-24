@@ -21,6 +21,11 @@ import { getOrSetUid } from "./custom/User";
 import SpotlightActionComponent from "./components/SpotlightActionComponent";
 import AnimeSearchScreen from "./screens/AnimeSearchScreen";
 import { IS_CHRISTMAS_ENABLED } from "./constants/genricConstants";
+import { isAuthPath, refreshLogin, signOut, userData } from "./custom/Auth";
+import SignInLayout from "./layouts/SignInLayout";
+import SignUpLayout from "./layouts/SignUpLayout";
+import AuthScreen from "./screens/AuthScreen";
+import PasswordResetLayout from "./layouts/PasswordResetLayout";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -34,9 +39,30 @@ function App() {
 
     const executeTargetRefSchedule = () => targetRefSchedule.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
+    const shouldHideHeaderFooter = isAuthPath();
+
     useEffect(() => {
         getOrSetUid();
-    }, []);
+
+        const userDatas = userData();
+        if (!userDatas.isAuthRecord && !isAuthPath()) {
+            navigate("/signin", { replace: true });
+        } else if (userDatas.isAuthRecord) {
+            if (isAuthPath()) {
+                navigate("/", { replace: true });
+            }
+            async function refreshAuth() {
+                const refreshAuth = await refreshLogin();
+                if (!refreshAuth) {
+                    signOut();
+                    navigate("/signin", { replace: true });
+                }
+            }
+            if (!isAuthPath()) {
+                refreshAuth();
+            }
+        }
+    }, [navigate]);
 
     return (
         <SpotlightProvider
@@ -51,7 +77,7 @@ function App() {
             actionComponent={SearchLayout}
             actionsWrapperComponent={SpotlightActionComponent}
         >
-            <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />
+            {shouldHideHeaderFooter ? <></> : <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />}
             <main className="py-3">
                 <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "81vh" }}>
                     <Routes>
@@ -78,11 +104,14 @@ function App() {
                         <Route path="/privacy" element={<PrivacyPolicyScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         <Route path="/contact" element={<ContactScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
                         <Route path="/catalog" element={<AnimeSearchScreen sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}></Route>
+                        <Route path="/signin" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignInLayout />} />}></Route>
+                        <Route path="/signup" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignUpLayout />} />}></Route>
+                        <Route path="/reset" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
                     </Routes>
                 </Container>
             </main>
             <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
-            <FooterComponent />
+            {shouldHideHeaderFooter ? <></> : <FooterComponent />}
             {IS_CHRISTMAS_ENABLED && !isPlayerPage ? (
                 <Snowfall
                     style={{

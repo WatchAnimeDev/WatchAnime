@@ -1,6 +1,6 @@
-import { createStyles, Header, Group, Burger, Image, UnstyledButton, Text, useMantineTheme, Paper, Menu, Avatar } from "@mantine/core";
+import { createStyles, Header, Group, Burger, UnstyledButton, Text, useMantineTheme, Paper, Menu, Avatar } from "@mantine/core";
 import { IconSearch, IconCalendarEvent, IconSettings, IconMessageCircle } from "@tabler/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 
 import React, { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useSpotlight } from "@mantine/spotlight";
 import { IS_CHRISTMAS_ENABLED, STATIC_BUCKET_URL } from "../constants/genricConstants";
 import NotificationComponent from "./NotificationComponent";
+import HeaderLogoPartial from "../partials/HeaderLogoPartial";
+import { signOut } from "../custom/Auth";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -100,6 +102,12 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
     const theme = useMantineTheme();
     const [scrollPosition, onScrollPositionChange] = useState(false);
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
+    const navigate = useNavigate();
+
+    const executeLogout = () => {
+        signOut();
+        navigate("/signin");
+    };
 
     const handleSpotLightClick = (e) => {
         e.preventDefault();
@@ -132,14 +140,7 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                     <Group>
                         <Burger opened={sideBarState} onClick={setSideBarState} size="sm" />
                         <Link to="/">
-                            <Image
-                                src={
-                                    IS_CHRISTMAS_ENABLED
-                                        ? "https://d33wubrfki0l68.cloudfront.net/9410fce5c5c19ee15bf2b5e4872391aad38a6981/8f410/assets/logo/watchanime-logo-w-christ.png"
-                                        : "https://d33wubrfki0l68.cloudfront.net/b0992c861afa31cd31c0d25e095ac1ed87aa4f5a/c411d/assets/logo/watchanime-logo-w.png"
-                                }
-                                width={mobile ? 150 : 200}
-                            />
+                            <HeaderLogoPartial isChristmasEnabled={IS_CHRISTMAS_ENABLED} mobile={mobile} />
                         </Link>
                     </Group>
 
@@ -175,6 +176,9 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
                                     <Menu.Label>Application</Menu.Label>
                                     <Menu.Item icon={<IconSettings size={14} />}>Stuff</Menu.Item>
                                     <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
+                                    <Menu.Item icon={<IconMessageCircle size={14} />} onClick={executeLogout}>
+                                        Logout
+                                    </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
                         </Group>

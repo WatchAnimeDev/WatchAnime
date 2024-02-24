@@ -1,9 +1,9 @@
 import { Anchor, Container, createStyles, Group, Text } from "@mantine/core";
-import { IconBrandDiscord, IconBrandFacebook } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 import footerImage from "../assets/images/footer.jpg";
 import { WATCHANIME_RED } from "../constants/cssConstants";
+import JoinUsPartial from "../partials/JoinUsPartial";
 
 const useStyles = createStyles((theme) => ({
     footerMainDiv: {
@@ -27,22 +27,6 @@ const useStyles = createStyles((theme) => ({
             color: WATCHANIME_RED,
         },
     },
-    discordIcon: {
-        cursor: "pointer",
-        "&:hover": {
-            background: "#7289d9",
-            padding: "1px",
-            borderRadius: "5px",
-        },
-    },
-    facebookIcon: {
-        cursor: "pointer",
-        "&:hover": {
-            background: "#4267B2",
-            padding: "1px",
-            borderRadius: "5px",
-        },
-    },
     copyrightText: {
         textAlign: "center",
         fontSize: "14px",
@@ -59,15 +43,7 @@ function FooterComponent() {
     return (
         <Container fluid className={classes.footerMainDiv} py={25}>
             <Group className={classes.socialAndFooterLinkDiv}>
-                <Group sx={{ fontWeight: "400" }}>
-                    <Text>JOIN US</Text>
-                    <Anchor href="https://discord.gg/SvH8VJWKzN" target="_blank">
-                        <IconBrandDiscord size={16} stroke={1.5} color={"white"} className={classes.discordIcon} />
-                    </Anchor>
-                    <Anchor href="https://www.facebook.com/groups/198603402431856" target="_blank">
-                        <IconBrandFacebook size={16} stroke={1.5} color={"white"} className={classes.facebookIcon} />
-                    </Anchor>
-                </Group>
+                <JoinUsPartial />
                 <Group sx={{ fontWeight: "500" }}>
                     <Anchor href="https://status.watchanime.dev/" target="_blank" className={classes.footerLink}>
                         STATUS

@@ -45,4 +45,4 @@ const handleWatchListDelete = async (e, selectedAnimeData, setWatchListData) => 
     if (setWatchListData) setWatchListData({});
 };
 
-export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, deleteFromWatchListBySlug, handleWatchListAdd, handleWatchListDelete, replaceAllWatchListData };
+export { getWatchListAllData, setWatchListData, getWatchListDataBySlug, handleWatchListAdd, handleWatchListDelete, replaceAllWatchListData };

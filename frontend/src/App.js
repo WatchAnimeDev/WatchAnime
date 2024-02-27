@@ -62,7 +62,7 @@ function App() {
                 refreshAuth();
             }
         }
-    }, [navigate]);
+    }, []);
 
     return (
         <SpotlightProvider

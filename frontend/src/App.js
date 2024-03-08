@@ -7,11 +7,9 @@ import { handleSpotLightSearch } from "./custom/Search";
 import Snowfall from "react-snowfall";
 
 import HomeScreen from "./screens/HomeScreen";
-import HeaderComponent from "./components/HeaderComponent";
 import SearchLayout from "./layouts/SearchLayout";
 import AnimeDetailsScreen from "./screens/AnimeDetailsScreen";
 import VideoPlayerScreen from "./screens/VideoPlayerScreen";
-import FooterComponent from "./components/FooterComponent";
 import GenericScreen from "./screens/GenericScreen";
 import DmcaScreen from "./screens/DmcaScreen";
 import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
@@ -26,6 +24,8 @@ import SignInLayout from "./layouts/SignInLayout";
 import SignUpLayout from "./layouts/SignUpLayout";
 import AuthScreen from "./screens/AuthScreen";
 import PasswordResetLayout from "./layouts/PasswordResetLayout";
+import GenericHeaderComponent from "./components/GenericHeaderComponent";
+import GenericFooterComponent from "./components/GenericFooterComponent";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -39,7 +39,7 @@ function App() {
 
     const executeTargetRefSchedule = () => targetRefSchedule.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
-    const shouldHideHeaderFooter = isAuthPath();
+    const pageType = isAuthPath() ? "auth" : "home";
 
     useEffect(() => {
         getOrSetUid();
@@ -62,6 +62,7 @@ function App() {
                 refreshAuth();
             }
         }
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -77,7 +78,8 @@ function App() {
             actionComponent={SearchLayout}
             actionsWrapperComponent={SpotlightActionComponent}
         >
-            {shouldHideHeaderFooter ? <></> : <HeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} />}
+            <GenericHeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} type={pageType} />
+
             <main className="py-3">
                 <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "81vh" }}>
                     <Routes>
@@ -111,7 +113,9 @@ function App() {
                 </Container>
             </main>
             <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
-            {shouldHideHeaderFooter ? <></> : <FooterComponent />}
+
+            <GenericFooterComponent type={pageType} />
+
             {IS_CHRISTMAS_ENABLED && !isPlayerPage ? (
                 <Snowfall
                     style={{

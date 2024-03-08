@@ -38,7 +38,7 @@ const useStyles = createStyles((theme) => ({
         color: "#757575",
     },
 }));
-function FooterComponent() {
+function HomeFooterComponent() {
     const { classes } = useStyles();
     return (
         <Container fluid className={classes.footerMainDiv} py={25}>
@@ -65,4 +65,4 @@ function FooterComponent() {
     );
 }
 
-export default FooterComponent;
+export default HomeFooterComponent;

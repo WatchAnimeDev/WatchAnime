@@ -95,7 +95,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
+function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
     const location = useLocation();
     const { classes } = useStyles(location);
     const spotlight = useSpotlight();
@@ -189,4 +189,4 @@ function HeaderComponent({ sideBarState, setSideBarState, otherData }) {
     );
 }
 
-export default HeaderComponent;
+export default HomeHeaderComponent;

@@ -19,9 +19,9 @@ export default function artplayerPluginDashQuality(option) {
 
         function update() {
             const dash = art.dash || window.dash;
-            if (!(dash && dash.media === $video)) {
-                return;
-            }
+            // if (!(dash && dash.media === $video)) {
+            //     return;
+            // }
             const auto = option.auto || "Auto";
             const title = option.title || "Quality";
             const levels = dash.getBitrateInfoListFor("video");

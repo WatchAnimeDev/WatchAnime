@@ -90,7 +90,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
     const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
 
-    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList);
+    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList, episodeDecoderData._id);
 
     const toggleAutoPlay = () => {
         setAutoPlay(!autoPlay);
@@ -100,7 +100,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     useEffect(() => {
         async function getAnimeDetails() {
             const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${selectedServer}`)]);
-            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
+            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList, episodeAnimeAjaxData.data._id);
             playerRef.current.switch = preparedVideoDataAjax[0].link;
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
             playerRef.current.shouldAjax = true;

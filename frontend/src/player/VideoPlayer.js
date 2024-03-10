@@ -26,30 +26,38 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
             aspectRatio: true,
             playsInline: true,
             plugins: [
-                artplayerPluginHlsQuality({
-                    // Show quality in control
-                    control: true,
-                    // Get the resolution text from level
-                    getResolution: (level) => level.height + "P",
+                ...[
+                    option.url.includes("m3u8")
+                        ? artplayerPluginHlsQuality({
+                              // Show quality in control
+                              control: true,
+                              // Get the resolution text from level
+                              getResolution: (level) => level.height + "P",
 
-                    // I18n
-                    title: "Quality",
-                    auto: "1080P",
-                }),
-                artplayerPluginDashQuality({
-                    // Show quality in control
-                    control: true,
+                              // I18n
+                              title: "Quality",
+                              auto: "1080",
+                          })
+                        : [],
+                ],
+                ...[
+                    option.url.includes("mpd")
+                        ? artplayerPluginDashQuality({
+                              // Show quality in control
+                              control: true,
 
-                    // Show quality in setting
-                    setting: true,
+                              // Show quality in setting
+                              setting: true,
 
-                    // Get the resolution text from level
-                    getResolution: (level) => level.height + "P",
+                              // Get the resolution text from level
+                              getResolution: (level) => level.height + "P",
 
-                    // I18n
-                    title: "Quality",
-                    auto: "Auto",
-                }),
+                              // I18n
+                              title: "Quality",
+                              auto: "1080",
+                          })
+                        : [],
+                ],
             ],
             customType: {
                 m3u8: function playM3u8(video, url, art) {
@@ -89,6 +97,7 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                 art.destroy(false);
             }
         };
+        // eslint-disable-next-line
     }, []);
 
     return (

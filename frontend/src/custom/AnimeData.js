@@ -29,12 +29,12 @@ const toTitleCase = (phrase, delimiter = ",") => {
         .join(delimiter);
 };
 
-const prepareVideoData = (videoData) => {
+const prepareVideoData = (videoData, cacheId) => {
     var videos_with_video_format = [];
     for (const result of videoData) {
-        if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls")) {
+        if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls") || result.type.includes("dash")) {
             videos_with_video_format.push({
-                link: getProxyUrl(result.url),
+                link: result.proxy ? `${API_BASE_URL}/proxy/mpd/${cacheId}.mpd` : getProxyUrl(result.url),
                 type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
                 resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
                 priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,

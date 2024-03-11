@@ -46,7 +46,6 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
 
                               // I18n
                               title: "Quality",
-                              auto: "1080",
                           })
                         : [],
                 ],
@@ -56,15 +55,11 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                               // Show quality in control
                               control: true,
 
-                              // Show quality in setting
-                              setting: true,
-
                               // Get the resolution text from level
                               getResolution: (level) => level.height + "P",
 
                               // I18n
                               title: "Quality",
-                              auto: "1080",
                           })
                         : [],
                 ],

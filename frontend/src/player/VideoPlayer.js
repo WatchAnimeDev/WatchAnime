@@ -25,6 +25,16 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
             mutex: true,
             aspectRatio: true,
             playsInline: true,
+            subtitle: {
+                ...(Object.keys(option.subtitles).length
+                    ? {
+                          url: option.subtitles.url,
+                          type: option.subtitles.type,
+                          encoding: "utf-8",
+                          escape: true,
+                      }
+                    : {}),
+            },
             plugins: [
                 ...[
                     option.url.includes("m3u8")

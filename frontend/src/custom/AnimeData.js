@@ -29,15 +29,16 @@ const toTitleCase = (phrase, delimiter = ",") => {
         .join(delimiter);
 };
 
-const prepareVideoData = (videoData, cacheId) => {
+const prepareVideoData = (videoData) => {
     var videos_with_video_format = [];
     for (const result of videoData) {
         if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls") || result.type.includes("dash")) {
             videos_with_video_format.push({
-                link: result.proxy ? `${API_BASE_URL}/proxy/mpd/${cacheId}.mpd` : getProxyUrl(result.url),
+                link: getProxyUrl(result.url),
                 type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
                 resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
                 priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,
+                subtitles: result.subtitles || {},
             });
         }
     }
@@ -46,7 +47,7 @@ const prepareVideoData = (videoData, cacheId) => {
 };
 
 const getProxyUrl = (videoUrl) => {
-    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", document.location.hostname];
+    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", "mirrorakam.akamaized", document.location.hostname, "watchanime.dev"];
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;
     }

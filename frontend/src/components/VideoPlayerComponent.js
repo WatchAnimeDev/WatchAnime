@@ -90,7 +90,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
     const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
 
-    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList, episodeDecoderData._id);
+    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList);
 
     const toggleAutoPlay = () => {
         setAutoPlay(!autoPlay);
@@ -100,7 +100,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
     useEffect(() => {
         async function getAnimeDetails() {
             const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${selectedServer}`)]);
-            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList, episodeAnimeAjaxData.data._id);
+            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
             playerRef.current.switch = preparedVideoDataAjax[0].link;
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
             playerRef.current.shouldAjax = true;
@@ -164,6 +164,12 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
          */
         player.on("ready", async () => {
             player.autoSize();
+        });
+        player.on("subtitleLoad", (url) => {
+            console.info("subtitleLoad", url);
+        });
+        player.on("subtitle", (state) => {
+            console.log("subtitle", state);
         });
         player.on("video:timeupdate", async () => {
             const currentSkipData = playerRef.current.skipData.filter((time) => time.startTime <= player.currentTime && time.endTime >= player.currentTime);
@@ -313,7 +319,11 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                             </Tooltip>
                         </Group>
                     </Group>
-                    {adfreeServer ? <VideoPlayer onReady={handlePlayerReady} option={{ url: preparedVideoData[0].link }} /> : <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />}
+                    {adfreeServer ? (
+                        <VideoPlayer onReady={handlePlayerReady} option={{ url: preparedVideoData[0].link, subtitles: preparedVideoData[0].subtitles }} />
+                    ) : (
+                        <VideoScreenIframePartial iframeCollectionData={episodeData.sources.others} selectedServer={selectedServer} />
+                    )}
                     <Group className={classes.videoDetailsDiv}>
                         <Group sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                             <Title sx={{ fontSize: "20px", fontWeight: "400" }}>{getAnimeTitleByRelevance(episodeData.animeDetails.titles, false, language)}</Title>

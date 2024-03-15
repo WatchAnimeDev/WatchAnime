@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AnimeDetailsEpisodeListComponent from "../components/AnimeDetailsEpisodeListComponent";
 import AnimeDetailsOverviewComponent from "../components/AnimeDetailsOverviewComponent";
-import AnimeRelationRecommendationComponent from "../components/AnimeRelationRecommendationComponent";
 import SideBarComponent from "../components/SideBarComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
+import AnimeMalForumComponent from "../components/AnimeMalForumComponent";
+import AnimeRelationComponent from "../components/AnimeRelationComponent";
+import AnimeRecommendationComponent from "../components/AnimeRecommendationComponent";
 
 function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
@@ -39,7 +41,9 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <AnimeDetailsOverviewComponent animeData={animeData} episodeInfoData={episodeInfoData} />
                 <AnimeDetailsEpisodeListComponent animeData={animeData} episodeInfoData={episodeInfoData} setEpisodeInfoData={setEpisodeInfoData} />
-                <AnimeRelationRecommendationComponent animeData={animeData} />
+                <AnimeRelationComponent animeData={animeData} />
+                {animeData.malId ? <AnimeRecommendationComponent malId={animeData.malId} /> : <></>}
+                {animeData.malId ? <AnimeMalForumComponent malId={animeData.malId} /> : <></>}
             </Container>
         </>
     ) : (

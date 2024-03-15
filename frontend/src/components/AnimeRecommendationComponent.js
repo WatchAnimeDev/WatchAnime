@@ -3,38 +3,28 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH } from "../constants/cssConstants";
 import { API_BASE_URL } from "../constants/genricConstants";
 import AnimeSectionLoaderPartial from "../partials/AnimeSectionLoaderPartial";
 import AnimeSectionComponent from "./AnimeSectionComponent";
 
-function AnimeRelationRecommendationComponent({ animeData }) {
+function AnimeRecommendationComponent({ malId }) {
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
 
-    const location = useLocation();
     const [ajaxComplete, setAjaxComplete] = useState(false);
     const [animeRecommendation, setAnimeRecommendation] = useState([]);
 
     useEffect(() => {
         async function getAnimeDetails() {
             setAjaxComplete(false);
-            const animeSlug = location.pathname.split("/anime/")[1];
-            const [animeRecommendationAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/anime/recommendation/${animeSlug}`)]);
+            const [animeRecommendationAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/anime/recommendation/${malId}`)]);
             setAnimeRecommendation(animeRecommendationAjaxData.data);
             setAjaxComplete(true);
             return;
         }
         getAnimeDetails();
-    }, []);
-
-    const relatedData = [];
-    for (const animeGroup of animeData.relations.map((anime) => anime?.entry)) {
-        for (const anime of animeGroup) {
-            relatedData.push(anime);
-        }
-    }
+    }, [malId]);
 
     const animeSliderConfig = {
         slideSize: mobile ? ANIME_SLIDER_MOBILE_WIDTH : ANIME_SLIDER_WIDTH,
@@ -68,7 +58,6 @@ function AnimeRelationRecommendationComponent({ animeData }) {
 
     return (
         <>
-            {relatedData.length ? <AnimeSectionComponent sectionTitle={"RELATED ANIME"} sectionAnimeData={relatedData} hasViewMore={false} sliderConfig={animeSliderConfig} /> : ""}
             {ajaxComplete ? (
                 animeRecommendation.length ? (
                     <AnimeSectionComponent sectionTitle={"RECOMMENDED FOR YOU"} sectionAnimeData={animeRecommendation} hasViewMore={false} sliderConfig={animeSliderConfig} />
@@ -82,4 +71,4 @@ function AnimeRelationRecommendationComponent({ animeData }) {
     );
 }
 
-export default AnimeRelationRecommendationComponent;
+export default AnimeRecommendationComponent;

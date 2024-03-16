@@ -8,7 +8,7 @@ WORKDIR /temp
 COPY ./frontend /temp
 
 # Install the dependencies
-RUN npm install --production && npm cache clean --force
+RUN npm install
 RUN npm run build
 
 COPY ./build /app

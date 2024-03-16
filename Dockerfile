@@ -1,4 +1,4 @@
-FROM node:20
+FROM library/node:14.15.3-alpine
 
 RUN mkdir -p /temp
 

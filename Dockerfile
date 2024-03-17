@@ -1,8 +1,5 @@
-FROM library/node:14.15.3-alpine
+FROM library/node:14.15.3-alpine AS build
 
-RUN mkdir -p /temp
-
-# Set the working directory inside the container
 WORKDIR /temp
 
 COPY ./frontend /temp
@@ -11,9 +8,14 @@ COPY ./frontend /temp
 RUN npm install
 RUN npm run build
 
-COPY ./build /app
-
-RUN rm -rf /temp
-
+# Create a new stage for the final image
 FROM socialengine/nginx-spa:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the built files from the previous stage
+COPY --from=build /temp/build /app
+
+# Change permissions if needed
 RUN chmod -R 777 /app

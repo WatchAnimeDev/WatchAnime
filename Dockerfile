@@ -1,11 +1,18 @@
-FROM library/node:14.15.3-alpine AS build
+# Use a smaller base image
+FROM node:14.15.3-alpine AS build
 
 WORKDIR /temp
 
+# Copy only package.json and package-lock.json first
+COPY ./frontend/package*.json /temp/
+
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of the application
 COPY ./frontend /temp
 
-# Install the dependencies
-RUN npm install
+# Build the application
 RUN npm run build
 
 # Create a new stage for the final image

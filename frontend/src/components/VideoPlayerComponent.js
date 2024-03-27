@@ -183,7 +183,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
             if (currentSkipData.length !== 0) {
                 //if autoSkipIntro is true then we should skip to the end of the skipData without showing the skip button
                 if (autoSkipIntro) {
-                    player.currentTime = currentSkipData.endTime + 1;
+                    player.currentTime = currentSkipData[0].endTime + 1;
                 } else {
                     //If autoSkipIntro is false then we should show the skip button but skip if the button is already shown
                     if (!player.layers.cache.has("skipTime")) {

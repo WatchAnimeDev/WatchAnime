@@ -299,13 +299,13 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                     <Group sx={{ width: "100%", backgroundColor: "#272727" }} c={"white"} py={"5px"} px={"10px"}>
                         <Group onClick={toggleAutoSkipIntro} sx={{ cursor: "pointer", gap: "5px" }}>
                             <Text sx={{ fontSize: "12px" }}>Auto Skip Intro</Text>
-                            <Text sx={{ fontSize: "12px" }} c={autoSkipIntro ? "green" : WATCHANIME_RED}>
+                            <Text sx={{ fontSize: "12px" }} c={WATCHANIME_RED} fw={600}>
                                 {autoSkipIntro ? "On" : "Off"}
                             </Text>
                         </Group>
                         <Group onClick={toggleAutoPlay} sx={{ cursor: "pointer", gap: "5px" }}>
                             <Text sx={{ fontSize: "12px" }}>Auto Next Episode</Text>
-                            <Text sx={{ fontSize: "12px" }} c={autoPlay ? "green" : WATCHANIME_RED}>
+                            <Text sx={{ fontSize: "12px" }} c={WATCHANIME_RED} fw={600}>
                                 {autoPlay ? "On" : "Off"}
                             </Text>
                         </Group>

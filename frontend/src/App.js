@@ -26,6 +26,7 @@ import AuthScreen from "./screens/AuthScreen";
 import PasswordResetLayout from "./layouts/PasswordResetLayout";
 import GenericHeaderComponent from "./components/GenericHeaderComponent";
 import GenericFooterComponent from "./components/GenericFooterComponent";
+import { isResetPage, resetData } from "./custom/ResetData";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -45,9 +46,15 @@ function App() {
         getOrSetUid();
 
         const userDatas = userData();
-        if (!userDatas.isAuthRecord && !isAuthPath()) {
+        //If on reset page reset all data and redirect to login
+        if (isResetPage()) {
+            resetData();
+            navigate("/signin", { replace: true });
+        } else if (!userDatas.isAuthRecord && !isAuthPath()) {
+            // If not logged in redirect to login
             navigate("/signin", { replace: true });
         } else if (userDatas.isAuthRecord) {
+            //If logged in and on auth path redirect to home
             if (isAuthPath()) {
                 navigate("/", { replace: true });
             }
@@ -58,6 +65,7 @@ function App() {
                     navigate("/signin", { replace: true });
                 }
             }
+            //Refresh auth if not on auth path
             if (!isAuthPath()) {
                 refreshAuth();
             }

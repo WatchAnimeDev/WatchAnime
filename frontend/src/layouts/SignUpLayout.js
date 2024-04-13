@@ -4,6 +4,8 @@ import { Paper, TextInput, PasswordInput, Button, Text, Anchor, List } from "@ma
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useNavigate } from "react-router-dom";
 import { preprocessAuthErrors, signUp } from "../custom/Auth";
+import { useWatchListStore } from "../store/WatchListStore";
+import { useShallow } from "zustand/react/shallow";
 
 function SignUpLayout() {
     const navigate = useNavigate();
@@ -14,6 +16,7 @@ function SignUpLayout() {
     const [email, setEmail] = useState();
     const [inviteCode, setInviteCode] = useState();
     const [error, setError] = useState({});
+    const { fetchWatchListData } = useWatchListStore(useShallow((state) => ({ fetchWatchListData: state.fetchWatchListData })));
 
     const executeSignUp = async () => {
         setHasSignUpStarted(true);
@@ -27,6 +30,7 @@ function SignUpLayout() {
             setError(preprocessAuthErrors(err));
             setHasSignUpStarted(false);
         } else {
+            await fetchWatchListData();
             navigate("/");
         }
     };

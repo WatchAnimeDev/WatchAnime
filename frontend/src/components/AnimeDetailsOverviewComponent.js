@@ -1,16 +1,16 @@
 import { Anchor, Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
 import { IconPlayerPlay, IconPlus, IconX } from "@tabler/icons";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, malStatusToMediaStatus } from "../custom/AnimeData";
-import { getWatchListDataBySlug, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import AnimeDetailsNextEpisodePartial from "../partials/AnimeDetailsNextEpisodePartial";
 
 import malImage from "../assets/images/mal.png";
 import aniImage from "../assets/images/ani.png";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
+import { useWatchListStore } from "../store/WatchListStore";
 
 const useStyles = createStyles((theme) => ({
     backgroundImageDiv: {
@@ -107,7 +107,7 @@ const useStyles = createStyles((theme) => ({
 
 function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
     const { classes } = useStyles();
-    const [watchListData, setWatchListData] = useState(getWatchListDataBySlug(animeData.slug));
+    const { watchListData, handleWatchListAdd, handleWatchListDelete } = useWatchListStore(useShallow((state) => ({ watchListData: state.watchListData, handleWatchListAdd: state.handleWatchListAdd, handleWatchListDelete: state.handleWatchListDelete })));
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     return (
         <Group>
@@ -125,8 +125,18 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                             <IconPlayerPlay size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>
-                        {!Object.keys(watchListData).length ? (
-                            <Button fullWidth={false} size={"md"} radius={5} onClick={async (e) => await handleWatchListAdd(e, animeData, setWatchListData)} className={classes.watchListButton}>
+                        {console.log(watchListData.filter((data) => data.slug === animeData.slug))}
+                        {!watchListData.filter((data) => data.slug === animeData.slug).length ? (
+                            <Button
+                                fullWidth={false}
+                                size={"md"}
+                                radius={5}
+                                onClick={async (e) => {
+                                    e.preventDefault();
+                                    await handleWatchListAdd(animeData);
+                                }}
+                                className={classes.watchListButton}
+                            >
                                 <IconPlus size={12} stroke={1.5} />
                                 <Text sx={{ marginLeft: "5px" }}>Add to Watchlist</Text>
                             </Button>
@@ -136,7 +146,8 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                                 size={"md"}
                                 radius={5}
                                 onClick={async (e) => {
-                                    await handleWatchListDelete(e, animeData, setWatchListData);
+                                    e.preventDefault();
+                                    await handleWatchListDelete(animeData);
                                 }}
                                 className={classes.watchListButton}
                             >

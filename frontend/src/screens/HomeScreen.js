@@ -11,11 +11,11 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { getLastWatchedData } from "../player/PlayerHelper";
-import { getWatchListAllData, replaceAllWatchListData } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
-import WatchListEditComponent from "../components/WatchListEditComponent";
-import { getLatestData } from "../custom/AnimeData";
+// import WatchListEditComponent from "../components/WatchListEditComponent";
+import { useWatchListStore } from "../store/WatchListStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -67,7 +67,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
     const [scheduleData, setScheduleData] = useState([]);
     const [headerVideoData, setHeaderVideoData] = useState({});
     const [popularSeries, setPopularSeries] = useState([]);
-    const [watchListData, setWatchListData] = useState(getWatchListAllData());
+    const { watchListData } = useWatchListStore(useShallow((state) => ({ watchListData: state.watchListData, setWatchListData: state.setWatchListData })));
 
     const [promptInstall, setPromptInstall] = useState(null);
 
@@ -108,48 +108,6 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         }
         promptInstall.prompt();
     };
-
-    useEffect(() => {
-        async function getLatestEpisodeInfoForWatchlist() {
-            const [latestEpisodeInfo, watchHistoryLatestData] = await Promise.all([
-                getLatestData(watchListData.filter((anime) => anime.airing || anime.status === "Not yet aired").map((anime) => anime.slug)),
-                getLatestData(
-                    lastWatchedData.map((anime) => anime.slug),
-                    true
-                ),
-            ]);
-            let updatedWatchHistory = [];
-            if (watchHistoryLatestData.data) {
-                for (let index = 0; index < lastWatchedData.length; index++) {
-                    updatedWatchHistory.push({
-                        ...watchHistoryLatestData.data[lastWatchedData[index].slug],
-                        ...{
-                            playbackPercent: lastWatchedData[index].playbackPercent,
-                            playBackData: lastWatchedData[index].playBackData,
-                            currentReleasedEpisode: lastWatchedData[index].currentReleasedEpisode,
-                        },
-                    });
-                }
-                setLastWatchedData(updatedWatchHistory);
-            }
-            for (let animeIndex = 0; animeIndex < watchListData.length; animeIndex++) {
-                if (latestEpisodeInfo.data[watchListData[animeIndex].slug]) {
-                    watchListData[animeIndex].releasedEpisodes = latestEpisodeInfo.data[watchListData[animeIndex].slug].episode;
-                    watchListData[animeIndex].airing = latestEpisodeInfo.data[watchListData[animeIndex].slug].airing;
-                    watchListData[animeIndex].status = latestEpisodeInfo.data[watchListData[animeIndex].slug].status;
-                    watchListData[animeIndex].images = latestEpisodeInfo.data[watchListData[animeIndex].slug].images;
-                }
-            }
-            replaceAllWatchListData(watchListData);
-            setWatchListData([...watchListData]);
-            return;
-        }
-        if (!watchListData.length) {
-            return;
-        }
-        getLatestEpisodeInfoForWatchlist();
-        // eslint-disable-next-line
-    }, []);
 
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
@@ -195,12 +153,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             <HeaderVideoLayout anime={headerVideoData.data} index={headerVideoData.index} />
             <Container fluid className={[classes.bodyContainer, "main-wrapper"]}>
                 {lastWatchedData.length ? (
-                    <AnimeSectionComponent
-                        sectionTitle={"Last Watched"}
-                        sectionAnimeData={lastWatchedData}
-                        sliderConfig={animeSliderConfig}
-                        otherData={{ isDeletable: true, featureId: "lastWatched", isAddableToWatchList: true, setLastWatchedData, setWatchListData }}
-                    />
+                    <AnimeSectionComponent sectionTitle={"Last Watched"} sectionAnimeData={lastWatchedData} sliderConfig={animeSliderConfig} otherData={{ isDeletable: true, featureId: "lastWatched", isAddableToWatchList: true, setLastWatchedData }} />
                 ) : (
                     <></>
                 )}
@@ -209,23 +162,15 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                         sectionTitle={"WatchList"}
                         sectionAnimeData={watchListData}
                         sliderConfig={animeSliderConfig}
-                        otherData={{ isDeletable: true, featureId: "watchList", setWatchListData }}
-                        actionComponent={<WatchListEditComponent watchListData={watchListData} setWatchListData={setWatchListData} />}
+                        otherData={{ isDeletable: true, featureId: "watchList" }}
+                        // actionComponent={<WatchListEditComponent watchListData={watchListData} setWatchListData={setWatchListData} />}
                     />
                 ) : (
                     <></>
                 )}
                 <AnimeSectionComponent refProp={targetRefRecent} sectionTitle={"Recently Released"} sectionAnimeData={recentlyReleasedAnimes} hasViewMore={true} viewMoreLink={"/recent/1"} sliderConfig={animeSliderConfig} />
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
-                <AnimeSectionComponent
-                    refProp={targetRefPopular}
-                    sectionTitle={"Popular Series"}
-                    sectionAnimeData={popularSeries}
-                    hasViewMore={true}
-                    viewMoreLink={"/popular/1"}
-                    sliderConfig={animeSliderConfig}
-                    otherData={{ isAddableToWatchList: true, setWatchListData }}
-                />
+                <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} otherData={{ isAddableToWatchList: true }} />
             </Container>
         </>
     ) : (

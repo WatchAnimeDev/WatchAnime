@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
 import { Paper, createStyles } from "@mantine/core";
 import { IconMenu2 } from "@tabler/icons";
-import { replaceAllWatchListData } from "../custom/WatchList";
+// import { replaceAllWatchListData } from "../custom/WatchListOld";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
 
@@ -56,7 +56,7 @@ function WatchListEditLayout({ watchListData, setWatchListData }) {
         items.splice(result.destination.index, 0, reorderedItem);
 
         setWatchListData(items);
-        replaceAllWatchListData(items);
+        // replaceAllWatchListData(items);
     }
     return (
         <DragDropContext onDragEnd={handleOnDragEnd}>

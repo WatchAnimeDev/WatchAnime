@@ -5,11 +5,11 @@ import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
 import { IconPlus, IconTrash } from "@tabler/icons";
 import { openConfirmModal } from "@mantine/modals";
-import { getWatchListAllData, handleWatchListAdd, handleWatchListDelete } from "../custom/WatchList";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import { getLastWatchedData, getWatchHistoryBySlug } from "../player/PlayerHelper";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
+import { useWatchListStore } from "../store/WatchListStore";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -113,9 +113,10 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, setWatchListData }) {
+function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData }) {
     const { classes } = useStyles();
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
+    const { handleWatchListAdd, handleWatchListDelete } = useWatchListStore(useShallow((state) => ({ handleWatchListAdd: state.handleWatchListAdd, handleWatchListDelete: state.handleWatchListDelete })));
 
     const handleDeleteFromAnimeCard = (e, featureId, selectedAnimeData) => {
         e.preventDefault();
@@ -137,8 +138,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
                 //dont do anything
             },
             onConfirm: async () => {
-                await handleWatchListDelete(null, selectedAnimeData);
-                setWatchListData(getWatchListAllData());
+                await handleWatchListDelete(selectedAnimeData);
             },
             centered: true,
         });
@@ -218,8 +218,8 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
                             <span
                                 className={classes.hoverContentBaseDiv}
                                 onClick={async (e) => {
-                                    await handleWatchListAdd(e, animeData);
-                                    setWatchListData(getWatchListAllData());
+                                    e.preventDefault();
+                                    await handleWatchListAdd(animeData);
                                 }}
                             >
                                 <IconPlus size={20} />
@@ -236,7 +236,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
     );
 }
 
-function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, setWatchListData }) {
+function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData }) {
     const { classes } = useStyles();
 
     return (
@@ -246,7 +246,7 @@ function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureI
             className={classes.noTextDecoration}
             sx={{ position: "relative" }}
         >
-            <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} setWatchListData={setWatchListData} />
+            <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} />
         </Anchor>
     );
 }

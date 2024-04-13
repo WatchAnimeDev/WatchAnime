@@ -27,11 +27,15 @@ import PasswordResetLayout from "./layouts/PasswordResetLayout";
 import GenericHeaderComponent from "./components/GenericHeaderComponent";
 import GenericFooterComponent from "./components/GenericFooterComponent";
 import { isResetPage, resetData } from "./custom/ResetData";
+import { useShallow } from "zustand/react/shallow";
+import { useWatchListStore } from "./store/WatchListStore";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
     const [bugReportState, setBugReportState] = useState(false);
     const [searchData, setSearchData] = useState([]);
+    const { fetchWatchListData } = useWatchListStore(useShallow((state) => ({ fetchWatchListData: state.fetchWatchListData })));
+
     const navigate = useNavigate();
     const location = useLocation();
     const isPlayerPage = /\/episode\/\d+/.test(location.pathname) === true;
@@ -44,7 +48,6 @@ function App() {
 
     useEffect(() => {
         getOrSetUid();
-
         const userDatas = userData();
         //If on reset page reset all data and redirect to login
         if (isResetPage()) {
@@ -64,6 +67,7 @@ function App() {
                     signOut();
                     navigate("/signin", { replace: true });
                 }
+                await fetchWatchListData();
             }
             //Refresh auth if not on auth path
             if (!isAuthPath()) {

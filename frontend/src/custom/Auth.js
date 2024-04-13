@@ -88,4 +88,8 @@ const preprocessAuthErrors = (err) => {
     return err;
 };
 
-export { signIn, signUp, refreshLogin, userData, signOut, preprocessAuthErrors, isAuthPath, resetPassword };
+const getUidForLoggedInUser = () => {
+    return userData().model.anon_uid;
+};
+
+export { signIn, signUp, refreshLogin, userData, signOut, preprocessAuthErrors, isAuthPath, resetPassword, getUidForLoggedInUser };

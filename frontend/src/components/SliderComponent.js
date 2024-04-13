@@ -19,7 +19,6 @@ const getSliderType = (sliderData, sliderRenderComponent, ind, otherData) => {
                     reRenderHomepage={otherData.reRenderHomepage}
                     setReRenderHomepage={otherData.setReRenderHomepage}
                     setLastWatchedData={otherData.setLastWatchedData}
-                    setWatchListData={otherData.setWatchListData}
                 />
             );
         case "ScheduleSectionLayout":

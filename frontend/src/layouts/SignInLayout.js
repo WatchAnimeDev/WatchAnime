@@ -4,6 +4,8 @@ import { Paper, TextInput, PasswordInput, Checkbox, Button, Text, Anchor } from 
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../custom/Auth";
+import { useWatchListStore } from "../store/WatchListStore";
+import { useShallow } from "zustand/react/shallow";
 
 function SignInLayout() {
     const navigate = useNavigate();
@@ -12,6 +14,7 @@ function SignInLayout() {
     const [userName, setUserName] = useState();
     const [password, setPassword] = useState();
     const [error, setError] = useState();
+    const { fetchWatchListData } = useWatchListStore(useShallow((state) => ({ fetchWatchListData: state.fetchWatchListData })));
 
     const executeSignIn = async () => {
         setHasSignInStarted(true);
@@ -25,6 +28,7 @@ function SignInLayout() {
             setError("Invalid username or password");
             setHasSignInStarted(false);
         } else {
+            await fetchWatchListData();
             navigate("/");
         }
     };

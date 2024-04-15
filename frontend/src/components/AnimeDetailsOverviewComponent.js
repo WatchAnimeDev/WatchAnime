@@ -125,7 +125,6 @@ function AnimeDetailsOverviewComponent({ animeData, episodeInfoData }) {
                             <IconPlayerPlay size={12} stroke={1.5} />
                             <Text sx={{ marginLeft: "5px" }}>Play</Text>
                         </Button>
-                        {console.log(watchListData.filter((data) => data.slug === animeData.slug))}
                         {!watchListData.filter((data) => data.slug === animeData.slug).length ? (
                             <Button
                                 fullWidth={false}

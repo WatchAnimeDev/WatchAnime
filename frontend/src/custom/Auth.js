@@ -2,14 +2,6 @@ import PocketBase from "pocketbase";
 import { AUTH_BASE_URL } from "../constants/genricConstants";
 import { getOrSetUid } from "./User";
 
-const isAuthPath = (path = null) => {
-    if (!path) {
-        path = window.location.pathname;
-    }
-    const regex = /^(\/signin|\/signup|\/reset)$/;
-    return regex.test(path);
-};
-
 const pocketBaseInstance = () => {
     return new PocketBase(AUTH_BASE_URL);
 };
@@ -92,4 +84,4 @@ const getUidForLoggedInUser = () => {
     return userData().model.anon_uid;
 };
 
-export { signIn, signUp, refreshLogin, userData, signOut, preprocessAuthErrors, isAuthPath, resetPassword, getUidForLoggedInUser };
+export { signIn, signUp, refreshLogin, userData, signOut, preprocessAuthErrors, resetPassword, getUidForLoggedInUser };

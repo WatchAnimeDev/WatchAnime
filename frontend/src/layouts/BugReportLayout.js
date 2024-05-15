@@ -50,6 +50,7 @@ function BugReportLayout({ bugReportState, setBugReportState }) {
             setErrorLog("Please provide message with atleast 20 character in length!");
             return false;
         }
+        // eslint-disable-next-line
         if (bugReportContactDetails && (/^.{3,32}#[0-9]{4}$/.test(bugReportContactDetails) === false || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(bugReportContactDetails) === false)) {
             setErrorLog("Please provide a valid email or disord username!");
             return false;

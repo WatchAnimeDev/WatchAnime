@@ -15,6 +15,7 @@ export default function artplayerPluginDashQuality(option) {
     return (art) => {
         checkVersion(art);
 
+        // eslint-disable-next-line
         const { $video } = art.template;
 
         function update() {

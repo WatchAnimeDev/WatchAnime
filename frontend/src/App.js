@@ -19,7 +19,7 @@ import { getOrSetUid } from "./custom/User";
 import SpotlightActionComponent from "./components/SpotlightActionComponent";
 import AnimeSearchScreen from "./screens/AnimeSearchScreen";
 import { IS_CHRISTMAS_ENABLED } from "./constants/genricConstants";
-import { isAuthPath, refreshLogin, signOut, userData } from "./custom/Auth";
+import { refreshLogin, signOut, userData } from "./custom/Auth";
 import SignInLayout from "./layouts/SignInLayout";
 import SignUpLayout from "./layouts/SignUpLayout";
 import AuthScreen from "./screens/AuthScreen";
@@ -29,6 +29,7 @@ import GenericFooterComponent from "./components/GenericFooterComponent";
 import { isResetPage, resetData } from "./custom/ResetData";
 import { useShallow } from "zustand/react/shallow";
 import { useWatchListStore } from "./store/WatchListStore";
+import { getPathType } from "./custom/Path";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -44,21 +45,22 @@ function App() {
 
     const executeTargetRefSchedule = () => targetRefSchedule.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 
-    const pageType = isAuthPath() ? "auth" : "home";
+    const pageType = getPathType();
 
     useEffect(() => {
         getOrSetUid();
         const userDatas = userData();
+        const isAuthPage = pageType === "auth";
         //If on reset page reset all data and redirect to login
         if (isResetPage()) {
             resetData();
             navigate("/signin", { replace: true });
-        } else if (!userDatas.isAuthRecord && !isAuthPath()) {
+        } else if (!userDatas.isAuthRecord && !isAuthPage) {
             // If not logged in redirect to login
             navigate("/signin", { replace: true });
         } else if (userDatas.isAuthRecord) {
             //If logged in and on auth path redirect to home
-            if (isAuthPath()) {
+            if (isAuthPage) {
                 navigate("/", { replace: true });
             }
             async function refreshAuth() {
@@ -70,7 +72,7 @@ function App() {
                 await fetchWatchListData();
             }
             //Refresh auth if not on auth path
-            if (!isAuthPath()) {
+            if (!isAuthPage) {
                 refreshAuth();
             }
         }
@@ -121,6 +123,7 @@ function App() {
                         <Route path="/signin" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignInLayout />} />}></Route>
                         <Route path="/signup" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignUpLayout />} />}></Route>
                         <Route path="/reset" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
+                        <Route path="/dashboard" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
                     </Routes>
                 </Container>
             </main>

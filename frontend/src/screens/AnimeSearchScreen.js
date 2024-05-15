@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import SideBarComponent from "../components/SideBarComponent";
 import { Box, Button, Container, Flex, Group, Input, Loader, MultiSelect, Pagination, RangeSlider, Select, Text, createStyles, useMantineTheme } from "@mantine/core";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
-import { API_BASE_URL } from "../constants/genricConstants";
-import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconSortDescending } from "@tabler/icons";
+import { CatalogQueryObj } from "../graphql/graphqlQueries";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -29,10 +29,12 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
 
+    // eslint-disable-next-line
     const [searchParams, setSearchParams] = useSearchParams();
     const [activePage, setActivePage] = useState(1);
 
     const [searchPageData, setSearchPageData] = useState([]);
+    const [serchPagePaginationData, setSerchPagePaginationData] = useState({});
     const [ajaxComplete, setAjaxComplete] = useState(false);
 
     const [nameValue, setNameValue] = useState(searchParams.get("name") || "");
@@ -50,19 +52,32 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
         const sortValueString = sortValue.split(" ");
         const genreValueString = genreValue.includes("ALL") ? "ALL" : genreValue.join("|");
         const [searchPageAjaxData] = await Promise.all([
-            axios.get(
-                `${API_BASE_URL}/search?notdub=true&name=${nameValue}&sortby=${sortValueString[0]}&sortorder=${sortValueString[1]}&type=${animeTypeValue}&source=${sourceValue}&status=${statusValue}&rating=${ratingValue}&season=${seasonValue}&scoremin=${
-                    scoreValue[0] / 10
-                }&scoremax=${scoreValue[1] / 10}&genres=${genreValueString}&page=${activePage}`
-            ),
+            execGraphqlQuery(CatalogQueryObj, {
+                page: activePage,
+                pageSize: 25,
+                name: nameValue,
+                type: animeTypeValue,
+                source: sourceValue,
+                status: statusValue,
+                rating: ratingValue,
+                season: seasonValue,
+                scoremin: scoreValue[0] / 10,
+                scoremax: scoreValue[0] / 10,
+                genres: genreValueString,
+                notdub: true,
+                sortby: sortValueString[0],
+                sortorder: sortValueString[1],
+            }),
         ]);
-        setSearchPageData(searchPageAjaxData.data);
+        setSearchPageData(searchPageAjaxData.data.data.Page.media);
+        setSerchPagePaginationData(searchPageAjaxData.data.data.Page.pageInfo);
         setAjaxComplete(true);
         return;
     }
 
     useEffect(() => {
         getSearchDetails();
+        // eslint-disable-next-line
     }, [activePage]);
 
     return ajaxComplete ? (
@@ -298,7 +313,7 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
                     </Box>
                 </Flex>
                 <Group sx={{ marginTop: "50px", justifyContent: "center" }}>
-                    <Pagination page={activePage} onChange={setActivePage} total={50} />
+                    <Pagination page={serchPagePaginationData.currentPage} onChange={setActivePage} total={serchPagePaginationData.lastPage} />
                 </Group>
             </Container>
         </>

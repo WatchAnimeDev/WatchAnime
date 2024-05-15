@@ -1,9 +1,9 @@
-import { Anchor, createStyles, Divider, Paper, Text } from "@mantine/core";
+import { Anchor, createStyles, Paper, Text } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 
 import React from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconArrowsShuffle, IconCalendarEvent } from "@tabler/icons";
+import { IconArrowsShuffle } from "@tabler/icons";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
 import axios from "axios";

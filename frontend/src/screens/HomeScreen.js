@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { API_BASE_URL } from "../constants/genricConstants";
 import SideBarComponent from "../components/SideBarComponent";
 import AnimeSectionComponent from "../components/AnimeSectionComponent";
 import { Container, createStyles, Loader, useMantineTheme } from "@mantine/core";
@@ -17,7 +15,7 @@ import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 import { useWatchListStore } from "../store/WatchListStore";
 import { useShallow } from "zustand/react/shallow";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
-import { PopularQueryObject, RecentQueryObject } from "../graphql/graphqlQueries";
+import { MergeQueryObject } from "../graphql/graphqlQueries";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -79,14 +77,14 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([execGraphqlQuery(PopularQueryObject, { page: 1 }), execGraphqlQuery(RecentQueryObject, { page: 1 }), axios.get(`${API_BASE_URL}/schedule`)]);
-            setRecentlyReleasedAnimes(recentlyReleasedData.data.data.Recent);
-            let headerVideoData = popularData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
-            headerVideoData = headerVideoData.length ? headerVideoData : popularData.data.data.Popular;
+            const [mergeData] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 })]);
+            setRecentlyReleasedAnimes(mergeData.data.data.Recent);
+            let headerVideoData = mergeData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
+            headerVideoData = headerVideoData.length ? headerVideoData : mergeData.data.data.Popular;
             const headerVideoIndex = Math.floor(Math.random() * headerVideoData.length);
             setHeaderVideoData({ data: headerVideoData[headerVideoIndex], index: headerVideoIndex });
-            setPopularSeries(popularData.data.data.Popular);
-            setScheduleData(prepareScheduleData(scheduleData.data));
+            setPopularSeries(mergeData.data.data.Popular);
+            setScheduleData(prepareScheduleData(mergeData.data.data.Schedule));
             setAjaxComplete(true);
             return;
         }

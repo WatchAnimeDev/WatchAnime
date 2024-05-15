@@ -1,7 +1,9 @@
-import axios from "axios";
-import { API_BASE_URL } from "../constants/genricConstants";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { WatchListQueryObj } from "../graphql/graphqlQueries";
 
 const fetchWatchListData = async (userId) => {
-    return (await axios.get(`${API_BASE_URL}/watchlist/get/${userId}`)).data;
+    return await (
+        await execGraphqlQuery(WatchListQueryObj, { userId })
+    ).data.data.WatchList;
 };
 export { fetchWatchListData };

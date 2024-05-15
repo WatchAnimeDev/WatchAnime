@@ -16,6 +16,8 @@ import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 // import WatchListEditComponent from "../components/WatchListEditComponent";
 import { useWatchListStore } from "../store/WatchListStore";
 import { useShallow } from "zustand/react/shallow";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { PopularQueryObject, RecentQueryObject } from "../graphql/graphqlQueries";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -77,13 +79,13 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([axios.get(`${API_BASE_URL}/popular/1`), axios.get(`${API_BASE_URL}/recent/1`), axios.get(`${API_BASE_URL}/schedule`)]);
-            setRecentlyReleasedAnimes(recentlyReleasedData.data);
-            let headerVideoData = popularData.data.filter((anime) => anime?.trailer?.deliveryUrl);
-            headerVideoData = headerVideoData.length ? headerVideoData : popularData.data;
+            const [popularData, recentlyReleasedData, scheduleData] = await Promise.all([execGraphqlQuery(PopularQueryObject, { page: 1 }), execGraphqlQuery(RecentQueryObject, { page: 1 }), axios.get(`${API_BASE_URL}/schedule`)]);
+            setRecentlyReleasedAnimes(recentlyReleasedData.data.data.Recent);
+            let headerVideoData = popularData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
+            headerVideoData = headerVideoData.length ? headerVideoData : popularData.data.data.Popular;
             const headerVideoIndex = Math.floor(Math.random() * headerVideoData.length);
             setHeaderVideoData({ data: headerVideoData[headerVideoIndex], index: headerVideoIndex });
-            setPopularSeries(popularData.data);
+            setPopularSeries(popularData.data.data.Popular);
             setScheduleData(prepareScheduleData(scheduleData.data));
             setAjaxComplete(true);
             return;

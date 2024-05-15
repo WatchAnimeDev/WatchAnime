@@ -65,4 +65,142 @@ const CatalogQueryObj = {
     operationName: "CatalogQuery",
 };
 
-export { CatalogQueryObj };
+const WatchListQuery = `
+    query WatchListQuery($userId: String) {
+        WatchList(userId: $userId) {
+            slug
+            images {
+                jpg {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                webp {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                png {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+            }
+            titles {
+                title
+                type
+            }
+            genres {
+                mal_id
+                name
+                type
+                url
+            }
+            type
+        }
+    }
+`;
+
+const WatchListQueryObj = {
+    query: WatchListQuery,
+    operationName: "WatchListQuery",
+};
+
+const PopularQuery = `
+    query PopularQuery($page: Int) {
+        Popular(page: $page) {
+            slug
+            images {
+                jpg {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                webp {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                png {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+            }
+            titles {
+                title
+                type
+            }
+            genres {
+                mal_id
+                name
+                type
+                url
+            }
+            type
+            aired {
+                string
+            }
+            bannerImage
+            trailer {
+                deliveryUrl
+            }
+            tmdbData {
+                backdrops {
+                    file_path
+                }
+                logos {
+                    file_path
+                }
+            }
+        }
+    }
+`;
+
+const PopularQueryObject = {
+    query: PopularQuery,
+    operationName: "PopularQuery",
+};
+
+const RecentQuery = `
+    query RecentQuery($page: Int) {
+        Recent(page: $page) {
+            slug
+            images {
+                jpg {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                webp {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+                png {
+                    image_url
+                    large_image_url
+                    small_image_url
+                }
+            }
+            titles {
+                title
+                type
+            }
+            genres {
+                mal_id
+                name
+                type
+                url
+            }
+            type
+        }
+    }
+`;
+
+const RecentQueryObject = {
+    query: RecentQuery,
+    operationName: "RecentQuery",
+};
+
+export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject };

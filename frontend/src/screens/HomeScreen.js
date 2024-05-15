@@ -77,7 +77,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [mergeData] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 })]);
+            const [mergeData] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 }, 10)]);
             setRecentlyReleasedAnimes(mergeData.data.data.Recent);
             let headerVideoData = mergeData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
             headerVideoData = headerVideoData.length ? headerVideoData : mergeData.data.data.Popular;

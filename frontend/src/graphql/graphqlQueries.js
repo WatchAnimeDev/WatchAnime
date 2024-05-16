@@ -319,4 +319,41 @@ const MergeQueryObject = {
     operationName: "MergeQuery",
 };
 
-export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject };
+const SearchQuery = `
+    query SearchQuery($page: Int, $pageSize: Int, $name: String) {
+        Page(page: $page, pageSize: $pageSize) {
+            media(name: $name) {
+                slug
+                synopsis
+                images {
+                    jpg {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    webp {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    png {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                }
+                titles {
+                    title
+                    type
+                }
+            }
+        }
+    }
+`;
+
+const SearchQueryObject = {
+    query: SearchQuery,
+    operationName: "SearchQuery",
+};
+
+export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject };

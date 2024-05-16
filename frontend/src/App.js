@@ -85,7 +85,7 @@ function App() {
             searchIcon={<IconSearch size={18} />}
             searchPlaceholder="Search..."
             shortcut="ctrl + k"
-            onChange={(e) => handleSpotLightSearch(e, setSearchData, navigate)}
+            onChange={async (e) => await handleSpotLightSearch(e, setSearchData, navigate)}
             closeOnActionTrigger={true}
             cleanQueryOnClose={true}
             limit={5}

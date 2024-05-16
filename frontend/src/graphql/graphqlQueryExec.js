@@ -17,7 +17,6 @@ const execGraphqlQuery = async (grapqlQueryObj, variables = {}, ttl = 60) => {
         const fetchedData = await axios.post(API_BASE_URL_V2, { variables, ...grapqlQueryObj });
         cacheResults.set(cacheKey, { fetchedData, ttl: Date.now() / 1000 + ttl * 60 });
     }
-    console.log(cacheResults);
     return cacheResults.get(cacheKey).fetchedData;
 };
 export { execGraphqlQuery };

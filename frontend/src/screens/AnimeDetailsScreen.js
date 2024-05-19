@@ -1,14 +1,14 @@
 import { Container, Loader } from "@mantine/core";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AnimeDetailsEpisodeListComponent from "../components/AnimeDetailsEpisodeListComponent";
 import AnimeDetailsOverviewComponent from "../components/AnimeDetailsOverviewComponent";
 import SideBarComponent from "../components/SideBarComponent";
-import { API_BASE_URL } from "../constants/genricConstants";
 import AnimeMalForumComponent from "../components/AnimeMalForumComponent";
 import AnimeRelationComponent from "../components/AnimeRelationComponent";
 import AnimeRecommendationComponent from "../components/AnimeRecommendationComponent";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { AnimeQueryObject } from "../graphql/graphqlQueries";
 
 function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
@@ -21,8 +21,8 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
         async function getAnimeDetails() {
             setAjaxComplete(false);
             const animeSlug = location.pathname.split("/anime/")[1];
-            const [animeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/anime/details/${animeSlug}`)]);
-            setAnimeData(animeAjaxData.data);
+            const [animeAjaxData] = await Promise.all([execGraphqlQuery(AnimeQueryObject, { slug: animeSlug })]);
+            setAnimeData(animeAjaxData.data.data.Page.media[0]);
             setAjaxComplete(true);
             return;
         }

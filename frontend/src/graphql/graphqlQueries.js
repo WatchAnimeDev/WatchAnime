@@ -356,4 +356,85 @@ const SearchQueryObject = {
     operationName: "SearchQuery",
 };
 
-export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject };
+const AnimeQuery = `
+    query AnimeQuery($page: Int, $pageSize: Int, $slug: String) {
+        Page(page: $page, pageSize: $pageSize) {
+            media(slug: $slug) {
+                slug
+                synopsis
+                malId
+                aniId
+                duration
+                score
+                aired {
+                    string
+                }
+                status
+                genres {
+                    name
+                }
+                studios {
+                    name
+                }
+                episodes
+                images {
+                    jpg {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    webp {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    png {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                }
+                titles {
+                    title
+                    type
+                }
+                relations {
+                    entry {
+                        slug
+                        images {
+                            jpg {
+                            image_url
+                            large_image_url
+                            small_image_url
+                            }
+                            webp {
+                            image_url
+                            large_image_url
+                            small_image_url
+                            }
+                            png {
+                            image_url
+                            large_image_url
+                            small_image_url
+                            }
+                        }
+                        titles {
+                            title
+                            type
+                        }
+                        genres {
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
+const AnimeQueryObject = {
+    query: AnimeQuery,
+    operationName: "AnimeQuery",
+};
+
+export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject };

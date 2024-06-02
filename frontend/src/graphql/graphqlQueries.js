@@ -302,6 +302,7 @@ const MergeQuery = `
                 url
             }
             type
+            currentReleasedEpisode
         }
         Schedule {
             slug

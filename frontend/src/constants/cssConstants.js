@@ -1,4 +1,4 @@
-export const WATCHANIME_RED = "#FF0000 !important";
+export const WATCHANIME_RED = "#FF0000";
 
 export const HEADER_VIDEO_CONTAINER_HEIGHT = "56.25vw";
 export const HEADER_VIDEO_CONTAINER_HEIGHT_MIN = 700;

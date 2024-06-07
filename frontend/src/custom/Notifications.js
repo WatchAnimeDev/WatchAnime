@@ -19,7 +19,7 @@ const getUserNotifications = async (queryObj = {}) => {
 const getNotificationPreviewImageFromNotificationData = (notificationData) => {
     switch (notificationData.notif_type) {
         case 1:
-            return getImageByRelevance(notificationData.previewImage);
+            return getImageByRelevance(notificationData.media.images);
         default:
             return `${STATIC_BUCKET_URL}/watchanime-512x512.png`;
     }

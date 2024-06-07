@@ -30,6 +30,7 @@ import { isResetPage, resetData } from "./custom/ResetData";
 import { useShallow } from "zustand/react/shallow";
 import { useWatchListStore } from "./store/WatchListStore";
 import { getPathType } from "./custom/Path";
+import DashboardScreen from "./screens/DashboardScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -78,7 +79,6 @@ function App() {
         }
         // eslint-disable-next-line
     }, []);
-
     return (
         <SpotlightProvider
             actions={searchData}
@@ -123,7 +123,7 @@ function App() {
                         <Route path="/signin" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignInLayout />} />}></Route>
                         <Route path="/signup" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignUpLayout />} />}></Route>
                         <Route path="/reset" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
-                        <Route path="/dashboard" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
+                        <Route path="/dashboard/:pageType?" element={<DashboardScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} />}></Route>
                     </Routes>
                 </Container>
             </main>

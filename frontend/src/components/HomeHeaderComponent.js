@@ -6,10 +6,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useSpotlight } from "@mantine/spotlight";
-import { IS_CHRISTMAS_ENABLED, STATIC_BUCKET_URL } from "../constants/genricConstants";
+import { IS_CHRISTMAS_ENABLED } from "../constants/genricConstants";
 import NotificationComponent from "./NotificationComponent";
 import HeaderLogoPartial from "../partials/HeaderLogoPartial";
 import { signOut } from "../custom/Auth";
+import { getUserAvatar } from "../custom/User";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -169,12 +170,14 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
                             <Menu shadow="md" width={200} position="bottom-end" transition="pop-top-right" withArrow>
                                 <Menu.Target>
                                     <Paper className={[classes.navIcons, classes.searchBarAccountIcon]}>
-                                        <Avatar src={`${STATIC_BUCKET_URL}/killua.jpg`} radius={"xl"} sx={{ height: "30px", width: "30px", minWidth: "30px" }} />
+                                        <Avatar src={getUserAvatar()} radius={"xl"} sx={{ height: "30px", width: "30px", minWidth: "30px" }} />
                                     </Paper>
                                 </Menu.Target>
                                 <Menu.Dropdown>
                                     <Menu.Label>Application</Menu.Label>
-                                    <Menu.Item icon={<IconSettings size={14} />}>Stuff</Menu.Item>
+                                    <Menu.Item icon={<IconSettings size={14} />} onClick={(e) => navigate("/dashboard")}>
+                                        Dashboard
+                                    </Menu.Item>
                                     <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
                                     <Menu.Item icon={<IconMessageCircle size={14} />} onClick={executeLogout}>
                                         Logout

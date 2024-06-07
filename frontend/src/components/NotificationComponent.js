@@ -124,7 +124,7 @@ function NotificationComponent() {
             case 0:
                 return notificationData.title;
             case 1:
-                return `Episode ${notificationData.episode_number} of ${getAnimeTitleByRelevance(notificationData.animeTitle, notificationData.slug_id.includes("dub"), language)} is out now.`;
+                return `Episode ${notificationData.episode_number} of ${getAnimeTitleByRelevance(notificationData.media.titles, notificationData.slug_id.includes("dub"), language)} is out now.`;
             default:
                 return "Well this isnt expected";
         }

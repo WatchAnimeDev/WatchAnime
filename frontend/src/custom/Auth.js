@@ -81,7 +81,7 @@ const preprocessAuthErrors = (err) => {
 };
 
 const getUidForLoggedInUser = () => {
-    return userData().model.anon_uid;
+    return userData()?.model?.anon_uid;
 };
 
 export { signIn, signUp, refreshLogin, userData, signOut, preprocessAuthErrors, resetPassword, getUidForLoggedInUser };

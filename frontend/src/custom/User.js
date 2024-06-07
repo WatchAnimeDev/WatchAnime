@@ -28,7 +28,7 @@ function getOrSetUid() {
 
 function getUserAvatar() {
     const userDataModel = userData().model;
-    return userDataModel.avatar ? `${AUTH_BASE_URL}/api/files/_pb_users_auth_/${userDataModel.id}/${userDataModel.avatar}` : `${STATIC_BUCKET_URL}/killua.jpg`;
+    return userDataModel?.avatar ? `${AUTH_BASE_URL}/api/files/_pb_users_auth_/${userDataModel.id}/${userDataModel.avatar}` : `${STATIC_BUCKET_URL}/killua.jpg`;
 }
 
 export { getOrSetUid, uuidv4, getUserAvatar };

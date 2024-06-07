@@ -1,5 +1,7 @@
 // import { gql } from "@apollo/client";
 
+import { NOTIFICATION_BASE_URL_V2 } from "../constants/genricConstants";
+
 const CatalogQuery = `
     query CatalogQuery(
         $page: Int
@@ -195,6 +197,7 @@ const RecentQuery = `
                 url
             }
             type
+            currentReleasedEpisode
         }
     }
 `;
@@ -438,4 +441,60 @@ const AnimeQueryObject = {
     operationName: "AnimeQuery",
 };
 
-export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject };
+const NotificationQuery = `
+    query NotificationQuery(
+    $userId: String
+    $page: Int
+    $pageSize: Int
+    $includeDissmissed: Boolean
+    ) {
+        Notifications(
+            userId: $userId
+            page: $page
+            pageSize: $pageSize
+            includeDissmissed: $includeDissmissed
+        ) {
+            createdAt
+            episode_number
+            epnotifid
+            is_notif_dissmissed
+            is_notif_read
+            notif_type
+            sender
+            slug_id
+            userid
+            usernotifstatusid
+            media {
+                images {
+                    jpg {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    png {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                    webp {
+                        image_url
+                        medium_image_url
+                        large_image_url
+                    }
+                }
+                titles {
+                    title
+                    type
+                }
+            }
+        }
+    }
+`;
+
+const NotificationQueryObject = {
+    query: NotificationQuery,
+    operationName: "NotificationQuery",
+    endpoint: NOTIFICATION_BASE_URL_V2,
+};
+
+export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject, NotificationQueryObject };

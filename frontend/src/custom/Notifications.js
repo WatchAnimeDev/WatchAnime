@@ -2,12 +2,18 @@ import axios from "axios";
 import { NOTIFICATION_BASE_URL, STATIC_BUCKET_URL } from "../constants/genricConstants";
 import { getImageByRelevance } from "./AnimeData";
 import { getUidForLoggedInUser } from "./Auth";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { NotificationQueryObject } from "../graphql/graphqlQueries";
 
-const getUserNotifications = async () => {
-    return (await axios.get(`${NOTIFICATION_BASE_URL}/notifications/get/${getUidForLoggedInUser()}`)).data;
-};
-const getUserNotificationCount = async () => {
-    return (await axios.get(`${NOTIFICATION_BASE_URL}/notifications/get/${getUidForLoggedInUser()}/count`)).data.count;
+const getUserNotifications = async (queryObj = {}) => {
+    return (
+        await execGraphqlQuery(NotificationQueryObject, {
+            userId: getUidForLoggedInUser(),
+            page: queryObj.page || 1,
+            pageSize: queryObj.pageSize || 5,
+            includeDissmissed: queryObj.includeDissmissed || false,
+        })
+    ).data.data.Notifications;
 };
 
 const getNotificationPreviewImageFromNotificationData = (notificationData) => {
@@ -71,4 +77,4 @@ const dismissNotification = async (notificatonId) => {
     }
 };
 
-export { getUserNotifications, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification, handleNotificationClick, generateNotificationCss, dismissNotification, getUserNotificationCount };
+export { getUserNotifications, getNotificationPreviewImageFromNotificationData, subscribeToEpisodeNotification, unSubscribeToEpisodeNotification, handleNotificationClick, generateNotificationCss, dismissNotification };

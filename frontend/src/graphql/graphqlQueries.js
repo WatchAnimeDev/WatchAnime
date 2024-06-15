@@ -443,17 +443,18 @@ const AnimeQueryObject = {
 
 const NotificationQuery = `
     query NotificationQuery(
-    $userId: String
-    $page: Int
-    $pageSize: Int
-    $includeDissmissed: Boolean
+        $page: Int
+        $pageSize: Int
+        $userId: String
+        $includeDissmissed: Boolean
+        $excludeAnnouncements: Boolean
     ) {
-        Notifications(
-            userId: $userId
-            page: $page
-            pageSize: $pageSize
-            includeDissmissed: $includeDissmissed
-        ) {
+        Page(page: $page, pageSize: $pageSize) {
+            notifications(
+                userId: $userId
+                includeDissmissed: $includeDissmissed
+                excludeAnnouncements: $excludeAnnouncements
+            ) {
             createdAt
             episode_number
             epnotifid
@@ -464,28 +465,40 @@ const NotificationQuery = `
             slug_id
             userid
             usernotifstatusid
+            announcenotifid
+            title
+            expireAt
+            message
             media {
-                images {
-                    jpg {
-                        image_url
-                        medium_image_url
-                        large_image_url
+                    images {
+                        jpg {
+                            image_url
+                            medium_image_url
+                            large_image_url
+                        }
+                        png {
+                            image_url
+                            medium_image_url
+                            large_image_url
+                        }
+                        webp {
+                            image_url
+                            medium_image_url
+                            large_image_url
+                        }
                     }
-                    png {
-                        image_url
-                        medium_image_url
-                        large_image_url
-                    }
-                    webp {
-                        image_url
-                        medium_image_url
-                        large_image_url
+                    titles {
+                        title
+                        type
                     }
                 }
-                titles {
-                    title
-                    type
-                }
+            }
+            pageInfo {
+                total
+                perPage
+                currentPage
+                lastPage
+                hasNextPage
             }
         }
     }

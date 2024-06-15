@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SideBarComponent from "../components/SideBarComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
+import { WATCHANIME_RED } from "../constants/cssConstants";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -78,7 +79,19 @@ function GenericScreen({ sideBarState, setSideBarState, bugReportState, setBugRe
                 </Group>
                 {hasPagination && (
                     <Group sx={{ marginTop: "50px", justifyContent: "center" }}>
-                        <Pagination page={activePage} onChange={onPaginationClick} total={50} />
+                        {console.log(activePage)}
+                        <Pagination
+                            page={parseInt(activePage)}
+                            onChange={onPaginationClick}
+                            total={50}
+                            styles={(theme) => ({
+                                item: {
+                                    "&[data-active]": {
+                                        backgroundColor: WATCHANIME_RED,
+                                    },
+                                },
+                            })}
+                        />
                     </Group>
                 )}
             </Container>

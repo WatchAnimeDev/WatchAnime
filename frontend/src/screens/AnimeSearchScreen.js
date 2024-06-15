@@ -7,6 +7,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconSortDescending } from "@tabler/icons";
 import { CatalogQueryObj } from "../graphql/graphqlQueries";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { WATCHANIME_RED } from "../constants/cssConstants";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -313,7 +314,18 @@ function AnimeSearchScreen({ sideBarState, setSideBarState, bugReportState, setB
                     </Box>
                 </Flex>
                 <Group sx={{ marginTop: "50px", justifyContent: "center" }}>
-                    <Pagination page={serchPagePaginationData.currentPage} onChange={setActivePage} total={serchPagePaginationData.lastPage} />
+                    <Pagination
+                        page={serchPagePaginationData.currentPage}
+                        onChange={setActivePage}
+                        total={serchPagePaginationData.lastPage}
+                        styles={(theme) => ({
+                            item: {
+                                "&[data-active]": {
+                                    backgroundColor: WATCHANIME_RED,
+                                },
+                            },
+                        })}
+                    />
                 </Group>
             </Container>
         </>

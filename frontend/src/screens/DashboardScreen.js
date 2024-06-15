@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { AppShell, Navbar, Header, Text, MediaQuery, Burger, useMantineTheme, Group, createStyles } from "@mantine/core";
+import { AppShell, Navbar, Header, Text, MediaQuery, Burger, useMantineTheme, Group, Box } from "@mantine/core";
 import HeaderLogoPartial from "../partials/HeaderLogoPartial";
 import { Link, useParams } from "react-router-dom";
 import NotificationComponent from "../components/NotificationComponent";
 import DashboardNavbarComponent from "../components/DashboardNavbarComponent";
 import DashboardBodyComponent from "../components/DashboardBodyComponent";
+import { IconBellRinging, IconDatabaseImport, IconFingerprint, IconKey, IconSettings, IconUserCircle } from "@tabler/icons";
 
-function DashboardScreen({ isChristmasEnabled, match }) {
+function DashboardScreen({ isChristmasEnabled }) {
+    const menuData = {
+        profile: { link: "profile", label: "Profile", icon: IconUserCircle },
+        security: { link: "security", label: "Security", icon: IconFingerprint },
+        notifications: { link: "notifications", label: "Notifications", icon: IconBellRinging },
+        settings: { link: "settings", label: "Other Settings", icon: IconSettings },
+        apikey: { link: "apikey", label: "API Keys", icon: IconKey },
+        mal: { link: "mal", label: "MAL", icon: IconDatabaseImport, description: "MAL Import/Export" },
+    };
+
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
     const { pageType } = useParams();
-    const [activePage, setActivePage] = useState();
+    const [activePage, setActivePage] = useState("profile");
+    const ActiveIcon = menuData[activePage].icon;
 
     useEffect(() => {
-        setActivePage(pageType || "profile");
+        if (pageType) setActivePage(pageType);
     }, [pageType]);
 
     return (
@@ -27,7 +38,7 @@ function DashboardScreen({ isChristmasEnabled, match }) {
             asideOffsetBreakpoint="sm"
             navbar={
                 <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 300 }}>
-                    <DashboardNavbarComponent activePage={activePage} />
+                    <DashboardNavbarComponent activePage={activePage} menuData={Object.values(menuData)} />
                 </Navbar>
             }
             header={
@@ -48,7 +59,15 @@ function DashboardScreen({ isChristmasEnabled, match }) {
                 </Header>
             }
         >
-            <DashboardBodyComponent activePage={activePage} />
+            <Group h={"100%"} w={"100%"} sx={{ justifyContent: "center", alignItems: "center", flexDirection: "column", flexWrap: "nowrap", gap: "10px" }}>
+                <Group w={"100%"} sx={{ gap: "10px", alignItems: "center" }}>
+                    <ActiveIcon size={"24px"} />
+                    <Text sx={{ fontSize: "24px" }}>{menuData[activePage].description ?? menuData[activePage].label}</Text>
+                </Group>
+                <Box sx={{ flexGrow: 1, backgroundColor: "#1A1B1E", borderRadius: "5px" }} p={"md"} w={"100%"}>
+                    <DashboardBodyComponent activePage={activePage} />
+                </Box>
+            </Group>
         </AppShell>
     );
 }

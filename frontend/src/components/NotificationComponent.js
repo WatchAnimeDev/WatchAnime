@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Paper, Menu, createStyles, LoadingOverlay, Text, Card, Transition, Container, Group, Avatar, Box, Indicator, Tooltip, UnstyledButton } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { IconBell, IconChecks, IconEyeCheck, IconPoint, IconSettings } from "@tabler/icons";
-import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
+import { dismissNotification, generateNotificationCss, getNotificationPreviewImageFromNotificationData, getNotificationTitleFromNotificationData, getUserNotifications, handleNotificationClick } from "../custom/Notifications";
 import { getFormattedDateFromTimestamp } from "../custom/DateTime";
 import { useNavigate } from "react-router-dom";
 import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
 import { uuidv4 } from "../custom/User";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
-import { getAnimeTitleByRelevance } from "../custom/AnimeData";
 
 const useStyles = createStyles((theme) => ({
     navIcons: {
@@ -119,17 +118,6 @@ function NotificationComponent() {
         dismissGenericDynamicNotification(notificationId, "Notificaton dismissed!", "Your notification has been dismissed successfully.");
     };
 
-    const getNotificationTitleFromNotificationData = (notificationData) => {
-        switch (notificationData.notif_type) {
-            case 0:
-                return notificationData.title;
-            case 1:
-                return `Episode ${notificationData.episode_number} of ${getAnimeTitleByRelevance(notificationData.media.titles, notificationData.slug_id.includes("dub"), language)} is out now.`;
-            default:
-                return "Well this isnt expected";
-        }
-    };
-
     return (
         <Menu
             shadow="md"
@@ -220,7 +208,7 @@ function NotificationComponent() {
                                                 sx={generateNotificationCss(notification)}
                                             >
                                                 <Container sx={{ padding: "0px", width: "85%" }} mx={"10px"}>
-                                                    <Text sx={{ fontSize: "14px" }}>{getNotificationTitleFromNotificationData(notification)}</Text>
+                                                    <Text sx={{ fontSize: "14px" }}>{getNotificationTitleFromNotificationData(notification, language)}</Text>
                                                     <Group sx={{ fontSize: "12px", color: "#7a7a7a", gap: "0px" }}>
                                                         <Text>{notification.sender}</Text>
                                                         <Box className={classes.dot} mx="5px"></Box>

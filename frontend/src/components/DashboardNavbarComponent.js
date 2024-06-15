@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconBellRinging, IconFingerprint, IconKey, IconSettings, IconDatabaseImport, IconLogout, IconUserCircle } from "@tabler/icons";
+import { IconLogout } from "@tabler/icons";
 import { Anchor, Group, Text, createStyles } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function DashboardNavbarComponent({ activePage }) {
+function DashboardNavbarComponent({ activePage, menuData }) {
     const navigate = useNavigate();
     const { classes } = useStyles();
 
@@ -31,20 +31,12 @@ function DashboardNavbarComponent({ activePage }) {
         navigate("/signin");
     };
 
-    const data = [
-        { link: "profile", label: "Profile", icon: IconUserCircle },
-        { link: "security", label: "Security", icon: IconFingerprint },
-        { link: "notifications", label: "Notifications", icon: IconBellRinging },
-        { link: "settings", label: "Other Settings", icon: IconSettings },
-        { link: "apikey", label: "API Keys", icon: IconKey },
-        { link: "mal", label: "MAL", icon: IconDatabaseImport },
-    ];
     return (
         <Group h={"100%"} sx={{ alignContent: "space-between" }}>
             <Group direction={"column"} sx={{ width: "100%", flexDirection: "column", alignItems: "flex-start", gap: "0px" }}>
-                {data.map((item, index) => {
+                {menuData.map((item, index) => {
                     return (
-                        <Anchor key={index} component={Link} to={`/dashboard/${item.link}`} className={classes.navItem} sx={item.link === activePage ? { backgroundColor: WATCHANIME_RED, color: "white" } : {}}>
+                        <Anchor key={index} component={Link} to={`/dashboard/${item.link}`} className={classes.navItem} sx={item.link === activePage ? { backgroundColor: `${WATCHANIME_RED} !important`, color: "white" } : {}}>
                             <Group sx={{ cursor: "pointer", padding: "10px 12px", gap: "12px" }}>
                                 <item.icon size={20} />
                                 <Text>{item.label}</Text>

@@ -178,7 +178,6 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
                                     <Menu.Item icon={<IconSettings size={14} />} onClick={(e) => navigate("/dashboard")}>
                                         Dashboard
                                     </Menu.Item>
-                                    <Menu.Item icon={<IconMessageCircle size={14} />}>Messages</Menu.Item>
                                     <Menu.Item icon={<IconMessageCircle size={14} />} onClick={executeLogout}>
                                         Logout
                                     </Menu.Item>

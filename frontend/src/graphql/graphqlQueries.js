@@ -68,44 +68,58 @@ const CatalogQueryObj = {
 };
 
 const WatchListQuery = `
-    query WatchListQuery($userId: String) {
-        WatchList(userId: $userId) {
-            slug
-            images {
-                jpg {
-                    image_url
-                    large_image_url
-                    small_image_url
+    query WatchListPageQuery(
+        $userId: String
+        $watchlistType: Float
+        $page: Int
+        $pageSize: Int
+    ) {
+        WatchListPage(page: $page, pageSize: $pageSize) {
+            media(userId: $userId, watchlistType: $watchlistType) {
+                slug
+                images {
+                    jpg {
+                        image_url
+                        large_image_url
+                        small_image_url
+                    }
+                    webp {
+                        image_url
+                        large_image_url
+                        small_image_url
+                    }
+                    png {
+                        image_url
+                        large_image_url
+                        small_image_url
+                    }
                 }
-                webp {
-                    image_url
-                    large_image_url
-                    small_image_url
+                titles {
+                    title
+                    type
                 }
-                png {
-                    image_url
-                    large_image_url
-                    small_image_url
+                genres {
+                    mal_id
+                    name
+                    type
+                    url
                 }
-            }
-            titles {
-                title
                 type
             }
-            genres {
-                mal_id
-                name
-                type
-                url
+            pageInfo {
+                total
+                perPage
+                currentPage
+                lastPage
+                hasNextPage
             }
-            type
         }
     }
 `;
 
 const WatchListQueryObj = {
     query: WatchListQuery,
-    operationName: "WatchListQuery",
+    operationName: "WatchListPageQuery",
 };
 
 const PopularQuery = `

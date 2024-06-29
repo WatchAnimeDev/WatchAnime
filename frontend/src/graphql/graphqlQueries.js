@@ -105,6 +105,7 @@ const WatchListQuery = `
                     url
                 }
                 type
+                watchlistType
             }
             pageInfo {
                 total
@@ -120,6 +121,21 @@ const WatchListQuery = `
 const WatchListQueryObj = {
     query: WatchListQuery,
     operationName: "WatchListPageQuery",
+};
+
+const WatchListEditTypeMutation = `
+    mutation WatchListEditTypeMutation($userId: String, $watchlistType: Float, $slugId: String) {
+        UpdateWatchListMediaType(
+            userId: $userId
+            watchlistType: $watchlistType
+            slugId: $slugId
+        )
+    }
+`;
+
+const WatchListEditTypeMutationObj = {
+    query: WatchListEditTypeMutation,
+    operationName: "WatchListEditTypeMutation",
 };
 
 const PopularQuery = `
@@ -524,4 +540,19 @@ const NotificationQueryObject = {
     endpoint: NOTIFICATION_BASE_URL_V2,
 };
 
-export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject, NotificationQueryObject };
+const WatchListMalImportMutation = `
+    mutation WatchListMalImportMutation($userId: String, $malUserName: String, $clearWatchList: Boolean) {
+        ImportMalWatchlistData(
+            userId: $userId
+            malUserName: $malUserName
+            clearWatchList: $clearWatchList
+        )
+    }
+`;
+
+const WatchListMalImportMutationObj = {
+    query: WatchListMalImportMutation,
+    operationName: "WatchListMalImportMutation",
+};
+
+export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject, NotificationQueryObject, WatchListEditTypeMutationObj, WatchListMalImportMutationObj };

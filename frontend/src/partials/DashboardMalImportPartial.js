@@ -1,6 +1,12 @@
 import { Button, Group, Switch, Text, TextInput, createStyles } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
+import { showGenericCheckBoxNotification } from "../custom/Notification";
+import { IconX } from "@tabler/icons";
+import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
+import { WatchListMalImportMutationObj } from "../graphql/graphqlQueries";
+import { getUidForLoggedInUser } from "../custom/Auth";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     importSubmitButton: {
@@ -21,6 +27,38 @@ const useStyles = createStyles((theme) => ({
 
 function DashboardMalImportPartial() {
     const { classes } = useStyles();
+    const navigate = useNavigate();
+    const [malUserName, setMalUserName] = useState("");
+    const [eraseWatchList, setEraseWatchList] = useState(false);
+
+    const handleImport = async () => {
+        if (!malUserName) {
+            showGenericCheckBoxNotification("Invalid username", "Your username cannot be empty. Please enter a valid username", {
+                color: "red",
+                icon: <IconX size={16} />,
+            });
+        } else {
+            const retData = await execGraphqlQuery(
+                WatchListMalImportMutationObj,
+                {
+                    userId: getUidForLoggedInUser(),
+                    malUserName: malUserName,
+                    clearWatchList: eraseWatchList,
+                },
+                0
+            );
+            if (retData.data.data.ImportMalWatchlistData?.error) {
+                showGenericCheckBoxNotification("Invalid username", "Your username isn't valid. Please enter a valid username", {
+                    color: "red",
+                    icon: <IconX size={16} />,
+                });
+            } else {
+                showGenericCheckBoxNotification("Imported Successfully", "All matching animes in your MAL-List have been imported successfully");
+                navigate("/dashboard/watchlist");
+            }
+        }
+    };
+
     return (
         <>
             <Group w={"100%"} mt={"16px"} sx={{ alignItems: "flex-start", flexDirection: "column" }}>
@@ -31,12 +69,22 @@ function DashboardMalImportPartial() {
             <Group w={"100%"} mt={"16px"} sx={{ gap: "0px" }}>
                 <Group w={"100%"} sx={{ gap: "5%" }}>
                     <Text className={classes.importInputLabel}>Your MAL username: </Text>
-                    <TextInput w={"60%"} />
+                    <TextInput
+                        w={"60%"}
+                        onChange={(e) => {
+                            setMalUserName(e.target.value);
+                        }}
+                    />
                 </Group>
                 <Group w={"100%"} sx={{ gap: "5%" }} mt={"16px"}>
                     <Text className={classes.importInputLabel}>Erase Existing Watchlist data? </Text>
                     <Group w={"60%"}>
-                        <Switch color="red" />
+                        <Switch
+                            color="red"
+                            onChange={() => {
+                                setEraseWatchList(!eraseWatchList);
+                            }}
+                        />
                     </Group>
                 </Group>
                 <Group w={"100%"} sx={{ gap: "5%" }} mt={"5px"}>
@@ -46,7 +94,9 @@ function DashboardMalImportPartial() {
                     </Group>
                 </Group>
                 <Group w={"100%"} mt={"64px"} sx={{ justifyContent: "flex-start", alignItems: "center" }} ml={"40%"}>
-                    <Button className={classes.importSubmitButton}>Import</Button>
+                    <Button className={classes.importSubmitButton} onClick={handleImport}>
+                        Import
+                    </Button>
                 </Group>
             </Group>
         </>

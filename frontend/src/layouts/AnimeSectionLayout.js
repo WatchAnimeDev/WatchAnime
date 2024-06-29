@@ -113,7 +113,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData }) {
+function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, ActionComponent, actionComponentData }) {
     const { classes } = useStyles();
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     const { handleWatchListAdd, handleWatchListDelete } = useWatchListStore(useShallow((state) => ({ handleWatchListAdd: state.handleWatchListAdd, handleWatchListDelete: state.handleWatchListDelete })));
@@ -196,9 +196,9 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
                         <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
                     </Group>
                 </Group>
-
                 <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent * 0.9 ?? 0}%` }}></Paper>
                 {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
+                {ActionComponent && <ActionComponent animeData={animeData} actionComponentData={actionComponentData} />}
                 {hasNewEpisodeReleasedForWatchlistAnime(animeData, featureId) ? <Paper className={classes.animeCardNewEpisodeDiv}>NEW</Paper> : <></>}
             </Paper>
             <div className={classes.backGroundFilter}></div>
@@ -236,17 +236,12 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
     );
 }
 
-function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData }) {
+function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, actionComponent, actionComponentData }) {
     const { classes } = useStyles();
 
     return (
-        <Anchor
-            component={Link}
-            to={`/anime/${anime.slug}${anime.hasOwnProperty("currentReleasedEpisode") ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`}
-            className={classes.noTextDecoration}
-            sx={{ position: "relative" }}
-        >
-            <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} />
+        <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
+            <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} ActionComponent={actionComponent} actionComponentData={actionComponentData} />
         </Anchor>
     );
 }

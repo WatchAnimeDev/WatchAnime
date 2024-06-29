@@ -79,7 +79,6 @@ function GenericScreen({ sideBarState, setSideBarState, bugReportState, setBugRe
                 </Group>
                 {hasPagination && (
                     <Group sx={{ marginTop: "50px", justifyContent: "center" }}>
-                        {console.log(activePage)}
                         <Pagination
                             page={parseInt(activePage)}
                             onChange={onPaginationClick}

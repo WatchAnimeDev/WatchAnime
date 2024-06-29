@@ -7,6 +7,11 @@ import { fetchWatchListData } from "../custom/WatchList";
 
 const useWatchListStore = create((set, get) => ({
     watchListData: [],
+    watchListDataPaginated: {
+        fetchedWatchListData: [],
+        fetchedWatchListDataPageInfo: {},
+    },
+
     setWatchListData: (animeData) => {
         set((state) => {
             let watchListData = state.watchListData;
@@ -21,6 +26,7 @@ const useWatchListStore = create((set, get) => ({
             return { watchListData };
         });
     },
+
     deleteFromWatchListBySlug: (slug) => {
         set((state) => {
             let watchListData = state.watchListData;
@@ -28,15 +34,27 @@ const useWatchListStore = create((set, get) => ({
             return { watchListData };
         });
     },
+
     fetchWatchListData: async () => {
-        const watchListData = await fetchWatchListData(getUidForLoggedInUser());
-        set({ watchListData: watchListData });
+        const { fetchedWatchListData } = await fetchWatchListData(getUidForLoggedInUser());
+        set({ watchListData: fetchedWatchListData });
     },
+
+    fetchWatchListDataPaginated: async (page = 1, pageSize = 20, watchlistType = 0) => {
+        const { fetchedWatchListData, fetchedWatchListDataPageInfo } = await fetchWatchListData(getUidForLoggedInUser(), page, pageSize, watchlistType);
+
+        set(() => ({
+            watchListDataPaginated: { fetchedWatchListData, fetchedWatchListDataPageInfo },
+        }));
+        return { fetchedWatchListData, fetchedWatchListDataPageInfo };
+    },
+
     handleWatchListAdd: async (selectedAnimeData) => {
         await subscribeToEpisodeNotification(selectedAnimeData.slug);
         get().setWatchListData(selectedAnimeData);
         showGenericCheckBoxNotification("Added to watchlist!", `${getAnimeTitleByRelevance(selectedAnimeData.titles)} has been added to watchlist!`);
     },
+
     handleWatchListDelete: async (selectedAnimeData) => {
         await unSubscribeToEpisodeNotification(selectedAnimeData.slug);
         get().deleteFromWatchListBySlug(selectedAnimeData.slug);

@@ -84,7 +84,7 @@ function DashboardNotificationLayout() {
                                 </Box>
                             </Card>
                         ))}
-                        <Group sx={{ marginTop: "20px" }}>
+                        <Group sx={{ marginTop: "auto" }}>
                             <Pagination
                                 page={page}
                                 onChange={setPage}

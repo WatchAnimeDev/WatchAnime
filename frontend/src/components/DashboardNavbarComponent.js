@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function DashboardNavbarComponent({ activePage, menuData }) {
+function DashboardNavbarComponent({ activePage, menuData, setOpened }) {
     const navigate = useNavigate();
     const { classes } = useStyles();
 
@@ -36,7 +36,14 @@ function DashboardNavbarComponent({ activePage, menuData }) {
             <Group direction={"column"} sx={{ width: "100%", flexDirection: "column", alignItems: "flex-start", gap: "0px" }}>
                 {menuData.map((item, index) => {
                     return (
-                        <Anchor key={index} component={Link} to={`/dashboard/${item.link}`} className={classes.navItem} sx={item.link === activePage ? { backgroundColor: `${WATCHANIME_RED} !important`, color: "white" } : {}}>
+                        <Anchor
+                            key={index}
+                            component={Link}
+                            to={`/dashboard/${item.link}`}
+                            className={classes.navItem}
+                            sx={item.link === activePage ? { backgroundColor: `${WATCHANIME_RED} !important`, color: "white" } : {}}
+                            onClick={() => setOpened(false)}
+                        >
                             <Group sx={{ cursor: "pointer", padding: "10px 12px", gap: "12px" }}>
                                 <item.icon size={20} />
                                 <Text>{item.label}</Text>

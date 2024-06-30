@@ -39,7 +39,7 @@ function DashboardScreen({ isChristmasEnabled }) {
             asideOffsetBreakpoint="sm"
             navbar={
                 <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 300 }}>
-                    <DashboardNavbarComponent activePage={activePage} menuData={Object.values(menuData)} />
+                    <DashboardNavbarComponent activePage={activePage} menuData={Object.values(menuData)} setOpened={setOpened} />
                 </Navbar>
             }
             header={

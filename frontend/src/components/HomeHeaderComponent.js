@@ -81,18 +81,18 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: "rgb(26, 27, 30)",
         padding: "4px 7px",
     },
-    searchBarAccountIcon: {
-        [theme.fn.smallerThan("xs")]: {
-            display: "none",
-        },
-    },
     searchBarSearchIcon: {
         [theme.fn.largerThan("sm")]: {
             display: "none",
         },
     },
     searchBarScheduleIcon: {
-        ...{ ...(window.location.pathname !== "/" ? { display: "none" } : {}) },
+        ...{
+            ...(window.location.pathname !== "/" ? { display: "none" } : {}),
+            [theme.fn.smallerThan("xs")]: {
+                display: "none",
+            },
+        },
     },
 }));
 

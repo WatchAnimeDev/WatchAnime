@@ -4,6 +4,8 @@ import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeDa
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { STATIC_BUCKET_URL } from "../constants/genricConstants";
+import { useLanguageStore } from "../store/LanguageToggleStore";
+import { useShallow } from "zustand/react/shallow";
 
 const useStyles = createStyles((theme) => ({
     subOrDubBackGroundImageDiv: {
@@ -56,6 +58,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function AnimeDetailsSubDubComponent({ animeData }) {
+    const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     const { classes } = useStyles();
     const hasSub = animeData.slug.includes("-dub");
     const hasDub = animeData.hasDub;
@@ -66,7 +69,7 @@ function AnimeDetailsSubDubComponent({ animeData }) {
             </Group>
             <Group>
                 <Anchor component={Link} to={`/anime/${hasSub ? animeData.slug.replace("-dub", "") : `${animeData.slug}-dub`}`} className={classes.subOrDubParentWrapper}>
-                    <Text className={classes.subOrDubTextDiv}>{getAnimeTitleByRelevance(animeData.titles, !hasSub)}</Text>
+                    <Text className={classes.subOrDubTextDiv}>{getAnimeTitleByRelevance(animeData.titles, !hasSub, language)}</Text>
                     <Paper className={classes.subOrDubBackGroundImageDiv} style={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }}></Paper>
                 </Anchor>
             </Group>

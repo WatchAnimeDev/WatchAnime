@@ -9,6 +9,7 @@ import AnimeRelationComponent from "../components/AnimeRelationComponent";
 import AnimeRecommendationComponent from "../components/AnimeRecommendationComponent";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { AnimeQueryObject } from "../graphql/graphqlQueries";
+import AnimeDetailsSubDubComponent from "../components/AnimeDetailsSubDubComponent";
 
 function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
@@ -40,6 +41,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
                 <AnimeDetailsOverviewComponent animeData={animeData} episodeInfoData={episodeInfoData} />
+                <AnimeDetailsSubDubComponent animeData={animeData} />
                 <AnimeDetailsEpisodeListComponent animeData={animeData} episodeInfoData={episodeInfoData} setEpisodeInfoData={setEpisodeInfoData} />
                 <AnimeRelationComponent animeData={animeData} />
                 {animeData.malId ? <AnimeRecommendationComponent malId={animeData.malId} /> : <></>}

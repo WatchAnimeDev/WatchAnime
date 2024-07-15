@@ -461,6 +461,7 @@ const AnimeQuery = `
                         }
                     }
                 }
+                hasDub
             }
         }
     }

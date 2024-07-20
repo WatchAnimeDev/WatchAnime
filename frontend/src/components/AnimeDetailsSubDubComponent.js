@@ -35,6 +35,7 @@ const useStyles = createStyles((theme) => ({
         overflow: "hidden",
         textDecoration: "none",
         color: "white",
+        textAlign: "center",
         "&:hover": {
             color: WATCHANIME_RED,
         },

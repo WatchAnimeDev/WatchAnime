@@ -26,6 +26,7 @@ const useStyles = createStyles((theme) => ({
         },
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
     },
 }));
 
@@ -37,7 +38,7 @@ function AuthScreen({ isChristmasEnabled, renderComponent }) {
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.form} radius={0} p={30}>
-                <Paper sx={{ backgroundColor: "transparent", display: "flex", justifyContent: "center" }} py={50}>
+                <Paper sx={{ backgroundColor: "transparent", display: "flex", justifyContent: "center" }} py={25}>
                     <HeaderLogoPartial isChristmasEnabled={isChristmasEnabled} mobile={mobile} />
                 </Paper>
                 {renderComponent}

@@ -59,7 +59,7 @@ function SignUpLayout() {
             <TextInput label="Email address" placeholder="hello@gmail.com" size="md" mt="md" required onChange={(e) => setEmail(e.target.value)} />
             <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" required onChange={(e) => setPassword(e.target.value)} />
             <TextInput label="Invite code" size="md" mt="md" required onChange={(e) => setInviteCode(e.target.value)} />
-            <Button fullWidth mt="xl" size="md" sx={{ backgroundColor: WATCHANIME_RED }} loading={hasSignUpStarted} onClick={executeSignUp}>
+            <Button fullWidth mt="xl" size="md" sx={{ backgroundColor: WATCHANIME_RED, minHeight: "40px" }} loading={hasSignUpStarted} onClick={executeSignUp}>
                 Register
             </Button>
 

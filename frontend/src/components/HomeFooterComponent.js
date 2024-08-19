@@ -45,7 +45,7 @@ function HomeFooterComponent() {
             <Group className={classes.socialAndFooterLinkDiv}>
                 <JoinUsPartial />
                 <Group sx={{ fontWeight: "500" }}>
-                    <Anchor href="https://status.watchanime.dev/" target="_blank" className={classes.footerLink}>
+                    <Anchor href="https://status.watchanime.dev/status/watchanime" target="_blank" className={classes.footerLink}>
                         STATUS
                     </Anchor>
                     <Anchor component={Link} to={"/dmca"} className={classes.footerLink}>

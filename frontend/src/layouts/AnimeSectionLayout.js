@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { createStyles, Paper, Text, Group, Anchor, Tooltip, Transition } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
@@ -11,7 +11,6 @@ import { useShallow } from "zustand/react/shallow";
 import { useWatchListStore } from "../store/WatchListStore";
 import { getLastWatched, removeLastWatched } from "../custom/CloudSync";
 import { useDisclosure } from "@mantine/hooks";
-import { useIsVisible } from "../hooks/useIsVisible";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -181,7 +180,6 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
         <Transition mounted={isCardOpen} transition="slide-up" duration={300} timingFunction="linear">
             {(styles) => (
                 <div style={{ ...styles }}>
-                    {console.log(styles)}
                     <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }} className={classes.card}>
                         <Group sx={{ width: "100%" }}>
                             <Group className={classes.sliderInfoDisplayDiv}>

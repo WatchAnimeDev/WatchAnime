@@ -128,7 +128,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             { label: "Recently Added", refs: executeTargetRefRecent },
             { label: "Popular", refs: executeTargetRefPopular },
             { label: "Install App", callBack: () => installPWA() },
-            { label: "Cloud Sync", callBack: () => openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage) },
+            { label: "Cloud Sync", callBack: () => openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage, true) },
         ],
     };
     const animeSliderConfig = {

@@ -120,7 +120,7 @@ function getWatchHistory(slug, userId = null) {
     );
 }
 
-const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage) => {
+const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage, fromBtn = false) => {
     const lastWatchedData = localStorage.getItem("lastWatchedQueue");
     const watchHistoryData = localStorage.getItem("watchHistory");
     if (lastWatchedData || watchHistoryData) {
@@ -207,7 +207,9 @@ const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudS
             },
         });
     } else {
-        showGenericCheckBoxNotification("Cloud Sync", "You data is already synced.");
+        if (fromBtn) {
+            showGenericCheckBoxNotification("Cloud Sync", "You data is already synced.");
+        }
     }
 };
 

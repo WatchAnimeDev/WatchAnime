@@ -1,15 +1,17 @@
-import React from "react";
-import { createStyles, Paper, Text, Group, Anchor, Tooltip } from "@mantine/core";
+import React, { useEffect, useRef, useState } from "react";
+import { createStyles, Paper, Text, Group, Anchor, Tooltip, Transition } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
 import { IconPlus, IconTrash } from "@tabler/icons";
 import { openConfirmModal } from "@mantine/modals";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
-import { getLastWatchedData, getWatchHistoryBySlug } from "../player/PlayerHelper";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
 import { useWatchListStore } from "../store/WatchListStore";
+import { getLastWatched, removeLastWatched } from "../custom/CloudSync";
+import { useDisclosure } from "@mantine/hooks";
+import { useIsVisible } from "../hooks/useIsVisible";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -117,6 +119,11 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
     const { classes } = useStyles();
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
     const { handleWatchListAdd, handleWatchListDelete } = useWatchListStore(useShallow((state) => ({ handleWatchListAdd: state.handleWatchListAdd, handleWatchListDelete: state.handleWatchListDelete })));
+    const [isCardOpen, isCardOpenHandler] = useDisclosure(false);
+
+    setTimeout(() => {
+        isCardOpenHandler.open();
+    }, 10);
 
     const handleDeleteFromAnimeCard = (e, featureId, selectedAnimeData) => {
         e.preventDefault();
@@ -153,11 +160,10 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
             onCancel: () => {
                 //dont do anything
             },
-            onConfirm: () => {
-                let currWatched = JSON.parse(localStorage.getItem("lastWatchedQueue"));
-                currWatched = currWatched.filter((anime) => anime.slug !== selectedAnimeData.slug);
-                localStorage.setItem("lastWatchedQueue", JSON.stringify(currWatched));
-                setLastWatchedData(getLastWatchedData());
+            onConfirm: async () => {
+                await removeLastWatched(selectedAnimeData.slug);
+                const newLastWatchedData = await getLastWatched();
+                setLastWatchedData(newLastWatchedData);
                 showGenericCheckBoxNotification("Deleted from watch history!", `${getAnimeTitleByRelevance(selectedAnimeData.titles, false, language)} has been deleted from your watch history!`);
             },
             centered: true,
@@ -168,77 +174,77 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
         if (featureId !== "watchList") {
             return false;
         }
-        const watchHistoryData = getWatchHistoryBySlug(animeData.slug);
-        if (Object.keys(watchHistoryData) && Object.keys(watchHistoryData).includes("watchedEpisodes") && Math.max(...Object.keys(watchHistoryData.watchedEpisodes)) < (animeData.releasedEpisodes ?? 0)) {
-            return true;
-        }
-        return false;
+        return animeData.hasNewEpisode;
     };
 
     return (
-        <>
-            <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }} className={classes.card}>
-                <Group sx={{ width: "100%" }}>
-                    <Group className={classes.sliderInfoDisplayDiv}>
-                        <Tooltip label={getAnimeTitleByRelevance(animeData.titles, false, language)}>
-                            <Text lineClamp={1} sx={{ fontSize: "15px", fontWeight: "600" }}>
-                                {getAnimeTitleByRelevance(animeData.titles, false, language)}
-                            </Text>
-                        </Tooltip>
-                        <Text sx={{ fontSize: "10px" }}>{animeData.duration ? `${animeData?.duration?.split(" ")[0]} min` : ""}</Text>
-                    </Group>
-                </Group>
-                <Group sx={{ width: "100%" }}>
-                    <Group className={classes.sliderInfoDisplayDiv}>
-                        <Text lineClamp={1} sx={{ fontSize: "10px", flexBasis: "70%" }}>
-                            {toTitleCase(animeData.genres.map((genre) => genre.name).join(","), ",")}
-                        </Text>
-                        <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
-                    </Group>
-                </Group>
-                <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent * 0.9 ?? 0}%` }}></Paper>
-                {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
-                {ActionComponent && <ActionComponent animeData={animeData} actionComponentData={actionComponentData} />}
-                {hasNewEpisodeReleasedForWatchlistAnime(animeData, featureId) ? <Paper className={classes.animeCardNewEpisodeDiv}>NEW</Paper> : <></>}
-            </Paper>
-            <div className={classes.backGroundFilter}></div>
-            {isDeletable || isAddableToWatchList ? (
-                <Paper className={classes.animeCardHoverState} id={animeData.slug}>
-                    {isDeletable ? (
-                        <Tooltip label={featureId === "lastWatched" ? "Delete from Last Watched" : "Delete from WatchList"} withArrow position="bottom" transition="scale" transitionDuration={100}>
-                            <span className={classes.hoverContentBaseDiv} onClick={(e) => handleDeleteFromAnimeCard(e, featureId, animeData)}>
-                                <IconTrash size={20} />
-                            </span>
-                        </Tooltip>
+        <Transition mounted={isCardOpen} transition="slide-up" duration={300} timingFunction="linear">
+            {(styles) => (
+                <div style={{ ...styles }}>
+                    {console.log(styles)}
+                    <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${getImageByRelevance(animeData.images)})` }} className={classes.card}>
+                        <Group sx={{ width: "100%" }}>
+                            <Group className={classes.sliderInfoDisplayDiv}>
+                                <Tooltip label={getAnimeTitleByRelevance(animeData.titles, false, language)}>
+                                    <Text lineClamp={1} sx={{ fontSize: "15px", fontWeight: "600" }}>
+                                        {getAnimeTitleByRelevance(animeData.titles, false, language)}
+                                    </Text>
+                                </Tooltip>
+                                <Text sx={{ fontSize: "10px" }}>{animeData.duration ? `${animeData?.duration?.split(" ")[0]} min` : ""}</Text>
+                            </Group>
+                        </Group>
+                        <Group sx={{ width: "100%" }}>
+                            <Group className={classes.sliderInfoDisplayDiv}>
+                                <Text lineClamp={1} sx={{ fontSize: "10px", flexBasis: "70%" }}>
+                                    {toTitleCase(animeData.genres.map((genre) => genre.name).join(","), ",")}
+                                </Text>
+                                <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
+                            </Group>
+                        </Group>
+                        <Paper className={classes.playBackTimeDiv} sx={{ width: `${animeData.playbackPercent * 0.9 ?? 0}%` }}></Paper>
+                        {animeData.currentReleasedEpisode ? <Paper className={classes.animeCardEpisodeDiv}>EP {animeData.currentReleasedEpisode}</Paper> : <></>}
+                        {ActionComponent && <ActionComponent animeData={animeData} actionComponentData={actionComponentData} />}
+                        {hasNewEpisodeReleasedForWatchlistAnime(animeData, featureId) ? <Paper className={classes.animeCardNewEpisodeDiv}>NEW</Paper> : <></>}
+                    </Paper>
+                    <div className={classes.backGroundFilter}></div>
+                    {isDeletable || isAddableToWatchList ? (
+                        <Paper className={classes.animeCardHoverState} id={animeData.slug}>
+                            {isDeletable ? (
+                                <Tooltip label={featureId === "lastWatched" ? "Delete from Last Watched" : "Delete from WatchList"} withArrow position="bottom" transition="scale" transitionDuration={100}>
+                                    <span className={classes.hoverContentBaseDiv} onClick={(e) => handleDeleteFromAnimeCard(e, featureId, animeData)}>
+                                        <IconTrash size={20} />
+                                    </span>
+                                </Tooltip>
+                            ) : (
+                                <></>
+                            )}
+                            {isAddableToWatchList ? (
+                                <Tooltip label="Add to WatchList" withArrow position="bottom" transition="scale" transitionDuration={100}>
+                                    <span
+                                        className={classes.hoverContentBaseDiv}
+                                        onClick={async (e) => {
+                                            e.preventDefault();
+                                            await handleWatchListAdd(animeData);
+                                        }}
+                                    >
+                                        <IconPlus size={20} />
+                                    </span>
+                                </Tooltip>
+                            ) : (
+                                <></>
+                            )}
+                        </Paper>
                     ) : (
                         <></>
                     )}
-                    {isAddableToWatchList ? (
-                        <Tooltip label="Add to WatchList" withArrow position="bottom" transition="scale" transitionDuration={100}>
-                            <span
-                                className={classes.hoverContentBaseDiv}
-                                onClick={async (e) => {
-                                    e.preventDefault();
-                                    await handleWatchListAdd(animeData);
-                                }}
-                            >
-                                <IconPlus size={20} />
-                            </span>
-                        </Tooltip>
-                    ) : (
-                        <></>
-                    )}
-                </Paper>
-            ) : (
-                <></>
+                </div>
             )}
-        </>
+        </Transition>
     );
 }
 
 function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, actionComponent, actionComponentData }) {
     const { classes } = useStyles();
-
     return (
         <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
             <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} ActionComponent={actionComponent} actionComponentData={actionComponentData} />

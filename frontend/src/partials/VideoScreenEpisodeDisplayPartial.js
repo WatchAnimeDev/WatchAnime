@@ -2,7 +2,6 @@ import { Anchor, createStyles, Group, Text } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { getWatchHistoryBySlug } from "../player/PlayerHelper";
 
 const useStyles = createStyles((theme) => ({
     parentEpisodeDiv: {
@@ -35,12 +34,12 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function VideoScreenEpisodeDisplayPartial({ episodeCount, episodeList, animeSlug, currentEpisode }) {
+function VideoScreenEpisodeDisplayPartial({ episodeCount, episodeList, animeSlug, currentEpisode, watchHistoryData }) {
     episodeList = Object.keys(episodeList ?? {})
         .map((val) => parseFloat(val))
         .sort((x, y) => x - y);
     const { classes } = useStyles();
-    const watchedEpisodes = getWatchHistoryBySlug(animeSlug)?.watchedEpisodes;
+    const watchedEpisodes = watchHistoryData;
     return (
         <Group className={classes.parentEpisodeDiv}>
             {episodeList.length && episodeCount <= episodeList.length

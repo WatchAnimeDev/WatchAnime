@@ -106,6 +106,8 @@ const WatchListQuery = `
                 }
                 type
                 watchlistType
+                releasedEpisodes
+                hasNewEpisode
             }
             pageInfo {
                 total
@@ -556,4 +558,114 @@ const WatchListMalImportMutationObj = {
     operationName: "WatchListMalImportMutation",
 };
 
-export { CatalogQueryObj, WatchListQueryObj, PopularQueryObject, RecentQueryObject, ScheduleQueryObject, MergeQueryObject, SearchQueryObject, AnimeQueryObject, NotificationQueryObject, WatchListEditTypeMutationObj, WatchListMalImportMutationObj };
+const LastWatchedDataUpdateMutation = `
+    mutation LastWatchedDataUpdate($userId: String, $slug: String, $episodeNumber: Int, $shouldDelete: Boolean) {
+        LastWatchedDataUpdate(userId: $userId, slug: $slug, episodeNumber: $episodeNumber, shouldDelete: $shouldDelete)
+    }
+`;
+
+const LastWatchedDataUpdateMutationObj = {
+    query: LastWatchedDataUpdateMutation,
+    operationName: "LastWatchedDataUpdate",
+};
+
+const WatchHistoryDataUpdateMutation = `
+    mutation WatchHistoryDataUpdate($userId: String, $slug: String, $episodeNumber: Int, $playBackData: JSON) {
+        WatchHistoryDataUpdate(userId: $userId, slug: $slug, episodeNumber: $episodeNumber, playBackData: $playBackData)
+    }
+`;
+
+const WatchHistoryDataUpdateMutationObj = {
+    query: WatchHistoryDataUpdateMutation,
+    operationName: "WatchHistoryDataUpdate",
+};
+
+const LastWatchedPageQuery = `
+    query LastWatchedPage($page: Int, $pageSize: Int, $userId: String) {
+        LastWatchedPage(page: $page, pageSize: $pageSize) {
+            media(userId: $userId) {
+                media {
+                    slug
+                    images {
+                        jpg {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                        png {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                        webp {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                    }
+                    titles {
+                        title
+                        type
+                    }
+                    genres {
+                        mal_id
+                        name
+                        type
+                        url
+                    }
+                    type
+                    currentReleasedEpisode
+                }
+                playBackData {
+                    duration,
+                    playBackTime
+                }
+            }
+            pageInfo {
+                currentPage,
+                hasNextPage
+                lastPage
+                perPage
+                total
+            }
+        }
+    }
+`;
+
+const LastWatchedPageQueryObject = {
+    query: LastWatchedPageQuery,
+    operationName: "LastWatchedPage",
+};
+
+const WatchHistoryQuery = `
+    query WatchHistory($userId: String, $slug: String, $episodeNumber: Int) {
+        WatchHistory(userId: $userId, slug: $slug, episodeNumber: $episodeNumber) {
+            duration
+            playBackTime
+            episodeNumber
+        }
+    }
+`;
+
+const WatchHistoryQueryObject = {
+    query: WatchHistoryQuery,
+    operationName: "WatchHistory",
+};
+
+export {
+    CatalogQueryObj,
+    WatchListQueryObj,
+    PopularQueryObject,
+    RecentQueryObject,
+    ScheduleQueryObject,
+    MergeQueryObject,
+    SearchQueryObject,
+    AnimeQueryObject,
+    NotificationQueryObject,
+    WatchListEditTypeMutationObj,
+    WatchListMalImportMutationObj,
+    LastWatchedDataUpdateMutationObj,
+    WatchHistoryDataUpdateMutationObj,
+    LastWatchedPageQueryObject,
+    WatchHistoryQueryObject,
+};

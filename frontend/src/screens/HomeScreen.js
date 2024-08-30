@@ -8,7 +8,6 @@ import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH } from 
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
-import { getLastWatchedData } from "../player/PlayerHelper";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import HeaderVideoLayout from "../layouts/HeaderVideoLayout";
 // import WatchListEditComponent from "../components/WatchListEditComponent";
@@ -16,6 +15,8 @@ import { useWatchListStore } from "../store/WatchListStore";
 import { useShallow } from "zustand/react/shallow";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { MergeQueryObject } from "../graphql/graphqlQueries";
+import { getLastWatched, openCloudSyncModal } from "../custom/CloudSync";
+import AnimeCloudSyncComponent from "../components/AnimeCloudSyncComponent";
 
 const useStyles = createStyles((theme) => ({
     bodyContainer: {
@@ -71,24 +72,35 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
 
     const [promptInstall, setPromptInstall] = useState(null);
 
-    const [lastWatchedData, setLastWatchedData] = useState(getLastWatchedData());
+    const [lastWatchedData, setLastWatchedData] = useState([]);
+
+    //for legacy syncs
+    const [cloudSyncModalOpen, setCloudSyncModalOpen] = useState(false);
+    const [cloudSyncModalText, setCloudSyncModalText] = useState("");
+    const [cloudSyncPersentage, setCloudSyncPersentage] = useState(0);
 
     const { classes } = useStyles();
 
     useEffect(() => {
         async function getRecentlyReleasedAnimes() {
-            const [mergeData] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 }, 10)]);
+            const [mergeData, lastWatched] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 }, 10), getLastWatched()]);
             setRecentlyReleasedAnimes(mergeData.data.data.Recent);
             let headerVideoData = mergeData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
             headerVideoData = headerVideoData.length ? headerVideoData : mergeData.data.data.Popular;
             const headerVideoIndex = Math.floor(Math.random() * headerVideoData.length);
+            const doNotSync = localStorage.getItem("doNotSync");
+            if (!doNotSync) {
+                openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage);
+            }
             setHeaderVideoData({ data: headerVideoData[headerVideoIndex], index: headerVideoIndex });
             setPopularSeries(mergeData.data.data.Popular);
             setScheduleData(prepareScheduleData(mergeData.data.data.Schedule));
+            setLastWatchedData(lastWatched);
             setAjaxComplete(true);
             return;
         }
         getRecentlyReleasedAnimes();
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -116,6 +128,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             { label: "Recently Added", refs: executeTargetRefRecent },
             { label: "Popular", refs: executeTargetRefPopular },
             { label: "Install App", callBack: () => installPWA() },
+            { label: "Cloud Sync", callBack: () => openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage) },
         ],
     };
     const animeSliderConfig = {
@@ -172,6 +185,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
                 <ScheduleComponent scheduleData={scheduleData} targetRefSchedule={otherData.targetRefSchedule} />
                 <AnimeSectionComponent refProp={targetRefPopular} sectionTitle={"Popular Series"} sectionAnimeData={popularSeries} hasViewMore={true} viewMoreLink={"/popular/1"} sliderConfig={animeSliderConfig} otherData={{ isAddableToWatchList: true }} />
             </Container>
+            <AnimeCloudSyncComponent cloudSyncModalOpen={cloudSyncModalOpen} cloudSyncPersentage={cloudSyncPersentage} cloudSyncModalText={cloudSyncModalText} />
         </>
     ) : (
         <Loader sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />

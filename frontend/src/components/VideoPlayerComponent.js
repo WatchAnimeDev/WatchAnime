@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
 import { getAnimeTitleByRelevance, getEpisodeCount, malStatusToMediaStatus, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
-import { getLastWatchedData, getAnimeSkipData, setLastWatchedQueue, setWatchHistoryBySlug } from "../player/PlayerHelper";
+import { getAnimeSkipData } from "../player/PlayerHelper";
 import { IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";
@@ -15,6 +15,7 @@ import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
 import { getPlayerSettings, setPlayerSettings } from "../custom/PlayerSettings";
 import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
+import { syncLastWatched, syncWatchHistory } from "../custom/CloudSync";
 
 const useStyles = createStyles((theme) => ({
     parentPlayerDiv: {
@@ -66,10 +67,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const updatePlaybackInWathHistoryBySlug = (player, slug, episodeNumber) => {
-    setWatchHistoryBySlug({ slug: slug }, { duration: player.duration, playBackTime: player.currentTime }, episodeNumber);
+    if (player.playing) {
+        syncWatchHistory(slug, episodeNumber, { duration: player.duration, playBackTime: player.currentTime });
+    } else {
+        console.log("player is paused. Not updating watch history");
+    }
 };
 
-function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
+function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryData }) {
     const { classes } = useStyles();
     const playerRef = useRef(null);
     const videoCounter = useRef(0);
@@ -233,17 +238,16 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
         player.on("video:loadeddata", async () => {
             console.log("player have loadeddata");
             //Get last watched info
-            let lastWatchedData = getLastWatchedData(episodeNumber);
-            let lastWatchedTime = lastWatchedData.length && lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug).length ? lastWatchedData.filter((lastWatched) => lastWatched.slug === animeSlug)[0].playBackData.playBackTime : 0;
+            let lastWatchedTime = watchHistoryData?.[episodeNumber]?.playBackTime || 0;
             //Use current time instead of seek to skip watched portions
             player.currentTime = lastWatchedTime;
             //Only set poster if no watchtime found
             if (lastWatchedTime === 0) {
                 player.poster = episodeData.poster;
             }
-            setLastWatchedQueue(animeSlug, episodeNumber);
-            setWatchHistoryBySlug(episodeData.animeDetails, { duration: player.duration, playBackTime: player.currentTime }, episodeNumber);
-            player.watchTimeTracker = setInterval(updatePlaybackInWathHistoryBySlug.bind(null, player, animeSlug, episodeNumber), 3000);
+            syncLastWatched(animeSlug, episodeNumber);
+            syncWatchHistory(animeSlug, episodeNumber, { duration: player.duration, playBackTime: player.currentTime });
+            player.watchTimeTracker = setInterval(updatePlaybackInWathHistoryBySlug.bind(null, player, animeSlug, episodeNumber), 15000);
             //Init and store aniskip
             playerRef.current.skipData = await getAnimeSkipData(episodeData.animeDetails, episodeNumber, player.duration);
         });
@@ -318,7 +322,13 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData }) {
                                 <Text sx={{ paddingLeft: "5px" }}>Change Server</Text>
                             </Button>
                         </Group>
-                        <VideoScreenEpisodeDisplayPartial episodeCount={getEpisodeCount(episodeData.animeDetails)} episodeList={episodeData.animeDetails.episodeList} animeSlug={animeSlug} currentEpisode={episodeNumber} />
+                        <VideoScreenEpisodeDisplayPartial
+                            episodeCount={getEpisodeCount(episodeData.animeDetails)}
+                            episodeList={episodeData.animeDetails.episodeList}
+                            animeSlug={animeSlug}
+                            currentEpisode={episodeNumber}
+                            watchHistoryData={watchHistoryData}
+                        />
                         <Divider sx={{ width: "100%", margin: "10px 0px" }} />
                         <Group sx={{ fontSize: "12px", flexDirection: "column", alignItems: "baseline", gap: "0px" }}>
                             <Group sx={{ gap: "5px" }}>

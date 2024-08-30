@@ -107,13 +107,13 @@ function getWatchHistory(slug, userId = null) {
         )
             .then((res) => {
                 resolve(
-                    res.data.data.WatchHistory.reduce((acc, curr) => {
+                    res.data.data.WatchHistory?.reduce((acc, curr) => {
                         acc[curr.episodeNumber] = {
                             duration: curr.duration,
                             playBackTime: curr.playBackTime,
                         };
                         return acc;
-                    }, {})
+                    }, {}) || {}
                 );
             })
             .catch((err) => reject(err))

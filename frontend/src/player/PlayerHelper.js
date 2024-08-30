@@ -23,10 +23,4 @@ const getAnimeSkipData = async (animeData, episodeNumber, duration) => {
     }
 };
 
-const getWatchHistoryBySlug = (slug) => {
-    let playBackHistory = localStorage.getItem("watchHistory") || "{}";
-    playBackHistory = JSON.parse(playBackHistory);
-    return playBackHistory[slug] ?? {};
-};
-
-export { getAnimeSkipData, getWatchHistoryBySlug };
+export { getAnimeSkipData };

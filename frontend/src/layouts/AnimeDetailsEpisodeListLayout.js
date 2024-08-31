@@ -50,7 +50,7 @@ function Card({ episodeData, index }) {
     const { classes } = useStyles();
     return (
         <>
-            <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${episodeData.image})` }} className={classes.card}>
+            <Paper shadow="md" radius="md" sx={{ backgroundImage: `url(${episodeData.image.replace("kitsu.io", "kitsu.app")})` }} className={classes.card}>
                 <Text lineClamp={1} sx={{ fontSize: "16px", fontWeight: "600", zIndex: 1 }}>
                     {toTitleCase(episodeData.title ?? `Episode ${index + 1}`, " ")}
                 </Text>

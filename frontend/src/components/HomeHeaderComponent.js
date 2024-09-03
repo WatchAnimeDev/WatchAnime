@@ -5,7 +5,6 @@ import { useMediaQuery } from "@mantine/hooks";
 
 import React, { useEffect, useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { useSpotlight } from "@mantine/spotlight";
 import { IS_CHRISTMAS_ENABLED } from "../constants/genricConstants";
 import NotificationComponent from "./NotificationComponent";
 import HeaderLogoPartial from "../partials/HeaderLogoPartial";
@@ -96,10 +95,9 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
+function HomeHeaderComponent({ sideBarState, setSideBarState, otherData, setSearchModalOpen }) {
     const location = useLocation();
     const { classes } = useStyles(location);
-    const spotlight = useSpotlight();
     const theme = useMantineTheme();
     const [scrollPosition, onScrollPositionChange] = useState(false);
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.md}px)`);
@@ -108,11 +106,6 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
     const executeLogout = () => {
         signOut();
         navigate("/signin");
-    };
-
-    const handleSpotLightClick = (e) => {
-        e.preventDefault();
-        spotlight.openSpotlight();
     };
 
     useEffect(() => {
@@ -134,6 +127,23 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
         return () => window.removeEventListener("scroll", handler);
     }, []);
 
+    useEffect(() => {
+        function handleKeyDown(event) {
+            if (event.ctrlKey && event.key === "k") {
+                event.preventDefault();
+                // Your function to run on Ctrl + K
+                setSearchModalOpen(true);
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+        // eslint-disable-next-line
+    }, []);
+
     return (
         <>
             <Header fixed height={56} className={classes.header} mb={120} sx={scrollPosition && { backgroundColor: "#1A1B1E", borderBottom: "1px solid #2C2E33" }}>
@@ -146,7 +156,7 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
                     </Group>
 
                     <Group>
-                        <UnstyledButton onClick={handleSpotLightClick} className={classes.searchBarUnstyledButton}>
+                        <UnstyledButton onClick={(e) => setSearchModalOpen(true)} className={classes.searchBarUnstyledButton}>
                             <Group>
                                 <IconSearch size={16} stroke={1.5} />
                                 <Text className={classes.searchBarText}>Search</Text>
@@ -154,7 +164,7 @@ function HomeHeaderComponent({ sideBarState, setSideBarState, otherData }) {
                             </Group>
                         </UnstyledButton>
                         <Group spacing={5}>
-                            <Paper className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={handleSpotLightClick} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
+                            <Paper className={[classes.navIcons, classes.searchBarSearchIcon]} onClick={(e) => setSearchModalOpen(true)} hidden={useMediaQuery(`(min-width: ${theme.breakpoints.md})`)}>
                                 <IconSearch size={20} stroke={1.5} />
                             </Paper>
                             <Paper

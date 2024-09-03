@@ -1,6 +1,3 @@
-/* html {
-    scroll-behavior: smooth;
-} */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -12,33 +9,6 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-/* .slider-slide:before {
-    content: "";
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #202125;
-    background: -moz-linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
-    background: -webkit-linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
-    background: linear-gradient(90deg, #202125 0, rgba(32, 33, 37, 0.6) 40%, rgba(32, 33, 37, 0) 60%, rgba(32, 33, 37, 0) 80%, #202125 100%);
-}
-.slider-slide:after {
-    content: "";
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #202125;
-    background: -moz-linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
-    background: -webkit-linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
-    background: linear-gradient(0deg, #202125 0, rgba(32, 33, 37, 0) 50%, #202125 100%);
-    z-index: 2;
-} */
 .slider--text {
     position: absolute;
     bottom: 4em;
@@ -75,4 +45,39 @@ code {
 
 .main-wrapper >  div:nth-child(1) {
   margin-top: 6vw;
+}
+
+.mantine-search-modal .mantine-Modal-inner {
+    padding-top: 120px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.mantine-search-modal .mantine-Paper-root {
+    padding: 0;
+    height: 50px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: -10px;
+}
+.mantine-search-modal .mantine-Input-wrapper {
+    height: 50px;
+}
+.mantine-search-modal .mantine-Input-icon {
+    width: 50px;
+}
+.mantine-search-modal .mantine-Input-input {
+    height: 50px;
+    border-color: transparent;
+    padding-left: 50px;
+    padding-right: 16.666px;
+    font-size: 18px;
+}
+.mantine-search-modal .mantine-Modal-body {
+    background-color: #25262b;
+}
+.mantine-search-modal .mantine-Input-rightSection {
+    width: 50px;
 }

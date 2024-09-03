@@ -1,13 +1,9 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Container } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
-import { SpotlightProvider } from "@mantine/spotlight";
-import { IconSearch } from "@tabler/icons";
-import { handleSpotLightSearch } from "./custom/Search";
 import Snowfall from "react-snowfall";
 
 import HomeScreen from "./screens/HomeScreen";
-import SearchLayout from "./layouts/SearchLayout";
 import AnimeDetailsScreen from "./screens/AnimeDetailsScreen";
 import VideoPlayerScreen from "./screens/VideoPlayerScreen";
 import GenericScreen from "./screens/GenericScreen";
@@ -16,7 +12,6 @@ import PrivacyPolicyScreen from "./screens/PrivacyPolicyScreen";
 import BugReportLayout from "./layouts/BugReportLayout";
 import ContactScreen from "./screens/ContactScreen";
 import { getOrSetUid } from "./custom/User";
-import SpotlightActionComponent from "./components/SpotlightActionComponent";
 import AnimeSearchScreen from "./screens/AnimeSearchScreen";
 import { IS_CHRISTMAS_ENABLED } from "./constants/genricConstants";
 import { refreshLogin, signOut, userData } from "./custom/Auth";
@@ -31,11 +26,12 @@ import { useShallow } from "zustand/react/shallow";
 import { useWatchListStore } from "./store/WatchListStore";
 import { getPathType } from "./custom/Path";
 import DashboardScreen from "./screens/DashboardScreen";
+import SearchScreen from "./screens/SearchScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
     const [bugReportState, setBugReportState] = useState(false);
-    const [searchData, setSearchData] = useState([]);
+    const [searchModalOpen, setSearchModalOpen] = useState(false);
     const { fetchWatchListData } = useWatchListStore(useShallow((state) => ({ fetchWatchListData: state.fetchWatchListData })));
 
     const navigate = useNavigate();
@@ -80,19 +76,8 @@ function App() {
         // eslint-disable-next-line
     }, []);
     return (
-        <SpotlightProvider
-            actions={searchData}
-            searchIcon={<IconSearch size={18} />}
-            searchPlaceholder="Search..."
-            shortcut="ctrl + k"
-            onChange={async (e) => await handleSpotLightSearch(e, setSearchData, navigate)}
-            closeOnActionTrigger={true}
-            cleanQueryOnClose={true}
-            limit={5}
-            actionComponent={SearchLayout}
-            actionsWrapperComponent={SpotlightActionComponent}
-        >
-            <GenericHeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} type={pageType} />
+        <>
+            <GenericHeaderComponent sideBarState={sideBarState} setSideBarState={setSideBarState} otherData={{ executeTargetRefSchedule: executeTargetRefSchedule }} type={pageType} setSearchModalOpen={setSearchModalOpen} />
 
             <main className="py-3">
                 <Container className="bodyContainer" fluid p={0} sx={{ minHeight: "81vh" }}>
@@ -129,6 +114,8 @@ function App() {
             </main>
             <BugReportLayout bugReportState={bugReportState} setBugReportState={setBugReportState} />
 
+            <SearchScreen searchModalOpen={searchModalOpen} setSearchModalOpen={setSearchModalOpen} />
+
             <GenericFooterComponent type={pageType} />
 
             {IS_CHRISTMAS_ENABLED && !isPlayerPage ? (
@@ -146,7 +133,7 @@ function App() {
             ) : (
                 <></>
             )}
-        </SpotlightProvider>
+        </>
     );
 }
 

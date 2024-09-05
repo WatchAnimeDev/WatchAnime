@@ -74,7 +74,7 @@ const updatePlaybackInWathHistoryBySlug = (player, slug, episodeNumber) => {
     }
 };
 
-function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryData }) {
+function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryData, userDefinedProxyUrl }) {
     const { classes } = useStyles();
     const playerRef = useRef(null);
     const videoCounter = useRef(0);
@@ -96,7 +96,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
     const animeSlug = location.pathname.split("/anime/")[1].split("/")[0];
     const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
 
-    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList);
+    let preparedVideoData = prepareVideoData(episodeDecoderData.videoUrlList, userDefinedProxyUrl);
 
     const toggleAutoPlay = () => {
         setAutoPlay(!autoPlay);
@@ -111,7 +111,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
     useEffect(() => {
         async function getAnimeDetails() {
             const [episodeAnimeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${selectedServer}`)]);
-            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList);
+            const preparedVideoDataAjax = prepareVideoData(episodeAnimeAjaxData.data.videoUrlList, userDefinedProxyUrl);
             playerRef.current.switch = preparedVideoDataAjax[0].link;
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
             playerRef.current.shouldAjax = true;

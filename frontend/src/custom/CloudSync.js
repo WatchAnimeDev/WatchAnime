@@ -1,7 +1,7 @@
 import { closeAllModals, openConfirmModal } from "@mantine/modals";
 import { LastWatchedDataUpdateMutationObj, LastWatchedPageQueryObject, WatchHistoryDataUpdateMutationObj, WatchHistoryQueryObject } from "../graphql/graphqlQueries";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
-import { userData } from "./Auth";
+import { getIdForLoggedInUser } from "./Auth";
 import { Group, Paper, Text, Title } from "@mantine/core";
 import { IconAlertTriangle } from "@tabler/icons";
 import { showGenericCheckBoxNotification } from "./Notification";
@@ -11,7 +11,7 @@ function syncWatchHistory(slug, episodeNumber, playBackData, userId = null) {
         execGraphqlQuery(
             WatchHistoryDataUpdateMutationObj,
             {
-                userId: userId || userData()?.model?.id,
+                userId: userId || getIdForLoggedInUser(),
                 slug: slug,
                 episodeNumber: parseInt(episodeNumber),
                 playBackData: playBackData,
@@ -44,7 +44,7 @@ function syncLastWatched(slug, episodeNumber, userId = null) {
         execGraphqlQuery(
             LastWatchedDataUpdateMutationObj,
             {
-                userId: userId || userData()?.model?.id,
+                userId: userId || getIdForLoggedInUser(),
                 slug: slug,
                 episodeNumber: parseInt(episodeNumber),
                 shouldDelete: false,
@@ -63,7 +63,7 @@ function getLastWatched(page = 1, pageSize = 20, userId = null) {
         execGraphqlQuery(
             LastWatchedPageQueryObject,
             {
-                userId: userId || userData()?.model?.id,
+                userId: userId || getIdForLoggedInUser(),
                 page: page,
                 pageSize: pageSize,
             },
@@ -81,7 +81,7 @@ function removeLastWatched(slug, userId = null) {
         execGraphqlQuery(
             LastWatchedDataUpdateMutationObj,
             {
-                userId: userId || userData()?.model?.id,
+                userId: userId || getIdForLoggedInUser(),
                 slug: slug,
                 episodeNumber: 0,
                 shouldDelete: true,
@@ -100,7 +100,7 @@ function getWatchHistory(slug, userId = null) {
         execGraphqlQuery(
             WatchHistoryQueryObject,
             {
-                userId: userId || userData()?.model?.id,
+                userId: userId || getIdForLoggedInUser(),
                 slug: slug,
             },
             0

@@ -6,6 +6,7 @@ import SideBarComponent from "../components/SideBarComponent";
 import VideoPlayerComponent from "../components/VideoPlayerComponent";
 import { API_BASE_URL } from "../constants/genricConstants";
 import { getWatchHistory } from "../custom/CloudSync";
+import { getProxyDetails } from "../custom/UserDefinedProxy";
 
 function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const location = useLocation();
@@ -13,6 +14,7 @@ function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setB
     const [episodeData, setEpisodeData] = useState({});
     const [episodeDecoderData, setEpisodeDecoderData] = useState({});
     const [watchHistoryData, setWatchHistoryData] = useState({});
+    const [userDefinedProxyUrl, setUserDefinedProxyUrl] = useState("");
 
     const sideBarComponentConfigForSideBarMenu = {
         title: "Menu",
@@ -27,9 +29,12 @@ function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setB
             const episodeNumber = location.pathname.split("/anime/")[1].split("/")[2];
             const [episodeAjaxData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/sources/${animeSlug}/${episodeNumber}`)]);
             setEpisodeData(episodeAjaxData.data);
-            const [episodeAnimeAjaxData, watchHistoryData] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${"Alpha"}`), getWatchHistory(animeSlug)]);
+            const [episodeAnimeAjaxData, watchHistoryData, { url, useProxy }] = await Promise.all([axios.get(`${API_BASE_URL}/episode/decoder/${animeSlug}/${episodeNumber}/${"Alpha"}`), getWatchHistory(animeSlug), getProxyDetails()]);
             setEpisodeDecoderData(episodeAnimeAjaxData.data);
             setWatchHistoryData(watchHistoryData);
+            if (useProxy) {
+                setUserDefinedProxyUrl(url);
+            }
             setAjaxComplete(true);
 
             return;
@@ -41,7 +46,7 @@ function VideoPlayerScreen({ sideBarState, setSideBarState, bugReportState, setB
         <>
             <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
             <Container fluid sx={{ margin: "10px 20px" }}>
-                <VideoPlayerComponent episodeData={episodeData} episodeDecoderData={episodeDecoderData} watchHistoryData={watchHistoryData} />
+                <VideoPlayerComponent episodeData={episodeData} episodeDecoderData={episodeDecoderData} watchHistoryData={watchHistoryData} userDefinedProxyUrl={userDefinedProxyUrl} />
             </Container>
         </>
     ) : (

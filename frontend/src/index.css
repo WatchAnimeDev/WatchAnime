@@ -81,3 +81,6 @@ code {
 .mantine-search-modal .mantine-Input-rightSection {
     width: 50px;
 }
+.profile-image .mantine-Image-image {
+    border: 3px solid #FF0000;
+}

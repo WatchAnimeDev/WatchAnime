@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import React from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconArrowsShuffle } from "@tabler/icons";
+import { IconArrowsShuffle } from "@tabler/icons-react";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";
 import axios from "axios";

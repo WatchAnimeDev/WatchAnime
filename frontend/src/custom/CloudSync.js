@@ -3,7 +3,7 @@ import { LastWatchedDataUpdateMutationObj, LastWatchedPageQueryObject, WatchHist
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { getIdForLoggedInUser } from "./Auth";
 import { Group, Paper, Text, Title } from "@mantine/core";
-import { IconAlertTriangle } from "@tabler/icons";
+import { IconAlertTriangle } from "@tabler/icons-react";
 import { showGenericCheckBoxNotification } from "./Notification";
 
 function syncWatchHistory(slug, episodeNumber, playBackData, userId = null) {

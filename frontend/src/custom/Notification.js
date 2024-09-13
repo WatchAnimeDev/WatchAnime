@@ -1,5 +1,5 @@
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons";
+import { IconCheck } from "@tabler/icons-react";
 
 const showGenericCheckBoxNotification = (title, message, config) => {
     showNotification({

@@ -1,5 +1,5 @@
 import { Group, Menu, Paper, createStyles } from "@mantine/core";
-import { IconCheck, IconDotsVertical } from "@tabler/icons";
+import { IconCheck, IconDotsVertical } from "@tabler/icons-react";
 import React from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { unSubscribeToEpisodeNotification } from "../custom/Notifications";

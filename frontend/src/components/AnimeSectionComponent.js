@@ -1,5 +1,5 @@
 import { Anchor, createStyles, Group, Paper, Text } from "@mantine/core";
-import { IconChevronRight } from "@tabler/icons";
+import { IconChevronRight } from "@tabler/icons-react";
 import React from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import SliderComponent from "./SliderComponent";

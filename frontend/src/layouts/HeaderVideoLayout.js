@@ -1,6 +1,6 @@
 import { Button, createStyles, Group, Image, Paper, Text, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconCalendarTime, IconPlayerPlay, IconStar, IconVolume, IconVolumeOff } from "@tabler/icons";
+import { IconCalendarTime, IconPlayerPlay, IconStar, IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { HEADER_VIDEO_CONTAINER_HEIGHT, HEADER_VIDEO_CONTAINER_HEIGHT_MIN } from "../constants/cssConstants";

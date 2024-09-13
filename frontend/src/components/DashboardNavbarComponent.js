@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconLogout } from "@tabler/icons";
+import { IconLogout } from "@tabler/icons-react";
 import { Anchor, Group, Text, createStyles } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";

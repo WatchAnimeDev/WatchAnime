@@ -5,12 +5,11 @@ import { Link, useParams } from "react-router-dom";
 import NotificationComponent from "../components/NotificationComponent";
 import DashboardNavbarComponent from "../components/DashboardNavbarComponent";
 import DashboardBodyComponent from "../components/DashboardBodyComponent";
-import { IconBellRinging, IconDatabaseImport, IconFingerprint, IconKey, IconListDetails, IconSettings, IconUserCircle } from "@tabler/icons";
+import { IconBellRinging, IconDatabaseImport, IconFingerprint, IconKey, IconListDetails, IconSettings, IconUserCircle } from "@tabler/icons-react";
 
 function DashboardScreen({ isChristmasEnabled }) {
     const menuData = {
         profile: { link: "profile", label: "Profile", icon: IconUserCircle },
-        security: { link: "security", label: "Security", icon: IconFingerprint },
         notifications: { link: "notifications", label: "Notifications", icon: IconBellRinging },
         watchlist: { link: "watchlist", label: "Watchlist", icon: IconListDetails },
         settings: { link: "settings", label: "Other Settings", icon: IconSettings },

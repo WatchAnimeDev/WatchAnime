@@ -2,7 +2,7 @@ import React from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";
 import { Paper, createStyles } from "@mantine/core";
-import { IconMenu2 } from "@tabler/icons";
+import { IconMenu2 } from "@tabler/icons-react";
 // import { replaceAllWatchListData } from "../custom/WatchListOld";
 import { useLanguageStore } from "../store/LanguageToggleStore";
 import { useShallow } from "zustand/react/shallow";

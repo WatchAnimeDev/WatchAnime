@@ -1,6 +1,6 @@
 import { Anchor, Group, Image, Input, Loader, Modal, Text } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons";
+import { IconSearch } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { SearchQueryObject } from "../graphql/graphqlQueries";
 import { getAnimeTitleByRelevance, getImageByRelevance } from "../custom/AnimeData";

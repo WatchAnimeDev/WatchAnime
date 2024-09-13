@@ -4,6 +4,7 @@ import DashboardMalLayout from "../layouts/DashboardMalLayout";
 import InformationPikachuPartial from "../partials/InformationPikachuPartial";
 import DashboardWatchlistLayout from "../layouts/DashboardWatchlistLayout";
 import DashboardOtherSettingsLayout from "../layouts/DashboardOtherSettingsLayout";
+import DashboardProfileLayout from "../layouts/DashboardProfileLayout";
 
 function DashboardBodyComponent({ activePage }) {
     switch (activePage) {
@@ -15,6 +16,8 @@ function DashboardBodyComponent({ activePage }) {
             return <DashboardWatchlistLayout />;
         case "settings":
             return <DashboardOtherSettingsLayout />;
+        case "profile":
+            return <DashboardProfileLayout />;
         default:
             return <InformationPikachuPartial message={"Coming Soon"} />;
     }

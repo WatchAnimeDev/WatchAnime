@@ -1,6 +1,6 @@
 import React from "react";
 import { Group, Text, UnstyledButton } from "@mantine/core";
-import { IconDeviceTv } from "@tabler/icons";
+import { IconDeviceTv } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { getAnimeTitleByRelevance } from "../custom/AnimeData";
 import { useLanguageStore } from "../store/LanguageToggleStore";

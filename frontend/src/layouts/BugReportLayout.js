@@ -1,6 +1,6 @@
 import { Alert, Button, Group, Modal, Text, TextInput, Textarea } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { IconCheck, IconCircleX } from "@tabler/icons";
+import { IconCheck, IconCircleX } from "@tabler/icons-react";
 import axios from "axios";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";

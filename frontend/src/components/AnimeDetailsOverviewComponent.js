@@ -1,5 +1,5 @@
 import { Anchor, Button, createStyles, Group, Paper, Space, Text, Title } from "@mantine/core";
-import { IconPlayerPlay, IconPlus, IconX } from "@tabler/icons";
+import { IconPlayerPlay, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";

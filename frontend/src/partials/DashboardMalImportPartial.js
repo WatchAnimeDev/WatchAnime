@@ -2,7 +2,7 @@ import { Button, Group, Switch, Text, TextInput, createStyles } from "@mantine/c
 import React, { useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
-import { IconX } from "@tabler/icons";
+import { IconX } from "@tabler/icons-react";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { WatchListMalImportMutationObj } from "../graphql/graphqlQueries";
 import { getUidForLoggedInUser } from "../custom/Auth";

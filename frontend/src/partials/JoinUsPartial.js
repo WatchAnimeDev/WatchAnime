@@ -1,5 +1,5 @@
 import { Anchor, Group, Text, createStyles } from "@mantine/core";
-import { IconBrandDiscord, IconBrandFacebook } from "@tabler/icons";
+import { IconBrandDiscord, IconBrandFacebook } from "@tabler/icons-react";
 import React from "react";
 
 const useStyles = createStyles((theme) => ({

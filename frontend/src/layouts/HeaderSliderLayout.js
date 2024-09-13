@@ -1,6 +1,6 @@
 import { Button, createStyles, Group, Image, Paper, Text, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconCalendarTime, IconPlayerPlay, IconStar } from "@tabler/icons";
+import { IconCalendarTime, IconPlayerPlay, IconStar } from "@tabler/icons-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { getAnimeTitleByRelevance, getImageByRelevance, getTmdbImageByRelevanceAndType, hasTmdbData } from "../custom/AnimeData";

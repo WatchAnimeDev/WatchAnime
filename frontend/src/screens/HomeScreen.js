@@ -5,7 +5,7 @@ import { Container, createStyles, Loader, useMantineTheme } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks";
 
 import { ANIME_SLIDER_GAP, ANIME_SLIDER_MOBILE_WIDTH, ANIME_SLIDER_WIDTH } from "../constants/cssConstants";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import ScheduleComponent from "../components/ScheduleComponent";
 import { getHoursIn12HoursFormat, roundOffTime } from "../custom/DateTime";
 import { showGenericCheckBoxNotification } from "../custom/Notification";

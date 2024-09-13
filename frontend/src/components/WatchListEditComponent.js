@@ -1,5 +1,5 @@
 import { Paper, useMantineTheme } from "@mantine/core";
-import { IconPencil } from "@tabler/icons";
+import { IconPencil } from "@tabler/icons-react";
 import React, { useState } from "react";
 import SideBarComponent from "./SideBarComponent";
 import { useMediaQuery } from "@mantine/hooks";

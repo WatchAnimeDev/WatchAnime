@@ -1,7 +1,7 @@
-import { createStyles, Group, Input, Paper, SegmentedControl, Text } from "@mantine/core";
+import { createStyles, Group, Input, Loader, Paper, SegmentedControl, Text } from "@mantine/core";
 import React, { useEffect, useRef, useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
-import { IconUnlink, IconX } from "@tabler/icons";
+import { IconUnlink, IconX } from "@tabler/icons-react";
 import { getIdForLoggedInUser, pocketBaseInstance } from "../custom/Auth";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import { getProxyDetails } from "../custom/UserDefinedProxy";
@@ -24,6 +24,7 @@ function DashboardOtherSettingsLayout() {
     const [activeTab, setActiveTab] = useState("proxysettings");
     const [proxyUrl, setProxyUrl] = useState("");
     const [useProxy, setUseProxy] = useState(false);
+    const [ajaxComplete, setAjaxComplete] = useState(false);
     let proxyRecordId = useRef(null);
 
     const proxyUrlChange = async (e) => {
@@ -68,10 +69,10 @@ function DashboardOtherSettingsLayout() {
         async function getProxyDetailsData() {
             try {
                 const { id, url, useProxy } = await getProxyDetails();
-                console.log({ id, url, useProxy });
                 setProxyUrl(url);
                 setUseProxy(useProxy);
                 proxyRecordId.current = id;
+                setAjaxComplete(true);
             } catch (e) {}
         }
 
@@ -80,35 +81,39 @@ function DashboardOtherSettingsLayout() {
 
     return (
         <Group w={"100%"} h={"100%"} sx={{ justifyContent: "center", alignItems: "center" }}>
-            <Group w={"100%"} h={"100%"} p={"md"} sx={{ flexDirection: "column" }}>
-                <Group w={"100%"} sx={{ gap: "10px" }}>
-                    <Paper className={classes.pageButtons} onClick={() => setActiveTab("proxysettings")} sx={activeTab === "proxysettings" ? { backgroundColor: WATCHANIME_RED, color: "white" } : {}}>
-                        Proxy Settings
-                    </Paper>
-                    <Paper className={classes.pageButtons} onClick={() => setActiveTab("playersettings")} sx={activeTab === "playersettings" ? { backgroundColor: WATCHANIME_RED, color: "white" } : {}}>
-                        Player Settings
-                    </Paper>
-                </Group>
-                <Group w={"100%"} sx={{ gap: "20px", flexDirection: "column", alignItems: "flex-start" }} my={20}>
-                    <Group w={"100%"}>
-                        <Text>Proxy URL</Text>
-                        <Input sx={{ flexGrow: 1 }} icon={<IconUnlink />} placeholder="Paste your proxy url..." onChange={proxyUrlChange} value={proxyUrl} />
-                    </Group>
-                    <Group>
-                        <Text>Use proxy</Text>
-                        <Paper sx={{ display: "flex", fontSize: "12px", borderRadius: "5px" }}>
-                            <SegmentedControl
-                                value={useProxy.toString()}
-                                data={[
-                                    { label: "Yes", value: "true", disabled: !proxyUrl.length },
-                                    { label: "No", value: "false" },
-                                ]}
-                                onChange={useProxyChange}
-                            />
+            {ajaxComplete ? (
+                <Group w={"100%"} h={"100%"} p={"md"} sx={{ flexDirection: "column" }}>
+                    <Group w={"100%"} sx={{ gap: "10px" }}>
+                        <Paper className={classes.pageButtons} onClick={() => setActiveTab("proxysettings")} sx={activeTab === "proxysettings" ? { backgroundColor: WATCHANIME_RED, color: "white" } : {}}>
+                            Proxy Settings
                         </Paper>
+                        {/* <Paper className={classes.pageButtons} onClick={() => setActiveTab("playersettings")} sx={activeTab === "playersettings" ? { backgroundColor: WATCHANIME_RED, color: "white" } : {}}>
+                            Player Settings
+                        </Paper> */}
+                    </Group>
+                    <Group w={"100%"} sx={{ gap: "20px", flexDirection: "column", alignItems: "flex-start" }} my={20}>
+                        <Group w={"100%"}>
+                            <Text>Proxy URL</Text>
+                            <Input sx={{ flexGrow: 1 }} icon={<IconUnlink />} placeholder="Paste your proxy url..." onChange={proxyUrlChange} value={proxyUrl} />
+                        </Group>
+                        <Group>
+                            <Text>Use proxy</Text>
+                            <Paper sx={{ display: "flex", fontSize: "12px", borderRadius: "5px" }}>
+                                <SegmentedControl
+                                    value={useProxy.toString()}
+                                    data={[
+                                        { label: "Yes", value: "true", disabled: !proxyUrl.length },
+                                        { label: "No", value: "false" },
+                                    ]}
+                                    onChange={useProxyChange}
+                                />
+                            </Paper>
+                        </Group>
                     </Group>
                 </Group>
-            </Group>
+            ) : (
+                <Loader />
+            )}
         </Group>
     );
 }

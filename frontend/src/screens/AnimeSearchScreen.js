@@ -4,7 +4,7 @@ import { Box, Button, Container, Flex, Group, Input, Loader, MultiSelect, Pagina
 import AnimeSectionLayout from "../layouts/AnimeSectionLayout";
 import { useSearchParams } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconSortDescending } from "@tabler/icons";
+import { IconSortDescending } from "@tabler/icons-react";
 import { CatalogQueryObj } from "../graphql/graphqlQueries";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { WATCHANIME_RED } from "../constants/cssConstants";

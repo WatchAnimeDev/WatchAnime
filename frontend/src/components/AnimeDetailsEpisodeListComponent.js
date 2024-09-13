@@ -1,5 +1,5 @@
 import { Group, Text } from "@mantine/core";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ANIME_SLIDER_GAP } from "../constants/cssConstants";

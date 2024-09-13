@@ -1,5 +1,5 @@
 import { createStyles, Header, Group, Burger, UnstyledButton, Text, useMantineTheme, Paper, Menu, Avatar } from "@mantine/core";
-import { IconSearch, IconCalendarEvent, IconSettings, IconMessageCircle } from "@tabler/icons";
+import { IconSearch, IconCalendarEvent, IconSettings, IconMessageCircle } from "@tabler/icons-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mantine/hooks";
 

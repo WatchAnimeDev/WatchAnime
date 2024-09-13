@@ -3,7 +3,7 @@ import { createStyles, Paper, Text, Group, Anchor, Tooltip, Transition } from "@
 import { Link } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { getAnimeTitleByRelevance, getImageByRelevance, toTitleCase } from "../custom/AnimeData";
-import { IconPlus, IconTrash } from "@tabler/icons";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { openConfirmModal } from "@mantine/modals";
 import { showGenericCheckBoxNotification } from "../custom/Notification";
 import { useLanguageStore } from "../store/LanguageToggleStore";

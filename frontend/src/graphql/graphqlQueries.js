@@ -652,6 +652,34 @@ const WatchHistoryQueryObject = {
     operationName: "WatchHistory",
 };
 
+const UserProfileQuery = `
+    query UserProfile($username: String) {
+        UserProfile(username: $username) {
+            etherCount
+            latestActivityList
+            userData {
+                avatar
+                bio
+                created
+                name
+                roles
+                username
+                verified
+            }
+            watchStatistics {
+                totalEpisodeWatchedCount
+                totalDuration
+                totalAnimeWatchedCount
+            }
+        }
+    }
+`;
+
+const UserProfileQueryObject = {
+    query: UserProfileQuery,
+    operationName: "UserProfile",
+};
+
 export {
     CatalogQueryObj,
     WatchListQueryObj,
@@ -668,4 +696,5 @@ export {
     WatchHistoryDataUpdateMutationObj,
     LastWatchedPageQueryObject,
     WatchHistoryQueryObject,
+    UserProfileQueryObject,
 };

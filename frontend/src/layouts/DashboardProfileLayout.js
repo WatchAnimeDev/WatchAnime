@@ -94,12 +94,11 @@ function DashboardProfileLayout() {
         }
         if (hasChange) {
             await pb.collection("users").update(pbUserData.id, postData);
+            showGenericCheckBoxNotification("Profile Updated", "Your profile has been updated", {
+                color: "green",
+                icon: <IconUserCheck size={16} />,
+            });
         }
-        showGenericCheckBoxNotification("Profile Updated", "Your profile has been updated", {
-            color: "green",
-            icon: <IconUserCheck size={16} />,
-        });
-
         return;
     };
 

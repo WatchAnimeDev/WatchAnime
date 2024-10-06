@@ -27,6 +27,7 @@ import { useWatchListStore } from "./store/WatchListStore";
 import { getPathType } from "./custom/Path";
 import DashboardScreen from "./screens/DashboardScreen";
 import SearchScreen from "./screens/SearchScreen";
+import UserProfileScreen from "./screens/UserProfileScreen";
 
 function App() {
     const [sideBarState, setSideBarState] = useState(false);
@@ -109,6 +110,7 @@ function App() {
                         <Route path="/signup" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignUpLayout />} />}></Route>
                         <Route path="/reset" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
                         <Route path="/dashboard/:pageType?" element={<DashboardScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} />}></Route>
+                        <Route path="/profile/:userName?" element={<UserProfileScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} />}></Route>
                     </Routes>
                 </Container>
             </main>

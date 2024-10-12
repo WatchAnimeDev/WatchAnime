@@ -658,6 +658,7 @@ const UserProfileQuery = `
             etherCount
             latestActivityList
             userData {
+                id
                 avatar
                 bio
                 created
@@ -670,6 +671,41 @@ const UserProfileQuery = `
                 totalEpisodeWatchedCount
                 totalDuration
                 totalAnimeWatchedCount
+            }
+            watchList {
+                media {
+                    slug
+                    images {
+                        jpg {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                        webp {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                        png {
+                            image_url
+                            large_image_url
+                            small_image_url
+                        }
+                    }
+                    titles {
+                        title
+                        type
+                    }
+                    genres {
+                        mal_id
+                        name
+                        type
+                        url
+                    }
+                    type
+                    watchlistType
+                    releasedEpisodes
+                }
             }
         }
     }

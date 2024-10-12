@@ -5,11 +5,12 @@
  * @return {string} The type of the path: "auth", "dashboard", or "home".
  */
 function getPathType(path = window.location.pathname) {
+    path = path.replace("/", "");
     if (["signin", "signup", "reset"].some((part) => path.includes(part))) {
         return "auth";
     } else if (path.includes("dashboard")) {
         return "dashboard";
-    } else {
+    } else if (["profile", "recent", "popular", "catalog"].some((part) => !path || path.includes(part))) {
         return "home";
     }
 }

@@ -10,7 +10,7 @@ function getPathType(path = window.location.pathname) {
         return "auth";
     } else if (path.includes("dashboard")) {
         return "dashboard";
-    } else if (["profile", "recent", "popular", "catalog"].some((part) => !path || path.includes(part))) {
+    } else if (["profile", "recent", "popular", "catalog", "anime"].some((part) => !path || path.includes(part))) {
         return "home";
     }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconLogout } from "@tabler/icons-react";
+import { IconLogout, IconUserScan } from "@tabler/icons-react";
 import { Anchor, Group, Text, createStyles } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
@@ -52,7 +52,11 @@ function DashboardNavbarComponent({ activePage, menuData, setOpened }) {
                     );
                 })}
             </Group>
-            <Group w={"100%"}>
+            <Group w={"100%"} sx={{ gap: "0px" }}>
+                <Group sx={{ cursor: "pointer", padding: "10px 12px" }} w={"100%"} onClick={() => navigate("/profile")} className={classes.navItem}>
+                    <IconUserScan size={20} stroke={1.5} />
+                    <span>View Profile</span>
+                </Group>
                 <Group sx={{ cursor: "pointer", padding: "10px 12px" }} w={"100%"} onClick={executeLogout} className={classes.navItem}>
                     <IconLogout size={20} stroke={1.5} />
                     <span>Logout</span>

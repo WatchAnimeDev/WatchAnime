@@ -23,6 +23,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "flex-end",
         padding: "10px",
         width: "200px",
+        marginTop: "10px",
         [theme.fn.smallerThan("md")]: {
             width: "150px",
         },
@@ -244,7 +245,12 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
 function AnimeSectionLayout({ anime, isDeletable, isAddableToWatchList, featureId, setLastWatchedData, actionComponent, actionComponentData }) {
     const { classes } = useStyles();
     return (
-        <Anchor component={Link} to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`} className={classes.noTextDecoration} sx={{ position: "relative" }}>
+        <Anchor
+            component={Link}
+            to={`/anime/${anime.slug}${anime.currentReleasedEpisode ? `/episode/${anime.currentReleasedEpisode ? anime.currentReleasedEpisode : 0}` : ""}`}
+            className={[classes.noTextDecoration, "anime-card-wrapper"]}
+            sx={{ position: "relative" }}
+        >
             <Card animeData={anime} isDeletable={isDeletable} featureId={featureId} isAddableToWatchList={isAddableToWatchList} setLastWatchedData={setLastWatchedData} ActionComponent={actionComponent} actionComponentData={actionComponentData} />
         </Anchor>
     );

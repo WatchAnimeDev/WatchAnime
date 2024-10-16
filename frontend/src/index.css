@@ -84,3 +84,10 @@ code {
 .profile-image .mantine-Image-image {
     border: 3px solid #FF0000;
 }
+.main-wrapper .mantine-Carousel-slide,.anime-card-wrapper {
+    transition-timing-function: cubic-bezier(0,0,.2,1);
+    transition-duration: .3s;
+}
+.main-wrapper .mantine-Carousel-slide:hover, .anime-card-wrapper:hover{
+    transform: translateY(-0.25rem);
+}

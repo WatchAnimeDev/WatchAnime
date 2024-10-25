@@ -47,7 +47,23 @@ const prepareVideoData = (videoData, userDefinedProxyUrl) => {
 };
 
 const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
-    var whitelist = ["cache", "wix", "sharepoint", "pstatic.net", "workfields", "akamai-video-content", "wetransfer", "bilucdn", "cdnstream", "vipanicdn", "anifastcdn", "mirrorakam.akamaized", document.location.hostname, "watchanime.dev"];
+    var whitelist = [
+        "cache",
+        "wix",
+        "sharepoint",
+        "pstatic.net",
+        "workfields",
+        "akamai-video-content",
+        "wetransfer",
+        "bilucdn",
+        "cdnstream",
+        "vipanicdn",
+        "anifastcdn",
+        "mirrorakam.akamaized",
+        document.location.hostname,
+        "watchanime.dev",
+        "cdn-jupiter.com",
+    ];
     // const whitelist = [];
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;

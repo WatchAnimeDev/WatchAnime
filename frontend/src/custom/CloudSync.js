@@ -208,7 +208,7 @@ const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudS
         });
     } else {
         if (fromBtn) {
-            showGenericCheckBoxNotification("Cloud Sync", "You data is already synced.");
+            showGenericCheckBoxNotification("Cloud Sync", "Your data is already synced.");
         }
     }
 };

@@ -195,7 +195,7 @@ function Card({ animeData, isDeletable, isAddableToWatchList, featureId, setLast
                         <Group sx={{ width: "100%" }}>
                             <Group className={classes.sliderInfoDisplayDiv}>
                                 <Text lineClamp={1} sx={{ fontSize: "10px", flexBasis: "70%" }}>
-                                    {toTitleCase(animeData.genres.map((genre) => genre.name).join(","), ",")}
+                                    {animeData.genres && toTitleCase(animeData.genres.map((genre) => genre.name).join(","), ",")}
                                 </Text>
                                 <div className={classes.animeSourceDiv}>{animeData.type ?? "TV"}</div>
                             </Group>

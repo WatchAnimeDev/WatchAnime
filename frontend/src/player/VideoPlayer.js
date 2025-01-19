@@ -34,6 +34,9 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                           escape: true,
                       }
                     : {}),
+                style: {
+                    fontSize: "2em",
+                },
             },
             plugins: [
                 ...[

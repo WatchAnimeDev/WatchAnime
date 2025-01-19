@@ -1,4 +1,4 @@
-import { Button, createStyles, Divider, Group, Radio, Text, Title, Tooltip, UnstyledButton } from "@mantine/core";
+import { Box, Button, createStyles, Divider, Group, Radio, Text, Title, Tooltip, UnstyledButton } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -130,26 +130,38 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
             title: "Server Selector",
             children: (
                 <Group>
-                    <Radio.Group
-                        label="AdFree Servers"
-                        onChange={(e) => {
-                            selectedServerModal.current = e;
-                        }}
-                    >
-                        {episodeData.sources.adfree.map((server, ind) => {
-                            return <Radio key={ind} value={`${server}`} label={`${server}`} />;
-                        })}
-                    </Radio.Group>
-                    <Radio.Group
-                        label="Ad Supported Servers"
-                        onChange={(e) => {
-                            selectedServerModal.current = e;
-                        }}
-                    >
-                        {episodeData.sources.others.map((server, ind) => {
-                            return <Radio key={ind} value={`${server.name}_ad`} label={`${server.name}`} />;
-                        })}
-                    </Radio.Group>
+                    <Box w={"100%"}>
+                        {episodeData.sources.adfree.length > 0 ? (
+                            <Radio.Group
+                                label="AdFree Servers"
+                                onChange={(e) => {
+                                    selectedServerModal.current = e;
+                                }}
+                            >
+                                {episodeData.sources.adfree.map((server, ind) => {
+                                    return <Radio key={ind} value={`${server}`} label={`${server}`} />;
+                                })}
+                            </Radio.Group>
+                        ) : (
+                            <></>
+                        )}
+                    </Box>
+                    <Box w={"100%"}>
+                        {episodeData.sources.others.length > 0 ? (
+                            <Radio.Group
+                                label="Ad Supported Servers"
+                                onChange={(e) => {
+                                    selectedServerModal.current = e;
+                                }}
+                            >
+                                {episodeData.sources.others.map((server, ind) => {
+                                    return <Radio key={ind} value={`${server.name}_ad`} label={`${server.name}`} />;
+                                })}
+                            </Radio.Group>
+                        ) : (
+                            <></>
+                        )}
+                    </Box>
                 </Group>
             ),
             labels: { confirm: "Confirm", cancel: "Cancel" },

@@ -33,7 +33,7 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                           encoding: "utf-8",
                           escape: true,
                           onVttLoad: (sub) => {
-                              return sub.replaceAll(/<\/?b>/g, "");
+                              return sub.replaceAll(/(<\/?b>)|(<\/?i>)/g, "");
                           },
                       }
                     : {}),

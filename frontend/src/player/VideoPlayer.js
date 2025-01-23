@@ -32,6 +32,9 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                           type: option.subtitles.type,
                           encoding: "utf-8",
                           escape: true,
+                          onVttLoad: (sub) => {
+                              return sub.replaceAll(/<\/?b>/g, "");
+                          },
                       }
                     : {}),
                 style: {

@@ -139,7 +139,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                                 }}
                             >
                                 {episodeData.sources.adfree.map((server, ind) => {
-                                    return <Radio key={ind} value={`${server}`} label={`${server}`} />;
+                                    return <Radio key={ind} value={`${server}`} label={`${server.split("|").pop()}`} />;
                                 })}
                             </Radio.Group>
                         ) : (

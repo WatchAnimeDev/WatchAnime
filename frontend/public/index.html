@@ -70,7 +70,7 @@
                     if (args && args.length > 1 && (args[1].includes("cdn-jupiter.com") || args[1].includes("cdn-centaurus.com")) && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_sb) {
                         args[1] = `https://${cors_api_url_sb}/` + args[1];
                     }
-                    if (args && args.length > 1 && args[1].includes("kwikie.ru") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_an) {
+                    if (args && args.length > 1 && args[1].includes("segment") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_an) {
                         args[1] = `https://${cors_api_url_an}/` + args[1];
                     }
                     return open.apply(this, args);

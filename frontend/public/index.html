@@ -58,24 +58,24 @@
             gtag("js", new Date());
 
             gtag("config", "G-9MMBH4GFGZ");
-            (function () {
-                var cors_api_url_sb = "streamsbs.watchanime.dev";
-                var cors_api_url_an = "in.watchanime.dev";
-                var slice = [].slice;
-                var origin = window.location.protocol + "//" + window.location.host;
-                var open = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function () {
-                    var args = slice.call(arguments);
-                    var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-                    if (args && args.length > 1 && (args[1].includes("cdn-jupiter.com") || args[1].includes("cdn-centaurus.com")) && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_sb) {
-                        args[1] = `https://${cors_api_url_sb}/` + args[1];
-                    }
-                    if (args && args.length > 1 && args[1].includes("segment") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_an) {
-                        args[1] = `https://${cors_api_url_an}/` + args[1];
-                    }
-                    return open.apply(this, args);
-                };
-            })();
+            // (function () {
+            //     var cors_api_url_sb = "streamsbs.watchanime.dev";
+            //     var cors_api_url_an = "in.watchanime.dev";
+            //     var slice = [].slice;
+            //     var origin = window.location.protocol + "//" + window.location.host;
+            //     var open = XMLHttpRequest.prototype.open;
+            //     XMLHttpRequest.prototype.open = function () {
+            //         var args = slice.call(arguments);
+            //         var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+            //         if (args && args.length > 1 && (args[1].includes("cdn-jupiter.com") || args[1].includes("cdn-centaurus.com")) && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_sb) {
+            //             args[1] = `https://${cors_api_url_sb}/` + args[1];
+            //         }
+            //         if (args && args.length > 1 && args[1].includes("segment") && targetOrigin && targetOrigin[0].toLowerCase() !== origin && targetOrigin[1] !== cors_api_url_an) {
+            //             args[1] = `https://${cors_api_url_an}/` + args[1];
+            //         }
+            //         return open.apply(this, args);
+            //     };
+            // })();
         </script>
     </body>
 </html>

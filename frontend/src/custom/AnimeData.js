@@ -68,7 +68,7 @@ const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;
     }
-    return (userDefinedProxyUrl || API_REDIRECT_HOST) + videoUrl;
+    return `https://api.watchanime.dev/v1/proxy/m3u8/${encodeURIComponent(videoUrl)}${userDefinedProxyUrl ? `?proxy=${userDefinedProxyUrl.slice(0, -1)}` : ""}`;
 };
 
 const prevEpisodeUrl = (animeSlug, episodeNumber) => {

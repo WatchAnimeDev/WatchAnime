@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL, API_REDIRECT_HOST } from "../constants/genricConstants";
+import { API_BASE_URL } from "../constants/genricConstants";
 
 function getImageByRelevance(images, size, type = "") {
     if (images.webp && (!type || type === "webp")) {
@@ -68,7 +68,7 @@ const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
         return videoUrl;
     }
-    return `https://api.watchanime.dev/v1/proxy/m3u8/${encodeURIComponent(videoUrl)}${userDefinedProxyUrl ? `?proxy=${userDefinedProxyUrl.slice(0, -1)}` : ""}`;
+    return `${API_BASE_URL}/proxy/m3u8/${encodeURIComponent(videoUrl.replace(/\/$/, ""))}${userDefinedProxyUrl ? `?proxy=${userDefinedProxyUrl.replace(/\/$/, "")}` : ""}`;
 };
 
 const prevEpisodeUrl = (animeSlug, episodeNumber) => {

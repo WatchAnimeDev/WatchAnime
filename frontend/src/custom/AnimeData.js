@@ -63,6 +63,7 @@ const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
         document.location.hostname,
         "watchanime.dev",
         "cdn-jupiter.com",
+        "seiryuu",
     ];
     // const whitelist = [];
     if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {

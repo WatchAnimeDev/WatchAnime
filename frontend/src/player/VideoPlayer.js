@@ -31,9 +31,9 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                           url: option.subtitles.url,
                           type: option.subtitles.type,
                           encoding: "utf-8",
-                          escape: true,
+                          escape: false,
                           onVttLoad: (sub) => {
-                              return sub.replaceAll(/(<\/?b>)|(<\/?i>)/g, "");
+                              return sub;
                           },
                       }
                     : {}),
@@ -117,5 +117,57 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
         </div>
     );
 };
+
+function fetchAndMergeSubtitles(text) {
+    let subtitles = [];
+    let lines = text.split("\n");
+    let temp = [];
+
+    for (let line of lines) {
+        if (line.trim() === "") {
+            if (temp.length > 0 && temp.length > 1) {
+                subtitles.push(temp);
+            }
+            if (temp.length > 0) {
+                temp = [];
+            }
+        } else {
+            temp.push(line);
+        }
+    }
+    if (temp.length > 0) subtitles.push(temp);
+
+    let mergedSubtitles = mergeOverlapping(subtitles);
+    return mergedSubtitles;
+}
+
+function mergeOverlapping(subtitles) {
+    let result = [];
+
+    for (let i = 0; i < subtitles.length; i++) {
+        let current = subtitles[i];
+        let next = subtitles[i + 1] || [];
+
+        let currentTime = current[0].split(" --> ");
+        let nextTime = next[0] ? next[0].split(" --> ") : null;
+
+        if (nextTime && parseTime(currentTime[1]) > parseTime(nextTime[0])) {
+            // Merge text if times overlap
+            let mergedText = current.slice(1).join("\n") + "\n" + next.slice(1).join("\n");
+            result.push([currentTime[0] + " --> " + nextTime[1], mergedText]);
+            i++; // Skip next subtitle since it's merged
+        } else {
+            result.push([current[0], current.slice(1).join("\n")]);
+        }
+    }
+
+    return result.map((sub) => sub.join("\n")).join("\n\n");
+}
+
+function parseTime(time) {
+    let parts = time.split(":");
+    let seconds = parseFloat(parts[2]);
+    return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + seconds;
+}
 
 export default VideoPlayer;

@@ -66,7 +66,7 @@ const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
         "seiryuu",
     ];
     // const whitelist = [];
-    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi))) {
+    if (whitelist.some((link) => videoUrl.includes(link) || videoUrl.match(/[/]{2}[w]{3}[x][^.]*/gi)) || window.location.href.includes("debug")) {
         return videoUrl;
     }
     return `${API_BASE_URL}/proxy/m3u8/${encodeURIComponent(videoUrl.replace(/\/$|(\r\n|\n|\r)/gm, ""))}${userDefinedProxyUrl ? `?proxy=${userDefinedProxyUrl.replace(/\/$/, "")}` : ""}`;

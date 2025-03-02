@@ -115,7 +115,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
             playerRef.current.switch = preparedVideoDataAjax[0].link;
             playerRef.current.videoUrlList = episodeAnimeAjaxData.data.videoUrlList;
             playerRef.current.shouldAjax = true;
-            if (preparedVideoDataAjax[0].subtitles.length)
+            if (Object.keys(preparedVideoDataAjax[0].subtitles).length)
                 playerRef.current.subtitle.switch(preparedVideoDataAjax[0].subtitles.url, {
                     type: preparedVideoDataAjax[0].subtitles.type, // or 'srt'
                 });

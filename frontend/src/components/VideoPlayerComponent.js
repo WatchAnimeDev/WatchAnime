@@ -133,26 +133,27 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
     const openModal = () =>
         openConfirmModal({
             title: "Server Selector",
+            size: "lg",
             children: (
                 <Group>
                     <Box w={"100%"}>
                         {episodeData.sources.adfree.length > 0 ? (
-                            <Radio.Group
-                                label="AdFree Servers"
-                                onChange={(e) => {
-                                    selectedServerModal.current = e;
-                                }}
-                            >
-                                {episodeData.sources.adfree.map((server, ind) => {
-                                    return <Radio key={ind} value={`${server.name}`} label={`${server.name.split("|").pop()}`} />;
-                                })}
-                            </Radio.Group>
-                        ) : (
-                            // <Group>
+                            // <Radio.Group
+                            //     label="AdFree Servers"
+                            //     onChange={(e) => {
+                            //         selectedServerModal.current = e;
+                            //     }}
+                            // >
                             //     {episodeData.sources.adfree.map((server, ind) => {
-                            //         return <VideoScreenServerSelectorPartial server={server} />;
+                            //         return <Radio key={ind} value={`${server.name}`} label={`${server.name.split("|").pop()}`} />;
                             //     })}
-                            // </Group>
+                            // </Radio.Group>
+                            <Group>
+                                {episodeData.sources.adfree.map((server, ind) => {
+                                    return <VideoScreenServerSelectorPartial server={server} episodeData={episodeData} />;
+                                })}
+                            </Group>
+                        ) : (
                             <></>
                         )}
                     </Box>

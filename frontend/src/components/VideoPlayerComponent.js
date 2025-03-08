@@ -16,6 +16,7 @@ import { useShallow } from "zustand/react/shallow";
 import { getPlayerSettings, setPlayerSettings } from "../custom/PlayerSettings";
 import { dismissGenericDynamicNotification, showGenericDynamicNotification } from "../custom/Notification";
 import { syncLastWatched, syncWatchHistory } from "../custom/CloudSync";
+import VideoScreenServerSelectorPartial from "../partials/VideoScreenServerSelectorPartial";
 
 const useStyles = createStyles((theme) => ({
     parentPlayerDiv: {
@@ -143,14 +144,19 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                                 }}
                             >
                                 {episodeData.sources.adfree.map((server, ind) => {
-                                    return <Radio key={ind} value={`${server}`} label={`${server.split("|").pop()}`} />;
+                                    return <Radio key={ind} value={`${server.name}`} label={`${server.name.split("|").pop()}`} />;
                                 })}
                             </Radio.Group>
                         ) : (
+                            // <Group>
+                            //     {episodeData.sources.adfree.map((server, ind) => {
+                            //         return <VideoScreenServerSelectorPartial server={server} />;
+                            //     })}
+                            // </Group>
                             <></>
                         )}
                     </Box>
-                    <Box w={"100%"}>
+                    {/* <Box w={"100%"}>
                         {episodeData.sources.others.length > 0 ? (
                             <Radio.Group
                                 label="Ad Supported Servers"
@@ -165,7 +171,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                         ) : (
                             <></>
                         )}
-                    </Box>
+                    </Box> */}
                 </Group>
             ),
             labels: { confirm: "Confirm", cancel: "Cancel" },

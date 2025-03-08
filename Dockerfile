@@ -15,7 +15,7 @@ COPY ./frontend /temp
 # Build the application
 RUN npm run build
 
-FROM golang:1.21.5-bullseye
+FROM golang:1.23.5-bullseye
 
 # Set the working directory inside the container
 WORKDIR /app

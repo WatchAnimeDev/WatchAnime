@@ -22,7 +22,7 @@ func DefaultRouter(c *gin.Context) {
 	defer cancel()
 
 	requestedPath := c.Request.URL.Path // Get the requested route path
-	re := regexp.MustCompile(`^/anime/([^/]+)/`)
+	re := regexp.MustCompile(`^/anime/([^/]+)`)
 	match := re.FindStringSubmatch(requestedPath)
 	var slug string
 	if len(match) > 1 {

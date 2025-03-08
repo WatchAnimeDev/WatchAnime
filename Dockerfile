@@ -15,14 +15,17 @@ COPY ./frontend /temp
 # Build the application
 RUN npm run build
 
-# Create a new stage for the final image
-FROM socialengine/nginx-spa:latest
+FROM golang:1.21.5-bullseye
 
 # Set the working directory inside the container
 WORKDIR /app
 
+COPY . .
+
+RUN go get
+RUN go build -o bin .
+
 # Copy the built files from the previous stage
 COPY --from=build /temp/build /app
 
-# Change permissions if needed
-RUN chmod -R 777 /app
+ENTRYPOINT ["/app/bin"]

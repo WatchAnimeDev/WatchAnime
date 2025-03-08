@@ -111,7 +111,10 @@ function App() {
                         <Route path="/signup" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<SignUpLayout />} />}></Route>
                         <Route path="/reset" element={<AuthScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} renderComponent={<PasswordResetLayout />} />}></Route>
                         <Route path="/dashboard/:pageType?" element={<DashboardScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} />}></Route>
-                        <Route path="/profile/:userName?" element={<UserProfileScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} />}></Route>
+                        <Route
+                            path="/profile/:userName?"
+                            element={<UserProfileScreen isChristmasEnabled={IS_CHRISTMAS_ENABLED} sideBarState={sideBarState} setSideBarState={setSideBarState} bugReportState={bugReportState} setBugReportState={setBugReportState} />}
+                        ></Route>
                         <Route path="*" element={<PageNotFoundScreen />} />
                     </Routes>
                 </Container>

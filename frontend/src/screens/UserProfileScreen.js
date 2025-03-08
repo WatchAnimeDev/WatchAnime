@@ -8,6 +8,7 @@ import { UserProfileQueryObject } from "../graphql/graphqlQueries";
 import { userData } from "../custom/Auth";
 import { STATIC_BUCKET_URL } from "../constants/genricConstants";
 import PageNotFoundScreen from "./PageNotFoundScreen";
+import SideBarComponent from "../components/SideBarComponent";
 
 function getRoleBadge(roles) {
     return roles.map(function (role) {
@@ -188,7 +189,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function UserProfileScreen() {
+function UserProfileScreen({ sideBarState, setSideBarState, bugReportState, setBugReportState }) {
     const { classes } = useStyles();
     // const pbUserData = userData().model;
     const [currentUserData, setCurrentUserData] = useState({});
@@ -200,6 +201,12 @@ function UserProfileScreen() {
         totalAnimeWatchedCount: 0,
     });
     const [ajaxComplete, setAjaxComplete] = useState(false);
+
+    const sideBarComponentConfigForSideBarMenu = {
+        title: "Menu",
+        type: "SideBarMenuLayout",
+        data: [{ label: "Home", href: "/" }],
+    };
 
     useEffect(() => {
         async function getUserData() {
@@ -239,108 +246,111 @@ function UserProfileScreen() {
     }
 
     return ajaxComplete ? (
-        currentUserData.id ? (
-            <Group pt={56} px={50} sx={{ maxWidth: "1230px", margin: "0 auto" }}>
-                <Paper className={classes.awardBackground}>
-                    <Paper className={classes.awardBackgroundImage} style={{ backgroundImage: `url('${getUserAvatar(currentUserData)}')` }}></Paper>
-                </Paper>
-                <Group w={"100%"}>
-                    <Group py={50} w={"100%"} sx={{ flexDirection: "column", gap: "0px" }}>
-                        <Group className={classes.iAmText} sx={{ flexDirection: "column", gap: "0px" }}>
-                            <Text>Hi! I'm</Text>
-                            <Text>{currentUserData.name}</Text>
-                        </Group>
-                        {currentUserData.verified && (
-                            <Badge my={"1rem"} variant="filled" leftSection={<IconRosetteDiscountCheckFilled style={{ display: "flex", alignItems: "center" }} size={16} />} size="lg" bg="rgb(29, 155, 240)">
-                                Verified
-                            </Badge>
-                        )}
-                    </Group>
-                </Group>
-                <Group w={"100%"} sx={{ gap: "20px", alignItems: "flex-start" }} mb={"40px"}>
-                    <Group className={classes.mainLeftDiv}>
-                        <Group mb={"40px"} sx={{ gap: "68px" }}>
-                            <Group>
-                                <Image radius="50%" src={getUserAvatar(currentUserData)} width={"60px"} height={"60px"} />
-                                <Group sx={{ flexDirection: "column", gap: "5px", alignItems: "flex-start" }}>
-                                    <Text color="white" sx={{ fontSize: "18px", fontWeight: "600" }}>
-                                        {currentUserData.username}
-                                    </Text>
-                                    <Group sx={{ gap: "5px" }}>{getRoleBadge(currentUserData.roles)}</Group>
-                                    {/* <Text sx={{ fontSize: "14px" }}>Joined {currentUserData.created.split(" ")[0]}</Text> */}
-                                </Group>
+        <>
+            <SideBarComponent sideBarState={sideBarState} setSideBarState={setSideBarState} sideBarComponentConfig={sideBarComponentConfigForSideBarMenu} otherData={{ bugReportState, setBugReportState }} />
+            {currentUserData.id ? (
+                <Group pt={56} px={50} sx={{ maxWidth: "1230px", margin: "0 auto" }}>
+                    <Paper className={classes.awardBackground}>
+                        <Paper className={classes.awardBackgroundImage} style={{ backgroundImage: `url('${getUserAvatar(currentUserData)}')` }}></Paper>
+                    </Paper>
+                    <Group w={"100%"}>
+                        <Group py={50} w={"100%"} sx={{ flexDirection: "column", gap: "0px" }}>
+                            <Group className={classes.iAmText} sx={{ flexDirection: "column", gap: "0px" }}>
+                                <Text>Hi! I'm</Text>
+                                <Text>{currentUserData.name}</Text>
                             </Group>
-                            <Group sx={{ flexDirection: "column", gap: "5px", alignItems: "flex-start" }}>
-                                <Group sx={{ gap: "10px" }}>
-                                    <Text fw={"600"}>Ether:</Text>
-                                    <Group sx={{ gap: "2px" }}>
-                                        <Image w={"16px !important"} src={`${STATIC_BUCKET_URL}/crypto.png`}></Image>
-                                        <Text fw={"600"}>{ether < 1000 ? ether : `${Math.round((ether / 1000) * 100) / 100}k`}</Text>
+                            {currentUserData.verified && (
+                                <Badge my={"1rem"} variant="filled" leftSection={<IconRosetteDiscountCheckFilled style={{ display: "flex", alignItems: "center" }} size={16} />} size="lg" bg="rgb(29, 155, 240)">
+                                    Verified
+                                </Badge>
+                            )}
+                        </Group>
+                    </Group>
+                    <Group w={"100%"} sx={{ gap: "20px", alignItems: "flex-start" }} mb={"40px"}>
+                        <Group className={classes.mainLeftDiv}>
+                            <Group mb={"40px"} sx={{ gap: "68px" }}>
+                                <Group>
+                                    <Image radius="50%" src={getUserAvatar(currentUserData)} width={"60px"} height={"60px"} />
+                                    <Group sx={{ flexDirection: "column", gap: "5px", alignItems: "flex-start" }}>
+                                        <Text color="white" sx={{ fontSize: "18px", fontWeight: "600" }}>
+                                            {currentUserData.username}
+                                        </Text>
+                                        <Group sx={{ gap: "5px" }}>{getRoleBadge(currentUserData.roles)}</Group>
+                                        {/* <Text sx={{ fontSize: "14px" }}>Joined {currentUserData.created.split(" ")[0]}</Text> */}
                                     </Group>
                                 </Group>
-                                <Group sx={{ gap: "10px" }}>
-                                    <Paper sx={{ width: "50px", height: "12px", padding: "2px", borderRadius: "10px", border: "1px solid white" }}>
-                                        <Paper w={50 * (ether / 240000)} sx={{ position: "absolute", backgroundColor: "white", height: "6px", borderRadius: "6px" }}></Paper>
-                                    </Paper>
-                                    <Text>{calculatePercentage(ether)}%</Text>
+                                <Group sx={{ flexDirection: "column", gap: "5px", alignItems: "flex-start" }}>
+                                    <Group sx={{ gap: "10px" }}>
+                                        <Text fw={"600"}>Ether:</Text>
+                                        <Group sx={{ gap: "2px" }}>
+                                            <Image w={"16px !important"} src={`${STATIC_BUCKET_URL}/crypto.png`}></Image>
+                                            <Text fw={"600"}>{ether < 1000 ? ether : `${Math.round((ether / 1000) * 100) / 100}k`}</Text>
+                                        </Group>
+                                    </Group>
+                                    <Group sx={{ gap: "10px" }}>
+                                        <Paper sx={{ width: "50px", height: "12px", padding: "2px", borderRadius: "10px", border: "1px solid white" }}>
+                                            <Paper w={50 * (ether / 240000)} sx={{ position: "absolute", backgroundColor: "white", height: "6px", borderRadius: "6px" }}></Paper>
+                                        </Paper>
+                                        <Text>{calculatePercentage(ether)}%</Text>
+                                    </Group>
                                 </Group>
                             </Group>
-                        </Group>
-                        <Group className={classes.rankParent} w={"100%"}>
-                            {getEtherBadge()}
-                            <Paper className={classes.rankLine}>
-                                <Paper className={classes.actualRankLine} w={`${calculatePercentage(ether)}%`}>
-                                    <Image height={"30px"} width={"30px"} radius="50%" className={classes.rankLineProfilePicture} src={getUserAvatar(currentUserData)}></Image>
+                            <Group className={classes.rankParent} w={"100%"}>
+                                {getEtherBadge()}
+                                <Paper className={classes.rankLine}>
+                                    <Paper className={classes.actualRankLine} w={`${calculatePercentage(ether)}%`}>
+                                        <Image height={"30px"} width={"30px"} radius="50%" className={classes.rankLineProfilePicture} src={getUserAvatar(currentUserData)}></Image>
+                                    </Paper>
                                 </Paper>
-                            </Paper>
-                        </Group>
-                        <Group sx={{ flexDirection: "column", alignItems: "flex-start", gap: "1.5rem" }} w={"100%"}>
-                            <Text sx={{ fontSize: "20px", fontWeight: "700" }}>WatchList</Text>
-                            <Group w={"100%"} sx={!watchlistData?.length ? { justifyContent: "center" } : {}}>
-                                {watchlistData?.length ? (
-                                    watchlistData.map((genericData, ind) => <AnimeSectionLayout anime={genericData} key={ind} />)
-                                ) : (
-                                    <Paper sx={{ minHeight: "100px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <Text>WatchList is either empty or private.</Text>
-                                    </Paper>
-                                )}
                             </Group>
-                        </Group>
-                    </Group>
-                    <Group className={classes.mainRightDiv}>
-                        <Group sx={{ gap: "20px", flexDirection: "column", alignItems: "flex-start" }} w={"100%"}>
-                            <Group sx={{ borderLeft: "1px solid rgba(255,255,255,.1)" }} pl={30}>
-                                <Text className={classes.activityHeader}>User Statistics</Text>
-                            </Group>
-                            <Group className={classes.userStatsDiv}>
-                                <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
-                                    <Text color={"#fed219"}>{userWatchStats.totalAnimeWatchedCount}</Text>
-                                    <Text sx={{ textAlign: "center", fontSize: "13px" }}>Animes Watched</Text>
-                                </Group>
-                                <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
-                                    <Text color={"#fed219"}>{userWatchStats.totalEpisodeWatchedCount}</Text>
-                                    <Text sx={{ textAlign: "center", fontSize: "13px" }}>Episodes Watched</Text>
-                                </Group>
-                                <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
-                                    <Text color={"#fed219"}>{Math.floor(userWatchStats.totalDuration / 3600)}</Text>
-                                    <Text sx={{ textAlign: "center", fontSize: "13px" }}>Hours Spent</Text>
+                            <Group sx={{ flexDirection: "column", alignItems: "flex-start", gap: "1.5rem" }} w={"100%"}>
+                                <Text sx={{ fontSize: "20px", fontWeight: "700" }}>WatchList</Text>
+                                <Group w={"100%"} sx={!watchlistData?.length ? { justifyContent: "center" } : {}}>
+                                    {watchlistData?.length ? (
+                                        watchlistData.map((genericData, ind) => <AnimeSectionLayout anime={genericData} key={ind} />)
+                                    ) : (
+                                        <Paper sx={{ minHeight: "100px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                            <Text>WatchList is either empty or private.</Text>
+                                        </Paper>
+                                    )}
                                 </Group>
                             </Group>
                         </Group>
-                        <Group sx={{ gap: "20px" }} w={"100%"}>
-                            <Group sx={{ borderLeft: "1px solid rgba(255,255,255,.1)" }} pl={30}>
-                                <Text className={classes.activityHeader}>Latest Activities</Text>
+                        <Group className={classes.mainRightDiv}>
+                            <Group sx={{ gap: "20px", flexDirection: "column", alignItems: "flex-start" }} w={"100%"}>
+                                <Group sx={{ borderLeft: "1px solid rgba(255,255,255,.1)" }} pl={30}>
+                                    <Text className={classes.activityHeader}>User Statistics</Text>
+                                </Group>
+                                <Group className={classes.userStatsDiv}>
+                                    <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
+                                        <Text color={"#fed219"}>{userWatchStats.totalAnimeWatchedCount}</Text>
+                                        <Text sx={{ textAlign: "center", fontSize: "13px" }}>Animes Watched</Text>
+                                    </Group>
+                                    <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
+                                        <Text color={"#fed219"}>{userWatchStats.totalEpisodeWatchedCount}</Text>
+                                        <Text sx={{ textAlign: "center", fontSize: "13px" }}>Episodes Watched</Text>
+                                    </Group>
+                                    <Group sx={{ justifyContent: "center", gap: "5px", flexDirection: "column" }} w={"33.33%"}>
+                                        <Text color={"#fed219"}>{Math.floor(userWatchStats.totalDuration / 3600)}</Text>
+                                        <Text sx={{ textAlign: "center", fontSize: "13px" }}>Hours Spent</Text>
+                                    </Group>
+                                </Group>
                             </Group>
-                            <Group sx={{ justifyContent: "center", alignItems: "center", width: "100%", minHeight: "100px" }}>
-                                <Text>No activities found</Text>
+                            <Group sx={{ gap: "20px" }} w={"100%"}>
+                                <Group sx={{ borderLeft: "1px solid rgba(255,255,255,.1)" }} pl={30}>
+                                    <Text className={classes.activityHeader}>Latest Activities</Text>
+                                </Group>
+                                <Group sx={{ justifyContent: "center", alignItems: "center", width: "100%", minHeight: "100px" }}>
+                                    <Text>No activities found</Text>
+                                </Group>
                             </Group>
                         </Group>
                     </Group>
                 </Group>
-            </Group>
-        ) : (
-            <PageNotFoundScreen subMessage="User Profile not found" />
-        )
+            ) : (
+                <PageNotFoundScreen subMessage="User Profile not found" />
+            )}
+        </>
     ) : (
         <Loader sx={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }} />
     );

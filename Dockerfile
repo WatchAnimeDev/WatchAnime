@@ -20,7 +20,7 @@ FROM golang:1.21.5-bullseye
 # Set the working directory inside the container
 WORKDIR /app
 
-COPY . .
+COPY ./server .
 
 RUN go get
 RUN go build -o bin .

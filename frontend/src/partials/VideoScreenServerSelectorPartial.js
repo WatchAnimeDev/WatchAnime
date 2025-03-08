@@ -19,12 +19,27 @@ const useStyles = createStyles((theme) => ({
         fontSize: "0.75rem",
         borderRadius: "0.375rem",
     },
+    parentDiv: {
+        backgroundColor: "#4b556380",
+        color: "white",
+        filter: "drop-shadow(0 10px 8px rgb(0 0 0 / .04)) drop-shadow(0 4px 3px rgb(0 0 0 / .1))",
+        cursor: "pointer",
+    },
 }));
 
-function VideoScreenServerSelectorPartial({ server, episodeData }) {
+function VideoScreenServerSelectorPartial({ server, episodeData, selectedServerModal }) {
     const { classes } = useStyles();
     return (
-        <Group sx={{ backgroundColor: "#4b556380", color: "white", filter: "drop-shadow(0 10px 8px rgb(0 0 0 / .04)) drop-shadow(0 4px 3px rgb(0 0 0 / .1))" }} w={"100%"} py={"sm"} px={"md"}>
+        <Group
+            className={classes.parentDiv}
+            w={"100%"}
+            py={"sm"}
+            px={"md"}
+            onClick={(e) => {
+                selectedServerModal.current = server.name;
+                e.currentTarget.classList.add("bg-red");
+            }}
+        >
             <Group w={"100%"} sx={{ justifyContent: "center" }}>
                 <Title order={4}>{server.name.split("|").pop()}</Title>
             </Group>
@@ -48,29 +63,33 @@ function VideoScreenServerSelectorPartial({ server, episodeData }) {
                     <Group>
                         <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"}>
                             <ReactCountryFlag
-                                countryCode="GB"
+                                countryCode={episodeData.animeDetails.slug.includes("-dub") || server.name.includes(" eng") ? "GB" : "JP"}
                                 svg
                                 style={{
                                     width: "16px",
                                 }}
                             />
-                            English
+                            {episodeData.animeDetails.slug.includes("-dub") || server.name.includes(" eng") ? "English" : "Japanese"}
                         </Group>
                     </Group>
                 </Group>
                 <Group w={"100%"} sx={{ fontSize: "0.875rem", gap: "0.275rem" }}>
-                    {server.info.isSoftSub && server.info.isHardSub ? "Soft/Hard Sub" : server.info.isSoftSub ? "Soft Sub" : "Hard Sub"}:
+                    {!server.info.availableSub.length ? "" : server.info.isSoftSub && server.info.isHardSub ? "Soft/Hard Sub:" : server.info.isSoftSub ? "Soft Sub:" : "Hard Sub:"}
                     <Group>
-                        <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"}>
-                            <ReactCountryFlag
-                                countryCode="GB"
-                                svg
-                                style={{
-                                    width: "16px",
-                                }}
-                            />
-                            English
-                        </Group>
+                        {server.info.availableSub.map((sub, ind) => {
+                            return (
+                                <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"}>
+                                    <ReactCountryFlag
+                                        countryCode="GB"
+                                        svg
+                                        style={{
+                                            width: "16px",
+                                        }}
+                                    />
+                                    English
+                                </Group>
+                            );
+                        })}
                     </Group>
                 </Group>
             </Group>

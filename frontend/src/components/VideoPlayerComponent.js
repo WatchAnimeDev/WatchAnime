@@ -150,7 +150,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                             // </Radio.Group>
                             <Group>
                                 {episodeData.sources.adfree.map((server, ind) => {
-                                    return <VideoScreenServerSelectorPartial server={server} episodeData={episodeData} />;
+                                    return <VideoScreenServerSelectorPartial server={server} episodeData={episodeData} selectedServerModal={selectedServerModal} key={ind} />;
                                 })}
                             </Group>
                         ) : (

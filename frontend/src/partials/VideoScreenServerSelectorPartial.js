@@ -1,4 +1,4 @@
-import { createStyles, Group, Paper, Text, Title } from "@mantine/core";
+import { createStyles, Group, Text } from "@mantine/core";
 import React from "react";
 import ReactCountryFlag from "react-country-flag";
 
@@ -10,8 +10,9 @@ const useStyles = createStyles((theme) => ({
         backgroundPosition: "center center",
         filter: "blur(20px)",
         opacity: ".35",
-        width: "100%",
+        width: "90%",
         position: "absolute",
+        paddingTop: "25% !important",
     },
     flagAndTextDiv: {
         gap: "0.275rem",
@@ -20,28 +21,35 @@ const useStyles = createStyles((theme) => ({
         borderRadius: "0.375rem",
     },
     parentDiv: {
-        backgroundColor: "#4b556380",
+        backgroundColor: "#4b556338",
         color: "white",
         filter: "drop-shadow(0 10px 8px rgb(0 0 0 / .04)) drop-shadow(0 4px 3px rgb(0 0 0 / .1))",
         cursor: "pointer",
+        borderRadius: "4px",
+        "&:hover": {
+            backgroundColor: "#4b556380",
+        },
     },
 }));
 
-function VideoScreenServerSelectorPartial({ server, episodeData, selectedServerModal }) {
+function VideoScreenServerSelectorPartial({ server, episodeData, selectedServerModal, selectedServer }) {
     const { classes } = useStyles();
+    const isDub = episodeData.animeDetails.slug.includes("-dub") || server.name.includes(" eng");
     return (
         <Group
-            className={classes.parentDiv}
+            className={`${classes.parentDiv} ${selectedServer === server.name ? "selected-server" : ""}`}
             w={"100%"}
             py={"sm"}
             px={"md"}
             onClick={(e) => {
                 selectedServerModal.current = server.name;
-                e.currentTarget.classList.add("bg-red");
+                e.currentTarget.parentNode.childNodes.forEach((x) => x.classList.remove("selected-server"));
+                e.currentTarget.classList.add("selected-server");
             }}
+            key={server.name}
         >
             <Group w={"100%"} sx={{ justifyContent: "center" }}>
-                <Title order={4}>{server.name.split("|").pop()}</Title>
+                <Text order={4}>{server.name.split("|").pop()}</Text>
             </Group>
             <Group>
                 <Group w={"100%"} sx={{ fontSize: "0.875rem" }}>
@@ -63,38 +71,39 @@ function VideoScreenServerSelectorPartial({ server, episodeData, selectedServerM
                     <Group>
                         <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"}>
                             <ReactCountryFlag
-                                countryCode={episodeData.animeDetails.slug.includes("-dub") || server.name.includes(" eng") ? "GB" : "JP"}
+                                countryCode={isDub ? "GB" : "JP"}
                                 svg
                                 style={{
                                     width: "16px",
                                 }}
                             />
-                            {episodeData.animeDetails.slug.includes("-dub") || server.name.includes(" eng") ? "English" : "Japanese"}
+                            {isDub ? "English" : "Japanese"}
                         </Group>
                     </Group>
                 </Group>
                 <Group w={"100%"} sx={{ fontSize: "0.875rem", gap: "0.275rem" }}>
-                    {!server.info.availableSub.length ? "" : server.info.isSoftSub && server.info.isHardSub ? "Soft/Hard Sub:" : server.info.isSoftSub ? "Soft Sub:" : "Hard Sub:"}
+                    {!server.info.availableSub.length || isDub ? "" : server.info.isSoftSub && server.info.isHardSub ? "Soft/Hard Sub:" : server.info.isSoftSub ? "Soft Sub:" : "Hard Sub:"}
                     <Group>
-                        {server.info.availableSub.map((sub, ind) => {
-                            return (
-                                <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"}>
-                                    <ReactCountryFlag
-                                        countryCode="GB"
-                                        svg
-                                        style={{
-                                            width: "16px",
-                                        }}
-                                    />
-                                    English
-                                </Group>
-                            );
-                        })}
+                        {!isDub &&
+                            server.info.availableSub.map((sub, ind) => {
+                                return (
+                                    <Group className={classes.flagAndTextDiv} px={"0.5rem"} py={"0.25rem"} key={ind}>
+                                        <ReactCountryFlag
+                                            countryCode={sub.flag}
+                                            svg
+                                            style={{
+                                                width: "16px",
+                                            }}
+                                        />
+                                        {sub.name}
+                                    </Group>
+                                );
+                            })}
                     </Group>
                 </Group>
             </Group>
 
-            {/* <Group px={"5%"} pt={80} className={classes.backgroundImageDiv} sx={{ backgroundImage: `url(${getImageByRelevance(episodeData.animeDetails.images)})` }}></Group> */}
+            <Group px={"5%"} pt={80} className={classes.backgroundImageDiv} sx={{ backgroundImage: `url(${episodeData.animeDetails.bannerImage ?? getImageByRelevance(episodeData.animeDetails.images)})` }}></Group>
         </Group>
     );
 }

@@ -91,3 +91,7 @@ code {
 .main-wrapper .mantine-Carousel-slide:hover, .anime-card-wrapper:hover{
     transform: translateY(-0.25rem);
 }
+.selected-server {
+    border: 0px solid;
+    border-left-width: 4px;
+}

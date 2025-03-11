@@ -20,7 +20,6 @@ func DefaultRouter(c *gin.Context) {
 	collection := database.GetCollection(os.Getenv("ANIME_INFO_COLLECTION_NAME"))
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
 	requestedPath := c.Request.URL.Path // Get the requested route path
 	re := regexp.MustCompile(`^/anime/([^/]+)`)
 	match := re.FindStringSubmatch(requestedPath)
@@ -62,5 +61,4 @@ func DefaultRouter(c *gin.Context) {
 	}
 	// Send the modified HTML response
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlContent))
-	//userAgent := c.Request.UserAgent()
 }

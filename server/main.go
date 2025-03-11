@@ -38,9 +38,11 @@ func main() {
 
 	// Serve the React build directory
 	router.Static("/static", os.Getenv("INDEX_FILE_PATH")+"static")
-	//router.StaticFile("/", "./frontend/build/index.html")
-	// router.StaticFile("/favicon.ico", "./frontend/build/favicon.ico")
-	// router.StaticFile("/manifest.json", "./frontend/build/manifest.json")
+	router.Static("/favicon", os.Getenv("INDEX_FILE_PATH")+"favicon")
+	router.StaticFile("/asset-manifest.json", os.Getenv("INDEX_FILE_PATH")+"asset-manifest.json")
+	router.StaticFile("/manifest.json", os.Getenv("INDEX_FILE_PATH")+"manifest.json")
+	router.StaticFile("/serviceWorker.js", os.Getenv("INDEX_FILE_PATH")+"serviceWorker.js")
+	router.StaticFile("/robots.txt", os.Getenv("INDEX_FILE_PATH")+"robots.txt")
 	router.NoRoute(routers.DefaultRouter)
 	port := os.Getenv("PORT")
 	router.Run(":" + port)

@@ -97,6 +97,18 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                     }
                 },
             },
+            settings: [
+                {
+                    html: "Subtitle Size",
+                    tooltip: "16px",
+                    range: [16, 10, 50, 1], // Min 10px, Max 40px, Step 1px
+                    onRange: function (item) {
+                        const fontSize = item.range + "px";
+                        document.querySelector(".art-subtitle").style.fontSize = fontSize;
+                        return fontSize;
+                    },
+                },
+            ],
             ...option,
         });
         if (onReady && typeof onReady === "function") {

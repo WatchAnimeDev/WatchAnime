@@ -103,7 +103,7 @@ export const VideoPlayer = ({ option, onReady, ...rest }) => {
                     tooltip: "28px",
                     range: [28, 10, 50, 1], // Min 10px, Max 40px, Step 1px
                     onRange: function (item) {
-                        const fontSize = item.range + "px";
+                        const fontSize = item.range[0] + "px";
                         document.querySelector(".art-subtitle").style.fontSize = fontSize;
                         return fontSize;
                     },

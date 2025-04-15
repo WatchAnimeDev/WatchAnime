@@ -34,11 +34,11 @@ const prepareVideoData = (videoData, userDefinedProxyUrl) => {
     for (const result of videoData) {
         if (result.url.includes("mp4") || result.url.includes("m3u8") || result.type.includes("mp4") || result.type.includes("hls") || result.type.includes("dash")) {
             videos_with_video_format.push({
-                link: getProxyUrl(result.url, userDefinedProxyUrl),
+                link: getVideoProxyUrl(result.url, userDefinedProxyUrl),
                 type: result.url.includes("m3u8") ? "application/x-mpegURL" : "video/mp4",
                 resolution: !result.url.includes("m3u8") && result.url.includes(".mp4") ? result?.res?.split(" ").join("") : "",
                 priority: result.url.includes("m3u8") && result.url.includes("gogoplay") ? 1 : 0,
-                subtitles: result.subtitles || {},
+                subtitles: result.subtitles ? getSubtitlesProxyUrl(result.subtitles, userDefinedProxyUrl) : {},
             });
         }
     }
@@ -46,7 +46,7 @@ const prepareVideoData = (videoData, userDefinedProxyUrl) => {
     return videos_with_video_format;
 };
 
-const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
+const getVideoProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
     var whitelist = [
         "cache",
         "wix",
@@ -70,6 +70,11 @@ const getProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
         return videoUrl;
     }
     return `${API_BASE_URL}/proxy/m3u8/${encodeURIComponent(videoUrl.replace(/\/$|(\r\n|\n|\r)/gm, ""))}${userDefinedProxyUrl ? `?proxy=${userDefinedProxyUrl.replace(/\/$/, "")}` : ""}`;
+};
+
+const getSubtitlesProxyUrl = (subtitlesObj, userDefinedProxyUrl = null) => {
+    subtitlesObj.url = `https://${userDefinedProxyUrl || "in-ani.watchanime.dev"}/${subtitlesObj.url}`;
+    return subtitlesObj;
 };
 
 const prevEpisodeUrl = (animeSlug, episodeNumber) => {

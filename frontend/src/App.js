@@ -58,6 +58,10 @@ function App() {
             // If not logged in redirect to login
             navigate("/signin", { replace: true });
         } else if (userDatas.isAuthRecord) {
+            if (userDatas.model.isBanned) {
+                signOut();
+                navigate("/signin", { replace: true });
+            }
             //If logged in and on auth path redirect to home
             if (isAuthPage) {
                 navigate("/", { replace: true });

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Paper, TextInput, PasswordInput, Checkbox, Button, Text, Anchor } from "@mantine/core";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { useNavigate } from "react-router-dom";
-import { signIn } from "../custom/Auth";
+import { signIn, signOut, userData } from "../custom/Auth";
 import { useWatchListStore } from "../store/WatchListStore";
 import { useShallow } from "zustand/react/shallow";
 
@@ -28,8 +28,15 @@ function SignInLayout() {
             setError("Invalid username or password");
             setHasSignInStarted(false);
         } else {
-            await fetchWatchListData();
-            navigate("/");
+            const userDatas = userData();
+            if (userDatas.model.isBanned) {
+                signOut();
+                setError("Your account has been banned. Please contact the admin.");
+                setHasSignInStarted(false);
+            } else {
+                await fetchWatchListData();
+                navigate("/");
+            }
         }
     };
 

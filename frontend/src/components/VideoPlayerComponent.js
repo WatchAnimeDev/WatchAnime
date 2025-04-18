@@ -140,7 +140,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                         {episodeData.sources.adfree.length > 0 ? (
                             <Group sx={{ overflow: "auto", maxHeight: "60vh" }}>
                                 {episodeData.sources.adfree.map((server, ind) => {
-                                    return <VideoScreenServerSelectorPartial server={server} episodeData={episodeData} selectedServerModal={selectedServerModal} key={ind} selectedServer={selectedServer} />;
+                                    return <VideoScreenServerSelectorPartial server={server} episodeData={episodeData} selectedServerModal={selectedServerModal} key={ind} selectedServer={selectedServer} episodeNumber={episodeNumber} />;
                                 })}
                             </Group>
                         ) : (

@@ -72,7 +72,7 @@ const getVideoProxyUrl = (videoUrl, userDefinedProxyUrl = null) => {
 };
 
 const getSubtitlesProxyUrl = (subtitlesObj, userDefinedProxyUrl = null) => {
-    subtitlesObj.url = `https://${userDefinedProxyUrl || "in-ani.watchanime.dev"}/${subtitlesObj.url}`;
+    subtitlesObj.url = `https://${userDefinedProxyUrl || "in.watchanime.dev"}/${subtitlesObj.url}`;
     return subtitlesObj;
 };
 

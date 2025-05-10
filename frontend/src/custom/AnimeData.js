@@ -102,7 +102,7 @@ const malStatusToMediaStatus = (status) => {
  * @returns
  */
 const getTmdbImageByRelevanceAndType = (tmdbData, type = "backdrops") => {
-    return tmdbData && Object.keys(tmdbData).length ? (tmdbData[type].length ? `https://www.themoviedb.org/t/p/original${tmdbData[type][0].file_path}` : "") : "";
+    return tmdbData && Object.keys(tmdbData).length ? (tmdbData[type]?.length ? `https://www.themoviedb.org/t/p/original${tmdbData[type][0].file_path}` : "") : "";
 };
 
 /**

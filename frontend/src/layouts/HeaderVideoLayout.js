@@ -130,6 +130,7 @@ const useStyles = createStyles((theme) => ({
         height: HEADER_VIDEO_CONTAINER_HEIGHT,
         transition: "opacity 1s linear",
         minHeight: HEADER_VIDEO_CONTAINER_HEIGHT_MIN,
+        transform: "translateY(-5px)",
     },
     headerMuteButton: {
         width: "50px",
@@ -156,6 +157,7 @@ function HeaderVideoLayout({ anime, index }) {
     const theme = useMantineTheme();
     const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`);
     const videoPlayerRef = useRef(HTMLVideoElement);
+    const videoPlayerParentRef = useRef(HTMLDivElement);
     // const isHeaderVideoEnable = isVideoHeaderEnabled(anime, mobile);
     const [logoClassArray, setLogoClassArray] = useState(classes.logoImageDiv);
     const [synopsisClassArray, setSynopsisClassArray] = useState("");
@@ -163,6 +165,7 @@ function HeaderVideoLayout({ anime, index }) {
     const [topTenClassArray, setTopTenClassArrayClassArray] = useState("");
     const [scrollFactor, setScrollFactor] = useState(0);
     const [videoMuted, setVideoMuted] = useState(true);
+    const [player, setPlayer] = useState(null);
     const [isHeaderVideoVisible, setIsHeaderVideoVisible] = useState(isVideoHeaderEnabled(anime, mobile));
     const { language } = useLanguageStore(useShallow((state) => ({ language: state.language })));
 
@@ -175,29 +178,80 @@ function HeaderVideoLayout({ anime, index }) {
         setSynopsisClassArray(classes.synopsisDivAnimate);
         setRatingAndAiringClassArray(classes.ratingAndAiringDivAnimate);
         setTopTenClassArrayClassArray(classes.topTenDivAnimate);
-        videoPlayerRef.current.onended = () => {
-            setLogoClassArray(classes.logoDivReAnimate);
-            setSynopsisClassArray(classes.divReAnimate);
-            setRatingAndAiringClassArray(classes.divReAnimate);
-            setTopTenClassArrayClassArray(classes.divReAnimate);
-            setIsHeaderVideoVisible(false);
-            videoPlayerRef.current.classList.add("opacityhide");
-        };
     }, [classes.logoDivAnimate, classes.synopsisDivAnimate, classes.ratingAndAiringDivAnimate, classes.topTenDivAnimate, classes.synopsisDivHide, classes.ratingAndAiringDivHide, classes.topTenDivHide, classes.divReAnimate, classes.logoDivReAnimate]);
 
     useEffect(() => {
         const headerVideoFadeHandler = () => {
             const scrollFactorCalculated = 1 - Math.max(0, window.innerHeight - document.documentElement.scrollTop) / window.innerHeight;
             setScrollFactor(scrollFactorCalculated);
-            if (videoPlayerRef.current?.classList && !videoPlayerRef.current.classList.contains("opacityhide")) {
-                videoPlayerRef.current.volume = Math.max(0, 1 - scrollFactorCalculated * 1.3);
-                scrollFactorCalculated > 0.7 ? videoPlayerRef.current.pause() : videoPlayerRef.current.play();
+            if (isHeaderVideoVisible && player) {
+                player.setVolume(Math.max(0, (1 - scrollFactorCalculated * 1.4) * 100));
+                scrollFactorCalculated > 0.7 ? player.pauseVideo() : player.playVideo();
             }
         };
 
         window.addEventListener("scroll", headerVideoFadeHandler);
         return () => window.removeEventListener("scroll", headerVideoFadeHandler);
-    }, []);
+    }, [player, isHeaderVideoVisible]);
+
+    useEffect(() => {
+        // Load YouTube Iframe API
+        if (!window.YT) {
+            const tag = document.createElement("script");
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName("script")[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // Set callback for when API is ready
+            window.onYouTubeIframeAPIReady = () => {
+                initPlayer(anime?.trailer?.youtube_id);
+            };
+        } else {
+            initPlayer(anime?.trailer?.youtube_id);
+        }
+        // eslint-disable-next-line
+    }, [anime?.trailer?.youtube_id]);
+
+    const initPlayer = (videoId) => {
+        if (!videoId) {
+            return;
+        }
+        new window.YT.Player(videoPlayerRef.current, {
+            height: "100%",
+            width: "100%",
+            videoId: videoId, // YouTube video ID
+            playerVars: {
+                autoplay: 1,
+                mute: 1,
+                controls: 0,
+                origin: window.location.origin,
+                playsinline: 1,
+                showinfo: 0,
+                rel: 0,
+                iv_load_policy: 3,
+                modestbranding: 1,
+            },
+            events: {
+                onReady: (event) => {
+                    setPlayer(event.target);
+                    event.target.playVideo();
+                },
+                onStateChange: (event) => {
+                    if (event.data === window.YT.PlayerState.ENDED) {
+                        setLogoClassArray(classes.logoDivReAnimate);
+                        setSynopsisClassArray(classes.divReAnimate);
+                        setRatingAndAiringClassArray(classes.divReAnimate);
+                        setTopTenClassArrayClassArray(classes.divReAnimate);
+                        setIsHeaderVideoVisible(false);
+                    } else if (event.data === window.YT.PlayerState.PLAYING) {
+                        setTimeout(() => {
+                            videoPlayerParentRef.current.classList.remove("opacityhide");
+                        }, 2750);
+                    }
+                },
+            },
+        });
+    };
 
     return (
         <Paper sx={{ height: HEADER_VIDEO_CONTAINER_HEIGHT, position: "absolute", width: "100%", minHeight: HEADER_VIDEO_CONTAINER_HEIGHT_MIN }} className="slider-slide">
@@ -209,7 +263,13 @@ function HeaderVideoLayout({ anime, index }) {
                     }")`,
                 }}
             ></Paper>
-            {isHeaderVideoVisible ? <video ref={videoPlayerRef} className={classes.videoBackgroundClass} id="vjs_video_3_html5_api" autoPlay src={anime.trailer.deliveryUrl} playsInline muted></video> : ""}
+            {isHeaderVideoVisible ? (
+                <Paper ref={videoPlayerParentRef} className="opacityhide">
+                    <div className={classes.videoBackgroundClass} ref={videoPlayerRef} />
+                </Paper>
+            ) : (
+                ""
+            )}
             <div className={classes.sliderText}>
                 <Group className={topTenClassArray} display={"flex"} mb={"xs"} sx={{ gap: 10 }}>
                     <Image src={topTenImage} width={32} height={32}></Image>
@@ -242,7 +302,7 @@ function HeaderVideoLayout({ anime, index }) {
             <Paper className={classes.sliderFade}></Paper>
             <Paper className={classes.scrollFade} sx={{ opacity: scrollFactor * 1.5 }}></Paper>
             {isHeaderVideoVisible ? (
-                <Paper className={classes.headerMuteButton} onClick={(e) => toggleVideoVolume(videoMuted, setVideoMuted, videoPlayerRef)}>
+                <Paper className={classes.headerMuteButton} onClick={(e) => toggleVideoVolume(videoMuted, setVideoMuted, player)}>
                     {videoMuted ? <IconVolumeOff size={24} stroke={1.5} /> : <IconVolume size={24} stroke={1.5} />}
                 </Paper>
             ) : (

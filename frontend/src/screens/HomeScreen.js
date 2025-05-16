@@ -85,7 +85,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
         async function getRecentlyReleasedAnimes() {
             const [mergeData, lastWatched] = await Promise.all([execGraphqlQuery(MergeQueryObject, { page: 1 }, 10), getLastWatched()]);
             setRecentlyReleasedAnimes(mergeData.data.data.Recent);
-            let headerVideoData = mergeData.data.data.Popular.filter((anime) => anime?.trailer?.deliveryUrl);
+            let headerVideoData = mergeData.data.data.Popular.filter((anime) => anime?.trailer?.youtube_id).slice(0, 10);
             headerVideoData = headerVideoData.length ? headerVideoData : mergeData.data.data.Popular;
             const headerVideoIndex = Math.floor(Math.random() * headerVideoData.length);
             const doNotSync = localStorage.getItem("doNotSync");

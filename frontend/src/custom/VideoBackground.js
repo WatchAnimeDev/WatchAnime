@@ -1,10 +1,15 @@
-const toggleVideoVolume = (isMuted, setVideoMuted, videoPlayerRef) => {
-    videoPlayerRef.current.muted = !isMuted;
+const toggleVideoVolume = (isMuted, setVideoMuted, player) => {
+    if (!player) return;
+    if (isMuted) {
+        player.unMute();
+    } else {
+        player.mute();
+    }
     setVideoMuted(!isMuted);
 };
 
 const isVideoHeaderEnabled = (animeData, isMobile) => {
-    return Boolean(!isMobile && animeData?.trailer?.deliveryUrl);
+    return Boolean(!isMobile && animeData?.trailer?.youtube_id);
 };
 
 export { toggleVideoVolume, isVideoHeaderEnabled };

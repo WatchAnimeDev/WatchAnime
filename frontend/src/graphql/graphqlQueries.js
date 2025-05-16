@@ -177,7 +177,7 @@ const PopularQuery = `
             }
             bannerImage
             trailer {
-                deliveryUrl
+                youtube_id
             }
             tmdbData {
                 backdrops {
@@ -294,7 +294,7 @@ const MergeQuery = `
             }
             bannerImage
             trailer {
-                deliveryUrl
+                youtube_id
             }
             tmdbData {
                 backdrops {

@@ -273,7 +273,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                                     <IconPlayerTrackNext size={14} />
                                 </UnstyledButton>
                             </Tooltip>
-                            <Tooltip label="Download Episode">
+                            {/* <Tooltip label="Download Episode">
                                 <UnstyledButton
                                     onClick={(e) => {
                                         window.open(
@@ -289,7 +289,7 @@ function VideoPlayerComponent({ episodeData, episodeDecoderData, watchHistoryDat
                                 >
                                     <IconDownload size={14} />
                                 </UnstyledButton>
-                            </Tooltip>
+                            </Tooltip> */}
                         </Group>
                     </Group>
                     {adfreeServer ? (

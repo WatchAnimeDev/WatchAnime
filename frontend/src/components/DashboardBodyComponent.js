@@ -5,6 +5,7 @@ import InformationPikachuPartial from "../partials/InformationPikachuPartial";
 import DashboardWatchlistLayout from "../layouts/DashboardWatchlistLayout";
 import DashboardOtherSettingsLayout from "../layouts/DashboardOtherSettingsLayout";
 import DashboardProfileLayout from "../layouts/DashboardProfileLayout";
+import DashboardEpisodeTracking from "../layouts/DashboardEpisodeTracking";
 
 function DashboardBodyComponent({ activePage }) {
     switch (activePage) {
@@ -18,6 +19,8 @@ function DashboardBodyComponent({ activePage }) {
             return <DashboardOtherSettingsLayout />;
         case "profile":
             return <DashboardProfileLayout />;
+        case "episodetracking":
+            return <DashboardEpisodeTracking />;
         default:
             return <InformationPikachuPartial message={"Coming Soon"} />;
     }

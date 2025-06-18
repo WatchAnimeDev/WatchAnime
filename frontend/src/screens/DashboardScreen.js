@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import NotificationComponent from "../components/NotificationComponent";
 import DashboardNavbarComponent from "../components/DashboardNavbarComponent";
 import DashboardBodyComponent from "../components/DashboardBodyComponent";
-import { IconBellRinging, IconDatabaseImport, IconFingerprint, IconKey, IconListDetails, IconSettings, IconUserCircle } from "@tabler/icons-react";
+import { IconBellRinging, IconCloudUp, IconDatabaseImport, IconKey, IconListDetails, IconSettings, IconUserCircle } from "@tabler/icons-react";
 
 function DashboardScreen({ isChristmasEnabled }) {
     const menuData = {
@@ -15,6 +15,7 @@ function DashboardScreen({ isChristmasEnabled }) {
         settings: { link: "settings", label: "Other Settings", icon: IconSettings },
         apikey: { link: "apikey", label: "API Keys", icon: IconKey },
         mal: { link: "mal", label: "MAL", icon: IconDatabaseImport, description: "MAL Import/Export" },
+        episodetracking: { link: "episodetracking", label: "Episode Tracking", icon: IconCloudUp, description: "Automatic Episode Tracking" },
     };
 
     const theme = useMantineTheme();

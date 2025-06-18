@@ -11,12 +11,12 @@ function DashboardProfileLayout() {
 
     const [image, setImage] = useState(getUserAvatar());
     const [isPasswordReserExpanded, setIsPasswordReserExpanded] = useState(false);
-    const [userEmail, setUserEmail] = useState(pbUserData.email);
-    const [userDisplayName, setUserDisplayName] = useState(pbUserData.name);
+    const [userEmail, setUserEmail] = useState(pbUserData?.email);
+    const [userDisplayName, setUserDisplayName] = useState(pbUserData?.name);
     const [userCurrentPassword, setUserCurrentPassword] = useState("");
     const [userNewPassword, setUserNewPassword] = useState("");
     const [userNewPasswordConfirm, setUserNewPasswordConfirm] = useState("");
-    const [userBio, setUserBio] = useState(pbUserData.bio);
+    const [userBio, setUserBio] = useState(pbUserData?.bio);
     const imagePickerRef = useRef(null);
 
     const onImageChange = (event) => {
@@ -116,8 +116,8 @@ function DashboardProfileLayout() {
                     </Paper>
                 </Group>
                 <Group sx={{ gap: "3px" }}>
-                    <Text size={"md"}>Hi, {pbUserData.username}</Text>
-                    {pbUserData.verified && <IconRosetteDiscountCheckFilled size={16} color="rgb(29, 155, 240)" />}
+                    <Text size={"md"}>Hi, {pbUserData?.username}</Text>
+                    {pbUserData?.verified && <IconRosetteDiscountCheckFilled size={16} color="rgb(29, 155, 240)" />}
                 </Group>
                 <Group sx={{ flexDirection: "column" }} w={"100%"}>
                     <Input.Wrapper label="Email" w={"100%"}>
@@ -127,7 +127,7 @@ function DashboardProfileLayout() {
                         <Input icon={<IconUserCheck size={16} />} value={userDisplayName} onChange={(e) => setUserDisplayName(e.target.value)} />
                     </Input.Wrapper>
                     <Input.Wrapper label="Joined" w={"100%"}>
-                        <Input icon={<IconCalendarEvent size={16} />} value={pbUserData.created.split(" ")[0]} disabled readOnly />
+                        <Input icon={<IconCalendarEvent size={16} />} value={pbUserData?.created?.split(" ")[0]} disabled readOnly />
                     </Input.Wrapper>
                     <Input.Wrapper label="Bio" w={"100%"}>
                         <Textarea value={userBio} onChange={(e) => setUserBio(e.currentTarget.value)} />

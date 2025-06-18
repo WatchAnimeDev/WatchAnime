@@ -95,3 +95,6 @@ code {
     border: 0px solid;
     border-left-width: 4px;
 }
+.ouath-error .mantine-Alert-wrapper {
+    align-items: center;
+}

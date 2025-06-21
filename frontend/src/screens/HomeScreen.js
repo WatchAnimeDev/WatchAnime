@@ -15,7 +15,7 @@ import { useWatchListStore } from "../store/WatchListStore";
 import { useShallow } from "zustand/react/shallow";
 import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { MergeQueryObject } from "../graphql/graphqlQueries";
-import { getLastWatched, openCloudSyncModal } from "../custom/CloudSync";
+import { getLastWatched, openCloudSyncModal, shouldDisplayCloudSyncBtn } from "../custom/CloudSync";
 import AnimeCloudSyncComponent from "../components/AnimeCloudSyncComponent";
 
 const useStyles = createStyles((theme) => ({
@@ -128,7 +128,7 @@ function HomeScreen({ sideBarState, setSideBarState, bugReportState, setBugRepor
             { label: "Recently Added", refs: executeTargetRefRecent },
             { label: "Popular", refs: executeTargetRefPopular },
             { label: "Install App", callBack: () => installPWA() },
-            { label: "Cloud Sync", callBack: () => openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage, true) },
+            ...(shouldDisplayCloudSyncBtn() ? [{ label: "Cloud Sync", callBack: () => openCloudSyncModal(setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage) }] : []),
         ],
     };
     const animeSliderConfig = {

@@ -4,7 +4,6 @@ import { execGraphqlQuery } from "../graphql/graphqlQueryExec";
 import { getIdForLoggedInUser } from "./Auth";
 import { Group, Paper, Text, Title } from "@mantine/core";
 import { IconAlertTriangle } from "@tabler/icons-react";
-import { showGenericCheckBoxNotification } from "./Notification";
 
 function syncWatchHistory(slug, episodeNumber, playBackData, userId = null) {
     return new Promise((resolve, reject) => {
@@ -120,10 +119,10 @@ function getWatchHistory(slug, userId = null) {
     );
 }
 
-const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage, fromBtn = false) => {
+const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudSyncPersentage, setCloudSyncPersentage) => {
     const lastWatchedData = localStorage.getItem("lastWatchedQueue");
     const watchHistoryData = localStorage.getItem("watchHistory");
-    if (lastWatchedData || watchHistoryData) {
+    if (shouldDisplayCloudSyncBtn()) {
         openConfirmModal({
             title: "Cloud Sync",
             closeOnConfirm: true,
@@ -206,11 +205,17 @@ const openCloudSyncModal = (setCloudSyncModalOpen, setCloudSyncModalText, cloudS
                 });
             },
         });
-    } else {
-        if (fromBtn) {
-            showGenericCheckBoxNotification("Cloud Sync", "Your data is already synced.");
-        }
     }
 };
 
-export { syncWatchHistory, syncLastWatched, syncWatchHistoryBulk, getLastWatched, removeLastWatched, getWatchHistory, openCloudSyncModal };
+const shouldDisplayCloudSyncBtn = () => {
+    const lastWatchedData = localStorage.getItem("lastWatchedQueue");
+    const watchHistoryData = localStorage.getItem("watchHistory");
+    if (lastWatchedData || watchHistoryData) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+export { syncWatchHistory, syncLastWatched, syncWatchHistoryBulk, getLastWatched, removeLastWatched, getWatchHistory, openCloudSyncModal, shouldDisplayCloudSyncBtn };

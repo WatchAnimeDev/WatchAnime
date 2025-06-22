@@ -47,12 +47,12 @@ function DashboardEpisodeTracking() {
     const pbUserData = userData().model;
     const navigate = useNavigate();
 
-    const [activeOauthProvider, setActiveOauthProvider] = useState("mal");
-    const [isTrackingActive, setIsTrackingActive] = useState(pbUserData.metaData?.episodeTracking[activeOauthProvider]?.isTrackingActive || false);
     // eslint-disable-next-line
     const [searchParams, setSearchParams] = useSearchParams();
     const isCallbackVal = searchParams.get("status");
     // const isLoggedIn = pbUserData.metaData?.episodeTracking[activeOauthProvider] || isCallbackVal === "success";
+    const [activeOauthProvider, setActiveOauthProvider] = useState(searchParams.get("provider") || "mal");
+    const [isTrackingActive, setIsTrackingActive] = useState(pbUserData.metaData?.episodeTracking[activeOauthProvider]?.isTrackingActive || false);
 
     useEffect(() => {
         const insertOauthDetails = async () => {
@@ -70,7 +70,7 @@ function DashboardEpisodeTracking() {
                 token_type: searchParams.get("token_type") || "Bearer",
                 expires_in: searchParams.get("expires_in"),
             });
-            navigate("/dashboard/episodetracking");
+            navigate(`/dashboard/episodetracking?provider=${activeOauthProvider}`);
             setIsTrackingActive(true);
         };
         if (isCallbackVal === "success") {
@@ -111,6 +111,7 @@ function DashboardEpisodeTracking() {
     const handleOauthProviderToggle = async (provider) => {
         setActiveOauthProvider(provider);
         setIsTrackingActive(pbUserData.metaData?.episodeTracking[provider]?.isTrackingActive || false);
+        navigate(`/dashboard/episodetracking?provider=${provider}`);
     };
 
     const handleOauthProviderDeLink = async () => {

@@ -245,7 +245,7 @@ function HeaderVideoLayout({ anime, index }) {
                         setIsHeaderVideoVisible(false);
                     } else if (event.data === window.YT.PlayerState.PLAYING) {
                         setTimeout(() => {
-                            videoPlayerParentRef.current.classList.remove("opacityhide");
+                            videoPlayerParentRef.current.classList?.remove("opacityhide");
                         }, 2750);
                     }
                 },

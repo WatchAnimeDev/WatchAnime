@@ -1,4 +1,4 @@
-import { Group, Paper, Text, createStyles } from "@mantine/core";
+import { Group, Paper, createStyles } from "@mantine/core";
 import React, { useState } from "react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import DashboardMalImportPartial from "../partials/DashboardMalImportPartial";

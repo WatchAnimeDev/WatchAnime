@@ -2,10 +2,11 @@ import { Box, Button, createStyles, Divider, Group, Text, Title, Tooltip, Unstyl
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { API_BASE_URL, GOGO_DOWNLOAD_LINK } from "../constants/genricConstants";
+import { API_BASE_URL } from "../constants/genricConstants";
 import { getAnimeTitleByRelevance, getEpisodeCount, malStatusToMediaStatus, nextEpisodeUrl, prepareVideoData, prevEpisodeUrl } from "../custom/AnimeData";
 import VideoPlayer from "../player/VideoPlayer";
 import { getAnimeSkipData } from "../player/PlayerHelper";
+// eslint-disable-next-line
 import { IconDownload, IconPlayerTrackNext, IconPlayerTrackPrev, IconSettings } from "@tabler/icons-react";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { openConfirmModal } from "@mantine/modals";

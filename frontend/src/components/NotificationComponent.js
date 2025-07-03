@@ -163,7 +163,7 @@ function NotificationComponent() {
                             </UnstyledButton>
                         </Tooltip>
                         <Tooltip label="Notification settings">
-                            <UnstyledButton className={classes.notificationCardParentIcon}>
+                            <UnstyledButton className={classes.notificationCardParentIcon} onClick={() => navigate("/dashboard/notifications")}>
                                 <IconSettings size={18} stroke={1.5} />
                             </UnstyledButton>
                         </Tooltip>

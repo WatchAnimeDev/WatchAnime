@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { WATCHANIME_RED } from "../constants/cssConstants";
 import { API_BASE_URL } from "../constants/genricConstants";
+import { userData } from "../custom/Auth";
 
 function BugReportLayout({ bugReportState, setBugReportState }) {
     const [bugReportMessage, setBugReportMessage] = useState("");
@@ -24,7 +25,7 @@ function BugReportLayout({ bugReportState, setBugReportState }) {
         try {
             const animeSlug = location.pathname?.split("/anime/")[1]?.split("/")[0] ?? null;
             const episodeNumber = location.pathname?.split("/anime/")[1]?.split("/")[2] ?? null;
-            const message = `Details : ${bugReportMessage} | Contact : ${bugReportContactDetails}`;
+            const message = `Details : ${bugReportMessage} | Contact : ${bugReportContactDetails} | uid : ${userData()?.record?.id}`;
             await Promise.all([axios.post(`${API_BASE_URL}/reporting/bug?message=${message}&slug=${animeSlug}&episodeNumber=${episodeNumber}`)]);
             updateNotification({
                 id: "bug-report-notif",

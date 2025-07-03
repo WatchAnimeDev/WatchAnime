@@ -21,7 +21,7 @@ function AnimeDetailsScreen({ sideBarState, setSideBarState, bugReportState, set
     useEffect(() => {
         async function getAnimeDetails() {
             setAjaxComplete(false);
-            const animeSlug = location.pathname.split("/anime/")[1];
+            const animeSlug = location.pathname.split("/anime/")[1].replace("/", "");
             const [animeAjaxData] = await Promise.all([execGraphqlQuery(AnimeQueryObject, { slug: animeSlug })]);
             setAnimeData(animeAjaxData.data.data.Page.media[0]);
             setAjaxComplete(true);

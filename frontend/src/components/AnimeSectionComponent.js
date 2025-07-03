@@ -21,7 +21,7 @@ function AnimeSectionComponent({ sectionTitle, sectionAnimeData, hasViewMore, vi
     const { classes } = useStyles();
     return (
         <>
-            <Group sx={{ width: "100%", marginBottom: "30px" }} ref={refProp}>
+            <Group sx={{ width: "100%", marginBottom: "30px", gap: "0px" }} ref={refProp}>
                 <Group sx={{ width: "100%", justifyContent: "space-between", marginBottom: "20px" }}>
                     <Paper sx={{ backgroundColor: "transparent", display: "flex", alignItems: "center" }}>
                         <Text sx={{ fontSize: "20px", fontWeight: "700", marginRight: "5px" }}>{sectionTitle}</Text>

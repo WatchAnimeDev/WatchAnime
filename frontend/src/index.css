@@ -98,3 +98,7 @@ code {
 .ouath-error .mantine-Alert-wrapper {
     align-items: center;
 }
+.mantine-Carousel-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

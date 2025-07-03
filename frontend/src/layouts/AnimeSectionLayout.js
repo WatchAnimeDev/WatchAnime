@@ -23,7 +23,6 @@ const useStyles = createStyles((theme) => ({
         justifyContent: "flex-end",
         padding: "10px",
         width: "200px",
-        marginTop: "10px",
         [theme.fn.smallerThan("md")]: {
             width: "150px",
         },
